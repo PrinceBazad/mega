@@ -1,0 +1,2 @@
+# This file is for frontend deployment tools
+serve>=13.0.0

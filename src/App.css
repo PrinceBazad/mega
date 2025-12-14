@@ -1,0 +1,15 @@
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.app {
+  width: 100%;
+  padding-top: 100px; /* Account for LocationSelector (50px) + Navbar (50px) */
+}
+
+@media (max-width: 768px) {
+  .app {
+    padding-top: 90px; /* Account for LocationSelector (40px) + Navbar (50px) on mobile */
+  }
+}
