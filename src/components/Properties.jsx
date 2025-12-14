@@ -9,6 +9,7 @@ import {
   FaHeart,
   FaSearch,
 } from "react-icons/fa";
+import API_BASE_URL from "../config";
 import "./Properties.css";
 
 const Properties = () => {
@@ -56,7 +57,7 @@ const Properties = () => {
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/properties");
+        const response = await fetch(`${API_BASE_URL}/api/properties`);
         const data = await response.json();
         setProperties(data);
         setFilteredProperties(data);

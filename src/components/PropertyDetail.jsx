@@ -11,6 +11,7 @@ import {
   FaArrowLeft,
   FaHome,
 } from "react-icons/fa";
+import API_BASE_URL from "../config";
 import "./PropertyDetail.css";
 
 const PropertyDetail = () => {
@@ -26,9 +27,7 @@ const PropertyDetail = () => {
     const fetchProperty = async () => {
       try {
         // Fetch main property
-        const response = await fetch(
-          `http://localhost:5000/api/properties/${id}`
-        );
+        const response = await fetch(`${API_BASE_URL}/api/properties/${id}`);
         const data = await response.json();
 
         if (response.ok) {
@@ -36,7 +35,7 @@ const PropertyDetail = () => {
 
           // Fetch similar properties (same location)
           const similarResponse = await fetch(
-            `http://localhost:5000/api/properties?location=${encodeURIComponent(
+            `${API_BASE_URL}/api/properties?location=${encodeURIComponent(
               data.location
             )}`
           );
