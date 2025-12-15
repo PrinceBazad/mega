@@ -83,58 +83,56 @@ npm run preview
 
 Preview the production build locally.
 
-## Deployment Options
+## Deployment to Vercel
 
-### Option 1: Deploy Frontend to Netlify/Vercel
+### Frontend Deployment
 
-1. Build the frontend:
+1. Sign up or log in to [Vercel](https://vercel.com/)
+2. Click "New Project"
+3. Import your Git repository or upload files directly
+4. Configure the project:
+   - Framework Preset: `Other`
+   - Build Command: `npm run build`
+   - Output Directory: `dist`
+   - Install Command: `npm install`
+5. Add environment variables if needed:
+   - `REACT_APP_API_URL`: `https://your-backend-url.com` (when you deploy the backend)
+6. Click "Deploy"
 
-```bash
-npm run build
-```
+### Backend Deployment
 
-2. Upload the `dist` folder to your hosting provider.
+For the backend, you'll need to deploy it separately to a platform that supports Python applications such as:
 
-### Option 2: Deploy Backend to Render/Railway
+- Render
+- Railway
+- Heroku
+- DigitalOcean App Platform
 
-1. Create a `Procfile` in the backend directory:
+#### Deploying to Render (Recommended)
 
-```
-web: gunicorn app:app
-```
-
-2. Update the Flask app to use the PORT environment variable:
-
-```python
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(debug=False, host='0.0.0.0', port=port)
-```
-
-### Option 3: Full Deployment to Railway
-
-Railway allows you to deploy both frontend and backend in one project.
-
-1. Create a `railway.toml` file in the root directory:
-
-```toml
-[build]
-builder = "nixpacks"
-
-[deploy]
-startCommand = "npm run build && npx serve dist"
-```
-
-2. For the backend, Railway will automatically detect the Python requirements.
+1. Sign up or log in to [Render](https://render.com/)
+2. Click "New" → "Web Service"
+3. Connect your GitHub repository
+4. Configure the service:
+   - Name: `megareality-backend`
+   - Root Directory: `backend`
+   - Runtime: `Python 3`
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `gunicorn app:app`
+5. Add environment variables:
+   - `SECRET_KEY`: `your-secret-key-here`
+6. Click "Create Web Service"
 
 ## Environment Variables
 
-Create a `.env` file in the backend directory with the following variables:
+### Frontend (Vercel)
 
-```
-SECRET_KEY=your_secret_key_here
-FLASK_ENV=production
-```
+- `REACT_APP_API_URL`: The URL of your deployed backend (e.g., https://your-backend.onrender.com)
+
+### Backend (Render/Railway/Heroku)
+
+- `SECRET_KEY`: A secure secret key for Flask
+- `FLASK_ENV`: Set to `production`
 
 ## API Endpoints
 
