@@ -99,29 +99,22 @@ Preview the production build locally.
    - `REACT_APP_API_URL`: `https://your-backend-url.com` (when you deploy the backend)
 6. Click "Deploy"
 
-### Backend Deployment
-
-For the backend, you'll need to deploy it separately to a platform that supports Python applications such as:
-
-- Render
-- Railway
-- Heroku
-- DigitalOcean App Platform
-
-#### Deploying to Render (Recommended)
+### Backend Deployment to Render
 
 1. Sign up or log in to [Render](https://render.com/)
 2. Click "New" → "Web Service"
-3. Connect your GitHub repository
+3. Connect your GitHub repository (`https://github.com/PrinceBazad/mega`)
 4. Configure the service:
    - Name: `megareality-backend`
    - Root Directory: `backend`
    - Runtime: `Python 3`
    - Build Command: `pip install -r requirements.txt`
-   - Start Command: `gunicorn app:app`
+   - Start Command: `python app.py`
 5. Add environment variables:
-   - `SECRET_KEY`: `your-secret-key-here`
+   - `SECRET_KEY`: A secure secret key for Flask security
+   - `PYTHON_VERSION`: `3.9` (optional but recommended)
 6. Click "Create Web Service"
+7. Once deployed, note the URL (looks like `https://your-service-name.onrender.com`)
 
 ## Environment Variables
 
@@ -129,10 +122,10 @@ For the backend, you'll need to deploy it separately to a platform that supports
 
 - `REACT_APP_API_URL`: The URL of your deployed backend (e.g., https://your-backend.onrender.com)
 
-### Backend (Render/Railway/Heroku)
+### Backend (Render)
 
-- `SECRET_KEY`: A secure secret key for Flask
-- `FLASK_ENV`: Set to `production`
+- `SECRET_KEY`: A secure secret key for Flask (required)
+- `PYTHON_VERSION`: `3.9` (optional but recommended)
 
 ## API Endpoints
 
