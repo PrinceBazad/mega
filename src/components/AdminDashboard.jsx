@@ -565,7 +565,9 @@ const AdminDashboard = () => {
               <h3>{property.title}</h3>
               <p className="property-location">{property.location}</p>
               {property.builder_name && (
-                <p className="property-builder">Builder: {property.builder_name}</p>
+                <p className="property-builder">
+                  Builder: {property.builder_name}
+                </p>
               )}
               <p className="property-price">
                 ${property.price.toLocaleString()}

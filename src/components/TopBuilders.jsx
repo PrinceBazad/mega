@@ -83,8 +83,8 @@ const TopBuilders = () => {
         </motion.div>
 
         <div className="builders-carousel">
-          <button 
-            className="carousel-btn prev-btn" 
+          <button
+            className="carousel-btn prev-btn"
             onClick={prevBuilder}
             aria-label="Previous builders"
             disabled={builders.length <= 3}
@@ -127,8 +127,8 @@ const TopBuilders = () => {
             ))}
           </div>
 
-          <button 
-            className="carousel-btn next-btn" 
+          <button
+            className="carousel-btn next-btn"
             onClick={nextBuilder}
             aria-label="Next builders"
             disabled={builders.length <= 3}

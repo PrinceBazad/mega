@@ -1,14 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import {
-  FaBed,
-  FaBath,
-  FaRulerCombined,
-  FaMapMarkerAlt,
-  FaHeart,
-  FaSearch,
-} from "react-icons/fa";
+import { FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import API_BASE_URL from "../config";
 import "./Properties.css";
 
@@ -318,11 +311,9 @@ const Properties = () => {
         >
           {filteredProperties.length > 0 ? (
             filteredProperties.map((property) => (
-              <motion.div
+              <div
                 key={property.id}
                 className="property-card"
-                variants={cardVariants}
-                whileHover={{ y: -10, transition: { duration: 0.3 } }}
                 onClick={() => navigate(`/property/${property.id}`)}
                 style={{ cursor: "pointer" }}
               >
@@ -334,61 +325,39 @@ const Properties = () => {
                       loading="lazy"
                     />
                   ) : (
-                    <div className="placeholder-image">No Image</div>
+                    <div className="no-image">No Image</div>
                   )}
-                  {property.featured && (
-                    <span className="badge-featured">Featured</span>
-                  )}
-                  <motion.button
-                    className="btn-favorite"
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <FaHeart />
-                  </motion.button>
                 </div>
 
                 <div className="property-info">
-                  <div className="property-header">
-                    <h3>{property.title}</h3>
-                    <p className="property-price">
-                      ${property.price.toLocaleString()}
-                    </p>
-                  </div>
+                  <h3>{property.title}</h3>
 
                   <div className="property-location">
                     <FaMapMarkerAlt />
                     <span>{property.location}</span>
                   </div>
 
-                  <div className="property-features">
-                    <div className="feature">
-                      <FaBed />
-                      <span>{property.bedrooms || 0} Beds</span>
-                    </div>
-                    <div className="feature">
-                      <FaBath />
-                      <span>{property.bathrooms || 0} Baths</span>
-                    </div>
-                    <div className="feature">
-                      <FaRulerCombined />
-                      <span>{property.area_sqft || 0} sqft</span>
-                    </div>
-                  </div>
+                  {property.builder_name && (
+                    <p className="property-builder">
+                      Builder: {property.builder_name}
+                    </p>
+                  )}
 
-                  <motion.button
+                  <p className="property-price">
+                    ${property.price.toLocaleString()}
+                  </p>
+
+                  <button
                     className="btn-view-details"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate(`/property/${property.id}`);
                     }}
                   >
                     View Details
-                  </motion.button>
+                  </button>
                 </div>
-              </motion.div>
+              </div>
             ))
           ) : (
             <div className="no-properties">
