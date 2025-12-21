@@ -146,6 +146,59 @@ def admin_login():
     
     return jsonify({'message': 'Invalid credentials'}), 401
 
+# Admin Management Routes
+@app.route('/api/admin/register', methods=['POST'])
+def register_admin():
+    data = request.get_json()
+    
+    # Validate required fields
+    if not data.get('name') or not data.get('email') or not data.get('password'):
+        return jsonify({'message': 'Name, email, and password are required'}), 400
+    
+    # Check if admin with this email already exists
+    for admin in admins:
+        if admin['email'] == data['email']:
+            return jsonify({'message': 'Admin with this email already exists'}), 409
+    
+    # Create new admin
+    new_admin = {
+        'id': len(admins) + 1,
+        'name': data['name'],
+        'email': data['email'],
+        'password_hash': hashlib.sha256(data['password'].encode()).hexdigest(),
+        'role': data.get('role', 'admin'),
+        'created_at': datetime.now().isoformat()
+    }
+    
+    admins.append(new_admin)
+    
+    # Return admin info without password hash
+    admin_info = {
+        'id': new_admin['id'],
+        'name': new_admin['name'],
+        'email': new_admin['email'],
+        'role': new_admin['role'],
+        'created_at': new_admin['created_at']
+    }
+    
+    return jsonify(admin_info), 201
+
+@app.route('/api/admins', methods=['GET'])
+def get_admins():
+    # Return all admins without password hashes
+    admin_list = []
+    for admin in admins:
+        admin_info = {
+            'id': admin['id'],
+            'name': admin['name'],
+            'email': admin['email'],
+            'role': admin['role'],
+            'created_at': admin['created_at']
+        }
+        admin_list.append(admin_info)
+    
+    return jsonify(admin_list)
+
 # Property Routes
 @app.route('/api/properties', methods=['GET'])
 def get_properties():
