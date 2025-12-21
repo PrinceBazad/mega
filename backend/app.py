@@ -3,6 +3,7 @@ from flask_cors import CORS
 import os
 from datetime import datetime
 import hashlib
+import uuid
 
 app = Flask(__name__)
 CORS(app)
@@ -162,7 +163,7 @@ def register_admin():
     
     # Create new admin
     new_admin = {
-        'id': len(admins) + 1,
+        'id': max([a['id'] for a in admins]) + 1 if admins else 1,
         'name': data['name'],
         'email': data['email'],
         'password_hash': hashlib.sha256(data['password'].encode()).hexdigest(),
@@ -198,6 +199,55 @@ def get_admins():
         admin_list.append(admin_info)
     
     return jsonify(admin_list)
+
+@app.route('/api/admins/<int:admin_id>', methods=['PUT'])
+def update_admin(admin_id):
+    # Find admin by ID
+    admin = next((a for a in admins if a['id'] == admin_id), None)
+    if not admin:
+        return jsonify({'message': 'Admin not found'}), 404
+    
+    data = request.get_json()
+    
+    # Update admin fields
+    if 'name' in data:
+        admin['name'] = data['name']
+    if 'email' in data:
+        # Check if email already exists for another admin
+        if any(a['email'] == data['email'] and a['id'] != admin_id for a in admins):
+            return jsonify({'message': 'Email already exists'}), 409
+        admin['email'] = data['email']
+    if 'role' in data:
+        admin['role'] = data['role']
+    if 'password' in data and data['password']:
+        admin['password_hash'] = hashlib.sha256(data['password'].encode()).hexdigest()
+    
+    # Return updated admin info
+    admin_info = {
+        'id': admin['id'],
+        'name': admin['name'],
+        'email': admin['email'],
+        'role': admin['role'],
+        'created_at': admin['created_at']
+    }
+    
+    return jsonify(admin_info)
+
+@app.route('/api/admins/<int:admin_id>', methods=['DELETE'])
+def delete_admin(admin_id):
+    global admins
+    # Cannot delete the last admin
+    if len(admins) <= 1:
+        return jsonify({'message': 'Cannot delete the last admin'}), 400
+    
+    # Find admin by ID
+    admin = next((a for a in admins if a['id'] == admin_id), None)
+    if not admin:
+        return jsonify({'message': 'Admin not found'}), 404
+    
+    # Remove admin
+    admins = [a for a in admins if a['id'] != admin_id]
+    return jsonify({'message': 'Admin deleted successfully'})
 
 # Property Routes
 @app.route('/api/properties', methods=['GET'])
@@ -248,7 +298,7 @@ def create_property():
     data = request.get_json()
     
     new_property = {
-        'id': len(properties) + 1,
+        'id': max([p['id'] for p in properties]) + 1 if properties else 1,
         'title': data['title'],
         'description': data.get('description', ''),
         'price': float(data['price']),
@@ -304,7 +354,7 @@ def create_inquiry():
     data = request.get_json()
     
     new_inquiry = {
-        'id': len(inquiries) + 1,
+        'id': max([i['id'] for i in inquiries]) + 1 if inquiries else 1,
         'user_name': data['user_name'],
         'email': data['email'],
         'phone': data.get('phone', ''),

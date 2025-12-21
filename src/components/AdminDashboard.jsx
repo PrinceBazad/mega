@@ -20,7 +20,10 @@ const AdminDashboard = () => {
   const [admins, setAdmins] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
+  const [showAddAdminForm, setShowAddAdminForm] = useState(false);
+  const [showEditAdminForm, setShowEditAdminForm] = useState(false);
   const [editingProperty, setEditingProperty] = useState(null);
+  const [editingAdmin, setEditingAdmin] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -32,6 +35,12 @@ const AdminDashboard = () => {
     bathrooms: "",
     area_sqft: "",
     images: [""],
+  });
+  const [adminFormData, setAdminFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "admin",
   });
   const [imageInputs, setImageInputs] = useState([""]);
 
@@ -75,15 +84,13 @@ const AdminDashboard = () => {
           setInquiries(data);
         }
       } else if (activeTab === "admins") {
-        // Mock admin data for now
-        setAdmins([
-          {
-            id: 1,
-            name: "Admin User",
-            email: "admin@example.com",
-            role: "Super Admin",
-          },
-        ]);
+        const response = await fetch(`${API_BASE_URL}/api/admins`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setAdmins(data);
+        }
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -98,6 +105,14 @@ const AdminDashboard = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleAdminInputChange = (e) => {
+    const { name, value } = e.target;
+    setAdminFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -173,6 +188,49 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleAdminSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("adminToken");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const url = editingAdmin
+        ? `${API_BASE_URL}/api/admins/${editingAdmin.id}`
+        : `${API_BASE_URL}/api/admin/register`;
+
+      const method = editingAdmin ? "PUT" : "POST";
+
+      // For updates, we don't send password unless it's changed
+      const adminData = { ...adminFormData };
+      if (editingAdmin && !adminData.password) {
+        delete adminData.password;
+      }
+
+      const response = await fetch(url, {
+        method,
+        headers,
+        body: JSON.stringify(adminData),
+      });
+
+      if (response.ok) {
+        setShowAddAdminForm(false);
+        setShowEditAdminForm(false);
+        setEditingAdmin(null);
+        resetAdminForm();
+        fetchData();
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to save admin:", errorData.message);
+      }
+    } catch (error) {
+      console.error("Error saving admin:", error);
+    }
+  };
+
   const handleEdit = (property) => {
     setEditingProperty(property);
     setFormData({
@@ -189,6 +247,17 @@ const AdminDashboard = () => {
     });
     setImageInputs(property.images || [""]);
     setShowEditForm(true);
+  };
+
+  const handleEditAdmin = (admin) => {
+    setEditingAdmin(admin);
+    setAdminFormData({
+      name: admin.name,
+      email: admin.email,
+      password: "", // Don't prefill password
+      role: admin.role,
+    });
+    setShowEditAdminForm(true);
   };
 
   const handleDelete = async (id) => {
@@ -219,6 +288,32 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleDeleteAdmin = async (id) => {
+    if (window.confirm("Are you sure you want to delete this admin?")) {
+      try {
+        const token = localStorage.getItem("adminToken");
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
+
+        const response = await fetch(`${API_BASE_URL}/api/admins/${id}`, {
+          method: "DELETE",
+          headers,
+        });
+
+        if (response.ok) {
+          fetchData();
+        } else {
+          const errorData = await response.json();
+          alert(errorData.message);
+        }
+      } catch (error) {
+        console.error("Error deleting admin:", error);
+      }
+    }
+  };
+
   const resetForm = () => {
     setFormData({
       title: "",
@@ -233,6 +328,15 @@ const AdminDashboard = () => {
       images: [""],
     });
     setImageInputs([""]);
+  };
+
+  const resetAdminForm = () => {
+    setAdminFormData({
+      name: "",
+      email: "",
+      password: "",
+      role: "admin",
+    });
   };
 
   const PropertyManagement = () => (
@@ -500,7 +604,8 @@ const AdminDashboard = () => {
               <th>ID</th>
               <th>Name</th>
               <th>Email</th>
-              <th>Property</th>
+              <th>Phone</th>
+              <th>Property ID</th>
               <th>Message</th>
               <th>Date</th>
             </tr>
@@ -511,6 +616,7 @@ const AdminDashboard = () => {
                 <td>{inquiry.id}</td>
                 <td>{inquiry.user_name}</td>
                 <td>{inquiry.email}</td>
+                <td>{inquiry.phone || "N/A"}</td>
                 <td>{inquiry.property_id || "N/A"}</td>
                 <td>{inquiry.message}</td>
                 <td>{new Date(inquiry.created_at).toLocaleDateString()}</td>
@@ -526,7 +632,14 @@ const AdminDashboard = () => {
     <div className="dashboard-content">
       <div className="content-header">
         <h2>Admin Management</h2>
-        <button className="btn-primary">
+        <button
+          className="btn-primary"
+          onClick={() => {
+            resetAdminForm();
+            setShowAddAdminForm(true);
+            setEditingAdmin(null);
+          }}
+        >
           <FaPlus /> Add Admin
         </button>
       </div>
@@ -539,6 +652,7 @@ const AdminDashboard = () => {
               <th>Name</th>
               <th>Email</th>
               <th>Role</th>
+              <th>Created At</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -549,11 +663,18 @@ const AdminDashboard = () => {
                 <td>{admin.name}</td>
                 <td>{admin.email}</td>
                 <td>{admin.role}</td>
+                <td>{new Date(admin.created_at).toLocaleDateString()}</td>
                 <td>
-                  <button className="btn-edit">
+                  <button
+                    className="btn-edit"
+                    onClick={() => handleEditAdmin(admin)}
+                  >
                     <FaEdit /> Edit
                   </button>
-                  <button className="btn-delete">
+                  <button
+                    className="btn-delete"
+                    onClick={() => handleDeleteAdmin(admin.id)}
+                  >
                     <FaTrash /> Delete
                   </button>
                 </td>
@@ -562,6 +683,93 @@ const AdminDashboard = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Add/Edit Admin Form Modal */}
+      {(showAddAdminForm || showEditAdminForm) && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3>{editingAdmin ? "Edit Admin" : "Add New Admin"}</h3>
+              <button
+                className="close-btn"
+                onClick={() => {
+                  setShowAddAdminForm(false);
+                  setShowEditAdminForm(false);
+                  setEditingAdmin(null);
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <form onSubmit={handleAdminSubmit} className="admin-form">
+              <div className="form-group">
+                <label>Name *</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={adminFormData.name}
+                  onChange={handleAdminInputChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Email *</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={adminFormData.email}
+                  onChange={handleAdminInputChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Password {!editingAdmin && "*"}</label>
+                <input
+                  type="password"
+                  name="password"
+                  value={adminFormData.password}
+                  onChange={handleAdminInputChange}
+                  {...(!editingAdmin ? { required: true } : {})}
+                />
+                {editingAdmin && (
+                  <small>Leave blank to keep current password</small>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label>Role</label>
+                <select
+                  name="role"
+                  value={adminFormData.role}
+                  onChange={handleAdminInputChange}
+                >
+                  <option value="admin">Admin</option>
+                  <option value="super_admin">Super Admin</option>
+                </select>
+              </div>
+
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="btn-cancel"
+                  onClick={() => {
+                    setShowAddAdminForm(false);
+                    setShowEditAdminForm(false);
+                    setEditingAdmin(null);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn-submit">
+                  {editingAdmin ? "Update Admin" : "Add Admin"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 
