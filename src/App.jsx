@@ -11,6 +11,7 @@ import PropertyDetail from "./components/PropertyDetail";
 import Services from "./components/Services";
 import About from "./components/About";
 import Contact from "./components/Contact";
+import Agents from "./components/Agents";
 import Footer from "./components/Footer";
 import AdminLogin from "./components/AdminLogin";
 import AdminDashboard from "./components/AdminDashboard";
@@ -69,6 +70,18 @@ function App() {
                 <LocationSelector />
                 <Navbar />
                 <PropertyDetail />
+                <Footer />
+              </div>
+            }
+          />
+
+          <Route
+            path="/agents"
+            element={
+              <div className="app">
+                <LocationSelector />
+                <Navbar />
+                <Agents />
                 <Footer />
               </div>
             }

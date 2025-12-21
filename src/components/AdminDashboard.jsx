@@ -9,10 +9,10 @@ import {
   FaUsers,
   FaList,
   FaEye,
+  FaUserFriends,
 } from "react-icons/fa";
 import API_BASE_URL from "../config";
 import "./AdminDashboard.css";
-
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("properties");
   const [properties, setProperties] = useState([]);
@@ -43,6 +43,21 @@ const AdminDashboard = () => {
     role: "admin",
   });
   const [imageInputs, setImageInputs] = useState([""]);
+
+  // Agent management state
+  const [agents, setAgents] = useState([]);
+  const [showAddAgentForm, setShowAddAgentForm] = useState(false);
+  const [editingAgent, setEditingAgent] = useState(null);
+  const [agentForm, setAgentForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    position: "",
+    experience: "",
+    properties_sold: 0,
+    image: "",
+    bio: "",
+  });
 
   const navigate = useNavigate();
 
@@ -91,12 +106,19 @@ const AdminDashboard = () => {
           const data = await response.json();
           setAdmins(data);
         }
+      } else if (activeTab === "agents") {
+        const response = await fetch(`${API_BASE_URL}/api/admin/agents`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setAgents(data);
+        }
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
     navigate("/admin/login");
@@ -337,6 +359,85 @@ const AdminDashboard = () => {
       password: "",
       role: "admin",
     });
+  };
+
+  // Handle agent form submission
+  const handleAgentSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const url = editingAgent
+        ? `${config.API_BASE_URL}/api/admin/agents/${editingAgent.id}`
+        : `${config.API_BASE_URL}/api/admin/agents`;
+
+      const method = editingAgent ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(agentForm),
+      });
+
+      if (response.ok) {
+        fetchData();
+        setShowAddAgentForm(false);
+        setEditingAgent(null);
+        setAgentForm({
+          name: "",
+          email: "",
+          phone: "",
+          position: "",
+          experience: "",
+          properties_sold: 0,
+          image: "",
+          bio: "",
+        });
+      } else {
+        console.error("Failed to save agent");
+      }
+    } catch (error) {
+      console.error("Error saving agent:", error);
+    }
+  };
+
+  // Edit agent
+  const handleEditAgent = (agent) => {
+    setEditingAgent(agent);
+    setAgentForm({
+      name: agent.name,
+      email: agent.email,
+      phone: agent.phone,
+      position: agent.position,
+      experience: agent.experience,
+      properties_sold: agent.properties_sold,
+      image: agent.image,
+      bio: agent.bio,
+    });
+    setShowAddAgentForm(true);
+  };
+
+  // Delete agent
+  const handleDeleteAgent = async (agentId) => {
+    if (window.confirm("Are you sure you want to delete this agent?")) {
+      try {
+        const response = await fetch(
+          `${config.API_BASE_URL}/api/admin/agents/${agentId}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        if (response.ok) {
+          fetchData();
+        } else {
+          console.error("Failed to delete agent");
+        }
+      } catch (error) {
+        console.error("Error deleting agent:", error);
+      }
+    }
   };
 
   const PropertyManagement = () => (
@@ -789,24 +890,27 @@ const AdminDashboard = () => {
             >
               <FaHome /> Properties
             </button>
-
             <button
               className={activeTab === "inquiries" ? "active" : ""}
               onClick={() => setActiveTab("inquiries")}
             >
               <FaList /> Inquiries
             </button>
-
             <button
               className={activeTab === "admins" ? "active" : ""}
               onClick={() => setActiveTab("admins")}
             >
               <FaUsers /> Admins
             </button>
-
+            <button
+              className={activeTab === "agents" ? "active" : ""}
+              onClick={() => setActiveTab("agents")}
+            >
+              <FaUserFriends /> Agents
+            </button>
             <button className="logout-btn" onClick={handleLogout}>
               <FaSignOutAlt /> Logout
-            </button>
+            </button>{" "}
           </nav>
         </div>
 
@@ -815,6 +919,204 @@ const AdminDashboard = () => {
           {activeTab === "properties" && <PropertyManagement />}
           {activeTab === "inquiries" && <InquiryManagement />}
           {activeTab === "admins" && <AdminManagement />}
+          {activeTab === "agents" && (
+            <div className="dashboard-content">
+              <div className="content-header">
+                <h2>Agents Management</h2>
+                <button
+                  className="btn-primary"
+                  onClick={() => {
+                    setEditingAgent(null);
+                    setAgentForm({
+                      name: "",
+                      email: "",
+                      phone: "",
+                      position: "",
+                      experience: "",
+                      properties_sold: 0,
+                      image: "",
+                      bio: "",
+                    });
+                    setShowAddAgentForm(true);
+                  }}
+                >
+                  <FaPlus /> Add Agent
+                </button>
+              </div>
+
+              {showAddAgentForm && (
+                <div className="modal-overlay">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h3>{editingAgent ? "Edit Agent" : "Add New Agent"}</h3>
+                      <button
+                        className="close-btn"
+                        onClick={() => {
+                          setShowAddAgentForm(false);
+                          setEditingAgent(null);
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                    <form onSubmit={handleAgentSubmit} className="agent-form">
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Name *</label>
+                          <input
+                            type="text"
+                            value={agentForm.name}
+                            onChange={(e) =>
+                              setAgentForm({
+                                ...agentForm,
+                                name: e.target.value,
+                              })
+                            }
+                            required
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Email *</label>
+                          <input
+                            type="email"
+                            value={agentForm.email}
+                            onChange={(e) =>
+                              setAgentForm({
+                                ...agentForm,
+                                email: e.target.value,
+                              })
+                            }
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Phone</label>
+                          <input
+                            type="text"
+                            value={agentForm.phone}
+                            onChange={(e) =>
+                              setAgentForm({
+                                ...agentForm,
+                                phone: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Position</label>
+                          <input
+                            type="text"
+                            value={agentForm.position}
+                            onChange={(e) =>
+                              setAgentForm({
+                                ...agentForm,
+                                position: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Experience</label>
+                          <input
+                            type="text"
+                            value={agentForm.experience}
+                            onChange={(e) =>
+                              setAgentForm({
+                                ...agentForm,
+                                experience: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Properties Sold</label>
+                          <input
+                            type="number"
+                            value={agentForm.properties_sold}
+                            onChange={(e) =>
+                              setAgentForm({
+                                ...agentForm,
+                                properties_sold: parseInt(e.target.value) || 0,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label>Image URL</label>
+                        <input
+                          type="text"
+                          value={agentForm.image}
+                          onChange={(e) =>
+                            setAgentForm({
+                              ...agentForm,
+                              image: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Bio</label>
+                        <textarea
+                          value={agentForm.bio}
+                          onChange={(e) =>
+                            setAgentForm({ ...agentForm, bio: e.target.value })
+                          }
+                          rows="3"
+                        ></textarea>
+                      </div>
+                      <div className="form-actions">
+                        <button
+                          type="button"
+                          className="btn-cancel"
+                          onClick={() => {
+                            setShowAddAgentForm(false);
+                            setEditingAgent(null);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button type="submit" className="btn-submit">
+                          {editingAgent ? "Update Agent" : "Add Agent"}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+
+              <div className="agents-list">
+                {agents.map((agent) => (
+                  <div key={agent.id} className="agent-item">
+                    <div className="agent-info">
+                      <h4>{agent.name}</h4>
+                      <p>{agent.position}</p>
+                      <p>{agent.email}</p>
+                      <p>{agent.phone}</p>
+                    </div>
+                    <div className="agent-actions">
+                      <button
+                        className="btn-edit"
+                        onClick={() => handleEditAgent(agent)}
+                      >
+                        <FaEdit /> Edit
+                      </button>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDeleteAgent(agent.id)}
+                      >
+                        <FaTrash /> Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}{" "}
         </div>
       </div>
     </div>

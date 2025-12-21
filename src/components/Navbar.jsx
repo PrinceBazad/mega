@@ -45,6 +45,9 @@ const Navbar = () => {
           >
             Services
           </button>
+          <Link to="/agents" className="nav-link">
+            Agents
+          </Link>
           <button className="nav-link" onClick={() => scrollToSection("about")}>
             About
           </button>
@@ -83,6 +86,9 @@ const Navbar = () => {
             >
               Services
             </button>
+            <Link to="/agents" className="mobile-nav-link">
+              Agents
+            </Link>
             <button
               className="mobile-nav-link"
               onClick={() => scrollToSection("about")}
