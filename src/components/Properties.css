@@ -1,5 +1,5 @@
 .properties {
-  padding: 5rem 0;
+  padding: 4rem 0;
   background: linear-gradient(
       rgba(248, 250, 252, 0.9),
       rgba(233, 236, 239, 0.9)
@@ -15,26 +15,26 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 100px;
+  height: 80px;
   background: linear-gradient(to bottom, #f8fafc, transparent);
   z-index: 1;
 }
 
 .properties-container {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
   position: relative;
   z-index: 2;
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
 }
 
 .section-header h2 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #333;
   margin-bottom: 1rem;
   position: relative;
@@ -47,14 +47,14 @@
   bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
+  width: 70px;
   height: 4px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 2px;
 }
 
 .section-header p {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #666;
   max-width: 600px;
   margin: 1rem auto 0;
@@ -63,18 +63,18 @@
 /* Search and Filter Styles */
 .search-filters {
   background: white;
-  border-radius: 15px;
-  padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  margin-bottom: 3rem;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2.5rem;
   border: 1px solid #e2e8f0;
 }
 
 .filter-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .filter-row:last-child {
@@ -88,16 +88,17 @@
 
 .filter-group label {
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
   color: #333;
+  font-size: 0.9rem;
 }
 
 .filter-group input,
 .filter-group select {
-  padding: 0.8rem 1rem;
+  padding: 0.7rem 0.8rem;
   border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 6px;
+  font-size: 14px;
   transition: all 0.3s ease;
 }
 
@@ -105,7 +106,7 @@
 .filter-group select:focus {
   outline: none;
   border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
 }
 
 .filter-actions {
@@ -117,9 +118,9 @@
   background: #6c757d;
   color: white;
   border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 8px;
-  font-size: 16px;
+  padding: 0.7rem 1.2rem;
+  border-radius: 6px;
+  font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -142,7 +143,7 @@
   align-items: center;
   justify-content: center;
   z-index: 100;
-  border-radius: 15px;
+  border-radius: 12px;
 }
 
 .loading-spinner {
@@ -150,10 +151,10 @@
 }
 
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid #e2e8f0;
-  border-top: 4px solid #667eea;
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e2e8f0;
+  border-top: 3px solid #667eea;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 1rem;
@@ -171,29 +172,29 @@
 /* Properties Grid */
 .properties-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2.5rem;
-  margin-bottom: 3rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .property-card {
   background: white;
-  border-radius: 15px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   transform: translateY(0);
 }
 
 .property-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
 
 .property-image {
   position: relative;
-  height: 250px;
+  height: 200px;
   overflow: hidden;
 }
 
@@ -215,39 +216,40 @@
   height: 100%;
   background: #f1f5f9;
   color: #94a3b8;
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .badge-featured {
   position: absolute;
-  top: 15px;
-  left: 15px;
+  top: 12px;
+  left: 12px;
   background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
   color: #333;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
+  padding: 0.4rem 0.8rem;
+  border-radius: 15px;
   font-weight: 600;
-  font-size: 0.9rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-size: 0.8rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
   z-index: 2;
 }
 
 .btn-favorite {
   position: absolute;
-  top: 15px;
-  right: 15px;
+  top: 12px;
+  right: 12px;
   background: white;
   border: none;
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
   z-index: 2;
   transition: all 0.3s ease;
+  font-size: 14px;
 }
 
 .btn-favorite:hover {
@@ -257,25 +259,25 @@
 }
 
 .property-info {
-  padding: 1.5rem;
+  padding: 1.2rem;
 }
 
 .property-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8rem;
 }
 
 .property-header h3 {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   color: #333;
   margin: 0;
   flex: 1;
 }
 
 .property-price {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: #667eea;
   margin: 0;
@@ -286,20 +288,21 @@
   display: flex;
   align-items: center;
   color: #666;
-  margin-bottom: 1.5rem;
-  font-size: 1rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.9rem;
 }
 
 .property-location svg {
-  margin-right: 8px;
+  margin-right: 6px;
   color: #667eea;
+  font-size: 14px;
 }
 
 .property-features {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1.5rem;
-  padding: 1rem 0;
+  margin-bottom: 1.2rem;
+  padding: 0.8rem 0;
   border-top: 1px solid #e2e8f0;
   border-bottom: 1px solid #e2e8f0;
 }
@@ -312,13 +315,13 @@
 }
 
 .feature svg {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #667eea;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .feature span {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: #666;
 }
 
@@ -327,70 +330,70 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  padding: 1rem;
-  border-radius: 8px;
-  font-size: 1rem;
+  padding: 0.8rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 3px 12px rgba(102, 126, 234, 0.3);
 }
 
 .btn-view-details:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 5px 16px rgba(102, 126, 234, 0.4);
 }
 
 /* No Properties Message */
 .no-properties {
   grid-column: 1 / -1;
   text-align: center;
-  padding: 3rem;
+  padding: 2rem;
   background: white;
-  border-radius: 15px;
+  border-radius: 12px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .no-properties p {
-  font-size: 1.2rem;
+  font-size: 1rem;
   color: #666;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
 }
 
 /* View All Button */
 .view-all-container {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .btn-view-all {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  padding: 1.2rem 3rem;
-  border-radius: 50px;
-  font-size: 1.1rem;
+  padding: 1rem 2.5rem;
+  border-radius: 30px;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 
 .btn-view-all:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
 }
 
 /* Responsive Design */
 @media (max-width: 1200px) {
   .properties-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
 }
 
 @media (max-width: 768px) {
   .properties {
-    padding: 3rem 0;
+    padding: 2.5rem 0;
   }
 
   .properties-container {
@@ -398,67 +401,67 @@
   }
 
   .section-header h2 {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 
   .section-header p {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .search-filters {
-    padding: 1.5rem;
+    padding: 1.2rem;
   }
 
   .filter-row {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 0.8rem;
   }
 
   .properties-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
   .property-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
 
   .property-price {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
   }
 
   .property-features {
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.8rem;
   }
 
   .feature {
     flex: 1;
-    min-width: 80px;
+    min-width: 70px;
   }
 }
 
 @media (max-width: 480px) {
   .section-header h2 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
   }
 
   .property-image {
-    height: 200px;
+    height: 180px;
   }
 
   .property-header h3 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   .property-price {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 
   .btn-view-all {
-    padding: 1rem 2rem;
-    font-size: 1rem;
+    padding: 0.8rem 2rem;
+    font-size: 0.9rem;
   }
 }

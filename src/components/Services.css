@@ -1,5 +1,5 @@
 .services {
-  padding: 100px 0;
+  padding: 4rem 0;
   background: linear-gradient(
       rgba(248, 249, 250, 0.9),
       rgba(233, 236, 239, 0.9)
@@ -16,28 +16,28 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 100px;
+  height: 80px;
   background: linear-gradient(to bottom, #f8f9fa, transparent);
   z-index: 1;
 }
 
 .services-container {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 1.5rem;
   position: relative;
   z-index: 2;
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 3rem;
 }
 
 .section-header h2 {
-  font-size: 3rem;
+  font-size: 2rem;
   color: #333;
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
   position: relative;
   display: inline-block;
 }
@@ -53,20 +53,20 @@
 .section-header h2::after {
   content: "";
   position: absolute;
-  bottom: -15px;
+  bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 100px;
-  height: 5px;
+  width: 70px;
+  height: 4px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .section-header p {
-  font-size: 1.3rem;
+  font-size: 1rem;
   color: #666;
-  max-width: 700px;
-  margin: 20px auto 0;
+  max-width: 600px;
+  margin: 1rem auto 0;
   font-weight: 300;
 }
 
@@ -74,7 +74,7 @@
 .services-slider {
   position: relative;
   overflow: hidden;
-  padding: 0 70px;
+  padding: 0 50px;
 }
 
 .slider-btn {
@@ -84,22 +84,22 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  font-size: 28px;
+  font-size: 24px;
   cursor: pointer;
   z-index: 10;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 
 .slider-btn:hover {
   transform: translateY(-50%) scale(1.1);
-  box-shadow: 0 15px 30px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
 }
 
 .slider-btn.prev {
@@ -112,24 +112,24 @@
 
 .services-wrapper {
   overflow: hidden;
-  padding: 30px 0;
+  padding: 20px 0;
 }
 
 .services-track {
   display: flex;
   transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  gap: 40px;
+  gap: 30px;
 }
 
 .service-card {
   flex: 0 0 calc(25% - 30px);
   background: white;
-  border-radius: 20px;
-  padding: 40px 30px;
+  border-radius: 15px;
+  padding: 30px 25px;
   text-align: center;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  min-width: 280px;
+  min-width: 250px;
   position: relative;
   overflow: hidden;
 }
@@ -140,7 +140,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 5px;
+  height: 4px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   transform: scaleX(0);
   transform-origin: left;
@@ -152,65 +152,65 @@
 }
 
 .service-icon {
-  width: 90px;
-  height: 90px;
+  width: 70px;
+  height: 70px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 25px;
-  font-size: 35px;
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+  margin: 0 auto 20px;
+  font-size: 28px;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
   position: relative;
   z-index: 1;
 }
 
 .service-card h3 {
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   color: #333;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   font-weight: 700;
 }
 
 .service-card p {
   color: #666;
-  line-height: 1.7;
-  margin-bottom: 25px;
-  min-height: 90px;
-  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  min-height: 70px;
+  font-size: 0.95rem;
 }
 
 .service-btn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
-  padding: 15px 30px;
-  border-radius: 30px;
-  font-size: 17px;
+  padding: 12px 25px;
+  border-radius: 25px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .service-btn:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(102, 126, 234, 0.4);
 }
 
 /* Slider Dots */
 .slider-dots {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  margin-top: 40px;
+  gap: 12px;
+  margin-top: 30px;
 }
 
 .dot {
-  width: 15px;
-  height: 15px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: #ccc;
   cursor: pointer;
@@ -219,7 +219,7 @@
 
 .dot.active {
   background: #667eea;
-  transform: scale(1.3);
+  transform: scale(1.2);
 }
 
 /* Responsive Design */
@@ -229,150 +229,155 @@
   }
 
   .section-header h2 {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
   }
 }
 
 @media (max-width: 992px) {
   .services {
-    padding: 80px 0;
-  }
-
-  .services-slider {
-    padding: 0 60px;
-  }
-
-  .service-card {
-    flex: 0 0 calc(50% - 30px);
-    padding: 30px 25px;
-  }
-
-  .service-icon {
-    width: 70px;
-    height: 70px;
-    font-size: 28px;
-  }
-
-  .service-card h3 {
-    font-size: 1.4rem;
-  }
-
-  .service-card p {
-    font-size: 1rem;
-    min-height: 80px;
-  }
-}
-
-@media (max-width: 768px) {
-  .services {
-    padding: 60px 0;
-  }
-
-  .section-header {
-    margin-bottom: 40px;
-  }
-
-  .section-header h2 {
-    font-size: 2.2rem;
-  }
-
-  .section-header p {
-    font-size: 1.1rem;
-  }
-
-  .services-slider {
-    padding: 0 50px;
-  }
-
-  .slider-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
-  }
-
-  .services-wrapper {
-    padding: 20px 0;
-  }
-
-  .service-card {
-    flex: 0 0 calc(100% - 30px);
-    padding: 35px 30px;
-  }
-
-  .service-icon {
-    width: 80px;
-    height: 80px;
-    font-size: 32px;
-  }
-
-  .service-card h3 {
-    font-size: 1.5rem;
-  }
-
-  .service-btn {
-    padding: 12px 25px;
-    font-size: 16px;
-  }
-}
-
-@media (max-width: 576px) {
-  .services-container {
-    padding: 0 15px;
-  }
-
-  .section-header h2 {
-    font-size: 2rem;
-  }
-
-  .section-header p {
-    font-size: 1rem;
+    padding: 3rem 0;
   }
 
   .services-slider {
     padding: 0 40px;
   }
 
-  .slider-btn {
-    width: 45px;
-    height: 45px;
-    font-size: 20px;
-  }
-
   .service-card {
-    padding: 30px 20px;
-    min-width: 250px;
+    flex: 0 0 calc(50% - 30px);
+    padding: 25px 20px;
   }
 
   .service-icon {
-    width: 70px;
-    height: 70px;
-    font-size: 28px;
-    margin-bottom: 20px;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
   }
 
   .service-card h3 {
-    font-size: 1.3rem;
-    margin-bottom: 15px;
+    font-size: 1.2rem;
   }
 
   .service-card p {
-    font-size: 0.95rem;
-    margin-bottom: 20px;
-    min-height: 70px;
+    font-size: 0.9rem;
+    min-height: 60px;
   }
 
   .service-btn {
     padding: 10px 20px;
-    font-size: 15px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .services {
+    padding: 2.5rem 0;
+  }
+
+  .section-header {
+    margin-bottom: 2rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .section-header p {
+    font-size: 0.95rem;
+  }
+
+  .services-slider {
+    padding: 0 35px;
+  }
+
+  .slider-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .services-wrapper {
+    padding: 15px 0;
+  }
+
+  .service-card {
+    flex: 0 0 calc(100% - 30px);
+    padding: 25px 20px;
+  }
+
+  .service-icon {
+    width: 65px;
+    height: 65px;
+    font-size: 26px;
+  }
+
+  .service-card h3 {
+    font-size: 1.25rem;
+  }
+
+  .service-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .services-container {
+    padding: 0 1rem;
+  }
+
+  .section-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .section-header p {
+    font-size: 0.9rem;
+  }
+
+  .services-slider {
+    padding: 0 30px;
+  }
+
+  .slider-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+  }
+
+  .service-card {
+    padding: 20px 15px;
+    min-width: 220px;
+  }
+
+  .service-icon {
+    width: 55px;
+    height: 55px;
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+
+  .service-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+  }
+
+  .service-card p {
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+    min-height: 50px;
+  }
+
+  .service-btn {
+    padding: 8px 15px;
+    font-size: 13px;
   }
 
   .slider-dots {
-    gap: 10px;
-    margin-top: 30px;
+    gap: 8px;
+    margin-top: 20px;
   }
 
   .dot {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
   }
 }
