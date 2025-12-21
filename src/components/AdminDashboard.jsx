@@ -61,6 +61,22 @@ const AdminDashboard = () => {
     bio: "",
   });
 
+  // Project management state
+  const [projects, setProjects] = useState([]);
+  const [showAddProjectForm, setShowAddProjectForm] = useState(false);
+  const [editingProject, setEditingProject] = useState(null);
+  const [projectForm, setProjectForm] = useState({
+    title: "",
+    description: "",
+    location: "",
+    status: "Available",
+    completion_date: "",
+    total_units: 0,
+    builder_id: "",
+    images: [""],
+    tag: "available",
+  });
+
   // Builder management state
   const [builders, setBuilders] = useState([]);
   const [showAddBuilderForm, setShowAddBuilderForm] = useState(false);
@@ -126,6 +142,14 @@ const AdminDashboard = () => {
         if (response.ok) {
           const data = await response.json();
           setAgents(data);
+        }
+      } else if (activeTab === "projects") {
+        const response = await fetch(`${API_BASE_URL}/api/admin/projects`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setProjects(data);
         }
       } else if (activeTab === "builders") {
         const response = await fetch(`${API_BASE_URL}/api/admin/builders`, {
@@ -513,6 +537,96 @@ const AdminDashboard = () => {
     setShowAddBuilderForm(true);
   };
 
+  // Handle project form submission
+  const handleProjectSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const url = editingProject
+        ? `${API_BASE_URL}/api/admin/projects/${editingProject.id}`
+        : `${API_BASE_URL}/api/admin/projects`;
+
+      const method = editingProject ? "PUT" : "POST";
+
+      const projectData = {
+        ...projectForm,
+        total_units: parseInt(projectForm.total_units) || 0,
+        builder_id: projectForm.builder_id
+          ? parseInt(projectForm.builder_id)
+          : null,
+        images: projectForm.images.filter((url) => url.trim() !== ""),
+      };
+
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(projectData),
+      });
+
+      if (response.ok) {
+        fetchData();
+        setShowAddProjectForm(false);
+        setEditingProject(null);
+        setProjectForm({
+          title: "",
+          description: "",
+          location: "",
+          status: "Available",
+          completion_date: "",
+          total_units: 0,
+          builder_id: "",
+          images: [""],
+          tag: "available",
+        });
+      } else {
+        console.error("Failed to save project");
+      }
+    } catch (error) {
+      console.error("Error saving project:", error);
+    }
+  };
+
+  // Edit project
+  const handleEditProject = (project) => {
+    setEditingProject(project);
+    setProjectForm({
+      title: project.title,
+      description: project.description,
+      location: project.location,
+      status: project.status,
+      completion_date: project.completion_date,
+      total_units: project.total_units,
+      builder_id: project.builder_id?.toString() || "",
+      images: project.images || [""],
+      tag: project.tag,
+    });
+    setShowAddProjectForm(true);
+  };
+
+  // Delete project
+  const handleDeleteProject = async (projectId) => {
+    if (window.confirm("Are you sure you want to delete this project?")) {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/admin/projects/${projectId}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        if (response.ok) {
+          fetchData();
+        } else {
+          console.error("Failed to delete project");
+        }
+      } catch (error) {
+        console.error("Error deleting project:", error);
+      }
+    }
+  };
+
   // Delete builder
   const handleDeleteBuilder = async (builderId) => {
     if (window.confirm("Are you sure you want to delete this builder?")) {
@@ -806,6 +920,217 @@ const AdminDashboard = () => {
           </div>
         </div>
       )}
+
+      {/* Add Project Form Modal */}
+      {showAddProjectForm && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3>{editingProject ? "Edit Project" : "Add New Project"}</h3>
+              <button
+                className="close-btn"
+                onClick={() => {
+                  setShowAddProjectForm(false);
+                  setEditingProject(null);
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <form onSubmit={handleProjectSubmit} className="project-form">
+              <div className="form-group">
+                <label>Title *</label>
+                <input
+                  type="text"
+                  value={projectForm.title}
+                  onChange={(e) =>
+                    setProjectForm({ ...projectForm, title: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Description</label>
+                <textarea
+                  value={projectForm.description}
+                  onChange={(e) =>
+                    setProjectForm({
+                      ...projectForm,
+                      description: e.target.value,
+                    })
+                  }
+                  rows="4"
+                />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Location *</label>
+                  <input
+                    type="text"
+                    value={projectForm.location}
+                    onChange={(e) =>
+                      setProjectForm({
+                        ...projectForm,
+                        location: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Status</label>
+                  <select
+                    value={projectForm.status}
+                    onChange={(e) =>
+                      setProjectForm({ ...projectForm, status: e.target.value })
+                    }
+                  >
+                    <option value="Available">Available</option>
+                    <option value="Working">Working</option>
+                    <option value="Completed">Completed</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Completion Date</label>
+                  <input
+                    type="date"
+                    value={projectForm.completion_date}
+                    onChange={(e) =>
+                      setProjectForm({
+                        ...projectForm,
+                        completion_date: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Total Units</label>
+                  <input
+                    type="number"
+                    value={projectForm.total_units}
+                    onChange={(e) =>
+                      setProjectForm({
+                        ...projectForm,
+                        total_units: parseInt(e.target.value) || 0,
+                      })
+                    }
+                    min="0"
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Tag</label>
+                  <select
+                    value={projectForm.tag}
+                    onChange={(e) =>
+                      setProjectForm({ ...projectForm, tag: e.target.value })
+                    }
+                  >
+                    <option value="available">Available</option>
+                    <option value="latest">Latest</option>
+                    <option value="working">Working</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Builder</label>
+                  <select
+                    value={projectForm.builder_id}
+                    onChange={(e) =>
+                      setProjectForm({
+                        ...projectForm,
+                        builder_id: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="">Select a Builder (Optional)</option>
+                    {builders.map((builder) => (
+                      <option key={builder.id} value={builder.id}>
+                        {builder.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Image URLs Section */}
+              <div className="form-group">
+                <label>Image URLs</label>
+                <div className="image-inputs">
+                  {projectForm.images.map((url, index) => (
+                    <div key={index} className="image-input-group">
+                      <input
+                        type="url"
+                        placeholder="Enter image URL"
+                        value={url}
+                        onChange={(e) => {
+                          const newImages = [...projectForm.images];
+                          newImages[index] = e.target.value;
+                          setProjectForm({ ...projectForm, images: newImages });
+                        }}
+                      />
+                      {projectForm.images.length > 1 && (
+                        <button
+                          type="button"
+                          className="btn-remove-image"
+                          onClick={() => {
+                            const newImages = projectForm.images.filter(
+                              (_, i) => i !== index
+                            );
+                            setProjectForm({
+                              ...projectForm,
+                              images: newImages,
+                            });
+                          }}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="btn-add-image"
+                    onClick={() => {
+                      setProjectForm({
+                        ...projectForm,
+                        images: [...projectForm.images, ""],
+                      });
+                    }}
+                  >
+                    + Add Image URL
+                  </button>
+                </div>
+              </div>
+
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="btn-cancel"
+                  onClick={() => {
+                    setShowAddProjectForm(false);
+                    setEditingProject(null);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn-submit">
+                  {editingProject ? "Update Project" : "Add Project"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 
@@ -991,6 +1316,75 @@ const AdminDashboard = () => {
     </div>
   );
 
+  const ProjectManagement = () => (
+    <div className="dashboard-content">
+      <div className="content-header">
+        <h2>Project Management</h2>
+        <button
+          className="btn-primary"
+          onClick={() => {
+            setEditingProject(null);
+            setProjectForm({
+              title: "",
+              description: "",
+              location: "",
+              status: "Available",
+              completion_date: "",
+              total_units: 0,
+              builder_id: "",
+              images: [""],
+              tag: "available",
+            });
+            setShowAddProjectForm(true);
+          }}
+        >
+          <FaPlus /> Add Project
+        </button>
+      </div>
+
+      <div className="properties-grid">
+        {projects.map((project) => (
+          <div key={project.id} className="property-card">
+            <div className="property-image">
+              {project.images && project.images.length > 0 ? (
+                <img src={project.images[0]} alt={project.title} />
+              ) : (
+                <div className="no-image">No Image</div>
+              )}
+            </div>
+            <div className="property-info">
+              <h3>{project.title}</h3>
+              <p className="property-location">{project.location}</p>
+              {project.builder_name && (
+                <p className="property-builder">
+                  Builder: {project.builder_name}
+                </p>
+              )}
+              <div className="project-tags">
+                <span className={`tag tag-${project.tag}`}>
+                  {project.tag.charAt(0).toUpperCase() + project.tag.slice(1)}
+                </span>
+              </div>
+              <div className="property-actions">
+                <button
+                  className="btn-edit"
+                  onClick={() => handleEditProject(project)}
+                >
+                  <FaEdit /> Edit
+                </button>
+                <button
+                  className="btn-delete"
+                  onClick={() => handleDeleteProject(project.id)}
+                >
+                  <FaTrash /> Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
   return (
     <div className="admin-dashboard">
       <div className="dashboard-layout">
@@ -1026,6 +1420,12 @@ const AdminDashboard = () => {
               <FaUserFriends /> Agents
             </button>
             <button
+              className={activeTab === "projects" ? "active" : ""}
+              onClick={() => setActiveTab("projects")}
+            >
+              <FaBuilding /> Projects
+            </button>
+            <button
               className={activeTab === "builders" ? "active" : ""}
               onClick={() => setActiveTab("builders")}
             >
@@ -1042,6 +1442,7 @@ const AdminDashboard = () => {
           {activeTab === "properties" && <PropertyManagement />}
           {activeTab === "inquiries" && <InquiryManagement />}
           {activeTab === "admins" && <AdminManagement />}
+          {activeTab === "projects" && <ProjectManagement />}
           {activeTab === "agents" && (
             <div className="dashboard-content">
               <div className="content-header">

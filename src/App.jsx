@@ -8,6 +8,9 @@ import Hero from "./components/Hero";
 import Properties from "./components/Properties";
 import PropertiesPage from "./components/PropertiesPage";
 import PropertyDetail from "./components/PropertyDetail";
+import Projects from "./components/Projects";
+import ProjectsPage from "./components/ProjectsPage";
+import ProjectDetail from "./components/ProjectDetail";
 import Services from "./components/Services";
 import About from "./components/About";
 import Contact from "./components/Contact";
@@ -44,6 +47,7 @@ function App() {
                 <Navbar />
                 <Hero />
                 <Properties />
+                <Projects />
                 <TopBuilders />
                 <Services />
                 <About />
@@ -84,6 +88,30 @@ function App() {
                 <TopBar />
                 <Navbar />
                 <Agents />
+                <Footer />
+              </div>
+            }
+          />
+
+          <Route
+            path="/projects"
+            element={
+              <div className="app">
+                <TopBar />
+                <Navbar />
+                <ProjectsPage />
+                <Footer />
+              </div>
+            }
+          />
+
+          <Route
+            path="/project/:id"
+            element={
+              <div className="app">
+                <TopBar />
+                <Navbar />
+                <ProjectDetail />
                 <Footer />
               </div>
             }

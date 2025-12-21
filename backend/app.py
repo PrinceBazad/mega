@@ -187,6 +187,52 @@ agents = [
     }
 ]
 
+# Sample projects data
+projects = [
+    {
+        'id': 1,
+        'title': 'Skyline Heights',
+        'description': 'Luxury residential towers with panoramic city views',
+        'location': 'Sector 23, Gurugram, Haryana',
+        'status': 'Available',
+        'completion_date': '2025-12-31',
+        'total_units': 120,
+        'builder_id': 1,
+        'builder_name': 'DLF Limited',
+        'images': ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80'],
+        'tag': 'latest',
+        'created_at': datetime.now().isoformat()
+    },
+    {
+        'id': 2,
+        'title': 'Green Valley Apartments',
+        'description': 'Eco-friendly residential complex with green spaces',
+        'location': 'Sector 45, Gurugram, Haryana',
+        'status': 'Working',
+        'completion_date': '2026-06-30',
+        'total_units': 80,
+        'builder_id': 2,
+        'builder_name': 'Amrapali Group',
+        'images': ['https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80'],
+        'tag': 'working',
+        'created_at': datetime.now().isoformat()
+    },
+    {
+        'id': 3,
+        'title': 'Royal Enclave',
+        'description': 'Premium gated community with luxury amenities',
+        'location': 'South Delhi, New Delhi',
+        'status': 'Available',
+        'completion_date': '2024-05-15',
+        'total_units': 200,
+        'builder_id': 3,
+        'builder_name': 'Godrej Properties',
+        'images': ['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80'],
+        'tag': 'available',
+        'created_at': datetime.now().isoformat()
+    }
+]
+
 # Sample top builders data
 builders = [
     {
@@ -627,6 +673,113 @@ def delete_builder(builder_id):
     
     builders = [b for b in builders if b['id'] != builder_id]
     return jsonify({'message': 'Builder deleted successfully'})
+
+# Project Routes
+@app.route('/api/projects', methods=['GET'])
+def get_projects():
+    # Get query parameters for filtering
+    status = request.args.get('status')
+    location = request.args.get('location')
+    tag = request.args.get('tag')
+    
+    # Filter projects
+    filtered_projects = projects.copy()
+    
+    if status:
+        filtered_projects = [p for p in filtered_projects if p['status'].lower() == status.lower()]
+    
+    if location:
+        filtered_projects = [p for p in filtered_projects if location.lower() in p['location'].lower()]
+    
+    if tag:
+        filtered_projects = [p for p in filtered_projects if p['tag'].lower() == tag.lower()]
+    
+    return jsonify(filtered_projects)
+
+@app.route('/api/projects/<int:project_id>', methods=['GET'])
+def get_project(project_id):
+    project = next((p for p in projects if p['id'] == project_id), None)
+    if project:
+        return jsonify(project)
+    return jsonify({'message': 'Project not found'}), 404
+
+# Admin Project Management Routes
+@app.route('/api/admin/projects', methods=['GET'])
+def get_admin_projects():
+    # In a real app, this would require authentication
+    return jsonify(projects)
+
+@app.route('/api/admin/projects', methods=['POST'])
+def create_project():
+    # In a real app, this would require authentication
+    data = request.get_json()
+    
+    # Get builder info if builder_id is provided
+    builder_id = data.get('builder_id')
+    builder_name = ""
+    if builder_id:
+        builder = next((b for b in builders if b['id'] == builder_id), None)
+        if builder:
+            builder_name = builder['name']
+    
+    new_project = {
+        'id': max([p['id'] for p in projects]) + 1 if projects else 1,
+        'title': data['title'],
+        'description': data.get('description', ''),
+        'location': data['location'],
+        'status': data.get('status', 'Available'),
+        'completion_date': data.get('completion_date', ''),
+        'total_units': data.get('total_units', 0),
+        'builder_id': builder_id,
+        'builder_name': builder_name,
+        'images': data.get('images', []),
+        'tag': data.get('tag', 'available'),
+        'created_at': datetime.now().isoformat()
+    }
+    
+    projects.append(new_project)
+    return jsonify(new_project), 201
+
+@app.route('/api/admin/projects/<int:project_id>', methods=['PUT'])
+def update_project(project_id):
+    # In a real app, this would require authentication
+    project = next((p for p in projects if p['id'] == project_id), None)
+    if not project:
+        return jsonify({'message': 'Project not found'}), 404
+    
+    data = request.get_json()
+    
+    # Get builder info if builder_id is provided
+    builder_id = data.get('builder_id')
+    builder_name = project['builder_name']
+    if builder_id and builder_id != project['builder_id']:
+        builder = next((b for b in builders if b['id'] == builder_id), None)
+        if builder:
+            builder_name = builder['name']
+    
+    project['title'] = data.get('title', project['title'])
+    project['description'] = data.get('description', project['description'])
+    project['location'] = data.get('location', project['location'])
+    project['status'] = data.get('status', project['status'])
+    project['completion_date'] = data.get('completion_date', project['completion_date'])
+    project['total_units'] = data.get('total_units', project['total_units'])
+    project['builder_id'] = builder_id if builder_id is not None else project['builder_id']
+    project['builder_name'] = builder_name
+    project['images'] = data.get('images', project['images'])
+    project['tag'] = data.get('tag', project['tag'])
+    
+    return jsonify(project)
+
+@app.route('/api/admin/projects/<int:project_id>', methods=['DELETE'])
+def delete_project(project_id):
+    # In a real app, this would require authentication
+    global projects
+    project = next((p for p in projects if p['id'] == project_id), None)
+    if not project:
+        return jsonify({'message': 'Project not found'}), 404
+    
+    projects = [p for p in projects if p['id'] != project_id]
+    return jsonify({'message': 'Project deleted successfully'})
 
 # Inquiry Routes
 @app.route('/api/inquiries', methods=['POST'])
