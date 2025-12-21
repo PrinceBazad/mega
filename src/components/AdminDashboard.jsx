@@ -35,6 +35,7 @@ const AdminDashboard = () => {
     bedrooms: "",
     bathrooms: "",
     area_sqft: "",
+    builder_id: "",
     images: [""],
   });
   const [adminFormData, setAdminFormData] = useState({
@@ -201,6 +202,7 @@ const AdminDashboard = () => {
         bedrooms: parseInt(formData.bedrooms) || 0,
         bathrooms: parseInt(formData.bathrooms) || 0,
         area_sqft: parseInt(formData.area_sqft) || 0,
+        builder_id: formData.builder_id ? parseInt(formData.builder_id) : null,
         images: imageInputs.filter((url) => url.trim() !== ""),
       };
 
@@ -285,6 +287,7 @@ const AdminDashboard = () => {
       bedrooms: property.bedrooms?.toString() || "",
       bathrooms: property.bathrooms?.toString() || "",
       area_sqft: property.area_sqft?.toString() || "",
+      builder_id: property.builder_id?.toString() || "",
       images: property.images || [""],
     });
     setImageInputs(property.images || [""]);
@@ -367,6 +370,7 @@ const AdminDashboard = () => {
       bedrooms: "",
       bathrooms: "",
       area_sqft: "",
+      builder_id: "",
       images: [""],
     });
     setImageInputs([""]);
@@ -560,6 +564,9 @@ const AdminDashboard = () => {
             <div className="property-info">
               <h3>{property.title}</h3>
               <p className="property-location">{property.location}</p>
+              {property.builder_name && (
+                <p className="property-builder">Builder: {property.builder_name}</p>
+              )}
               <p className="property-price">
                 ${property.price.toLocaleString()}
               </p>
@@ -706,6 +713,23 @@ const AdminDashboard = () => {
                     min="0"
                   />
                 </div>
+              </div>
+
+              {/* Builder Selection */}
+              <div className="form-group">
+                <label>Builder</label>
+                <select
+                  name="builder_id"
+                  value={formData.builder_id}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select a Builder (Optional)</option>
+                  {builders.map((builder) => (
+                    <option key={builder.id} value={builder.id}>
+                      {builder.name}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {/* Image URLs Section */}

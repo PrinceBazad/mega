@@ -160,6 +160,13 @@
   color: #333;
 }
 
+.property-builder {
+  font-size: 14px;
+  color: #667eea;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
 .property-location {
   display: flex;
   align-items: center;
@@ -525,17 +532,17 @@
   .btn-submit {
     width: 100%;
   }
-  
+
   .builders-list {
     grid-template-columns: 1fr;
   }
-  
+
   .builder-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 15px;
   }
-  
+
   .builder-actions {
     align-self: flex-end;
   }

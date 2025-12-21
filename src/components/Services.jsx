@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { motion, useAnimation } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import {
   FaHome,
   FaHandshake,
@@ -57,16 +57,6 @@ const Services = () => {
   ]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const controls = useAnimation();
-
-  // Auto-scroll functionality
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % services.length);
-    }, 4000); // Change slide every 4 seconds
-
-    return () => clearInterval(interval);
-  }, [services.length]);
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % services.length);
@@ -130,7 +120,6 @@ const Services = () => {
                   currentIndex * (100 / Math.min(services.length, 4))
                 }%)`,
               }}
-              animate={controls}
             >
               {services.map((service, index) => (
                 <motion.div

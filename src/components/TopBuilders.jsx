@@ -28,15 +28,19 @@ const TopBuilders = () => {
   }, []);
 
   const nextBuilder = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === builders.length - 1 ? 0 : prevIndex + 1
-    );
+    setCurrentIndex((prevIndex) => {
+      // Move by 3 items at a time for smoother navigation
+      const newIndex = prevIndex + 3;
+      return newIndex >= builders.length ? 0 : newIndex;
+    });
   };
 
   const prevBuilder = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? builders.length - 1 : prevIndex - 1
-    );
+    setCurrentIndex((prevIndex) => {
+      // Move by 3 items at a time for smoother navigation
+      const newIndex = prevIndex - 3;
+      return newIndex < 0 ? Math.max(0, builders.length - 3) : newIndex;
+    });
   };
 
   const handleViewProjects = (builderId) => {
@@ -61,12 +65,8 @@ const TopBuilders = () => {
     return null;
   }
 
+  // Show 3 builders at a time
   const visibleBuilders = builders.slice(currentIndex, currentIndex + 3);
-  // If we don't have 3 builders, wrap around from the beginning
-  if (visibleBuilders.length < 3 && builders.length >= 3) {
-    const remaining = 3 - visibleBuilders.length;
-    visibleBuilders.push(...builders.slice(0, remaining));
-  }
 
   return (
     <section className="top-builders">
@@ -83,10 +83,11 @@ const TopBuilders = () => {
         </motion.div>
 
         <div className="builders-carousel">
-          <button
-            className="carousel-btn prev-btn"
+          <button 
+            className="carousel-btn prev-btn" 
             onClick={prevBuilder}
             aria-label="Previous builders"
+            disabled={builders.length <= 3}
           >
             <FaArrowLeft />
           </button>
@@ -94,7 +95,7 @@ const TopBuilders = () => {
           <div className="builders-grid">
             {visibleBuilders.map((builder, index) => (
               <motion.div
-                key={`${builder.id}-${index}`}
+                key={builder.id}
                 className="builder-card"
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -126,10 +127,11 @@ const TopBuilders = () => {
             ))}
           </div>
 
-          <button
-            className="carousel-btn next-btn"
+          <button 
+            className="carousel-btn next-btn" 
             onClick={nextBuilder}
             aria-label="Next builders"
+            disabled={builders.length <= 3}
           >
             <FaArrowRight />
           </button>

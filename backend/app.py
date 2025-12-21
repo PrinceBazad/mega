@@ -37,6 +37,7 @@ admins = [
     }
 ]
 
+# Sample properties data with builder association
 properties = [
     {
         'id': 1,
@@ -49,6 +50,8 @@ properties = [
         'bedrooms': 5,
         'bathrooms': 4,
         'area_sqft': 4500,
+        'builder_id': 1,
+        'builder_name': 'DLF Limited',
         'images': ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80'],
         'created_at': datetime.now().isoformat()
     },
@@ -63,6 +66,8 @@ properties = [
         'bedrooms': 2,
         'bathrooms': 2,
         'area_sqft': 1200,
+        'builder_id': 2,
+        'builder_name': 'Amrapali Group',
         'images': ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80'],
         'created_at': datetime.now().isoformat()
     },
@@ -77,6 +82,8 @@ properties = [
         'bedrooms': 3,
         'bathrooms': 3,
         'area_sqft': 2100,
+        'builder_id': 1,
+        'builder_name': 'DLF Limited',
         'images': ['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80'],
         'created_at': datetime.now().isoformat()
     },
@@ -91,6 +98,8 @@ properties = [
         'bedrooms': 4,
         'bathrooms': 3,
         'area_sqft': 3500,
+        'builder_id': 3,
+        'builder_name': 'Godrej Properties',
         'images': ['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80'],
         'created_at': datetime.now().isoformat()
     },
@@ -105,6 +114,8 @@ properties = [
         'bedrooms': 4,
         'bathrooms': 4,
         'area_sqft': 3800,
+        'builder_id': 5,
+        'builder_name': 'Oberoi Realty',
         'images': ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80'],
         'created_at': datetime.now().isoformat()
     },
@@ -119,6 +130,8 @@ properties = [
         'bedrooms': 2,
         'bathrooms': 2,
         'area_sqft': 1100,
+        'builder_id': 6,
+        'builder_name': 'Tata Housing',
         'images': ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80'],
         'created_at': datetime.now().isoformat()
     }
@@ -405,6 +418,14 @@ def create_property():
     # In a real app, this would require authentication
     data = request.get_json()
     
+    # Get builder info if builder_id is provided
+    builder_id = data.get('builder_id')
+    builder_name = ""
+    if builder_id:
+        builder = next((b for b in builders if b['id'] == builder_id), None)
+        if builder:
+            builder_name = builder['name']
+    
     new_property = {
         'id': max([p['id'] for p in properties]) + 1 if properties else 1,
         'title': data['title'],
@@ -416,6 +437,8 @@ def create_property():
         'bedrooms': data.get('bedrooms', 0),
         'bathrooms': data.get('bathrooms', 0),
         'area_sqft': data.get('area_sqft', 0),
+        'builder_id': builder_id,
+        'builder_name': builder_name,
         'images': data.get('images', []),
         'created_at': datetime.now().isoformat()
     }
@@ -432,6 +455,14 @@ def update_property(property_id):
     
     data = request.get_json()
     
+    # Get builder info if builder_id is provided
+    builder_id = data.get('builder_id')
+    builder_name = property['builder_name']
+    if builder_id and builder_id != property['builder_id']:
+        builder = next((b for b in builders if b['id'] == builder_id), None)
+        if builder:
+            builder_name = builder['name']
+    
     property['title'] = data.get('title', property['title'])
     property['description'] = data.get('description', property['description'])
     property['price'] = data.get('price', property['price'])
@@ -441,6 +472,8 @@ def update_property(property_id):
     property['bedrooms'] = data.get('bedrooms', property['bedrooms'])
     property['bathrooms'] = data.get('bathrooms', property['bathrooms'])
     property['area_sqft'] = data.get('area_sqft', property['area_sqft'])
+    property['builder_id'] = builder_id if builder_id is not None else property['builder_id']
+    property['builder_name'] = builder_name
     property['images'] = data.get('images', property['images'])
     
     return jsonify(property)

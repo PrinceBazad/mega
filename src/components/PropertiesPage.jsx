@@ -77,6 +77,13 @@ const PropertiesPage = () => {
       );
     }
 
+    // If filtering by builder, apply that filter
+    if (builderId) {
+      filtered = filtered.filter(
+        (prop) => prop.builder_id && prop.builder_id.toString() === builderId
+      );
+    }
+
     // Apply other existing filters
     if (searchFilters.location) {
       filtered = filtered.filter((prop) =>
@@ -108,13 +115,6 @@ const PropertiesPage = () => {
       filtered = filtered.filter(
         (prop) => prop.status === searchFilters.status
       );
-    }
-
-    // If filtering by builder, apply that filter
-    if (builderId) {
-      // In a real app, you would filter by builder ID
-      // For now, we'll just show all properties since we don't have builder associations
-      console.log("Filtering by builder ID:", builderId);
     }
 
     setFilteredProperties(filtered);
