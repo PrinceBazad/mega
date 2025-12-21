@@ -1,39 +1,46 @@
-import { useState, useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
-import { FaSearch, FaMapMarkerAlt, FaHome, FaDollarSign, FaChevronDown } from 'react-icons/fa';
-import './Hero.css';
+import { useState, useEffect } from "react";
+import { motion, useAnimation } from "framer-motion";
+import { Link } from "react-router-dom";
+import {
+  FaSearch,
+  FaMapMarkerAlt,
+  FaHome,
+  FaDollarSign,
+  FaChevronDown,
+} from "react-icons/fa";
+import "./Hero.css";
 
 const Hero = () => {
   const [searchData, setSearchData] = useState({
-    location: '',
-    propertyType: '',
-    priceRange: ''
+    location: "",
+    propertyType: "",
+    priceRange: "",
   });
-  
+
   const [scrollY, setScrollY] = useState(0);
   const floatingAnim = useAnimation();
 
   // Handle scroll effect for parallax
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll);
-    
+    window.addEventListener("scroll", handleScroll);
+
     // Floating animation for stats
     floatingAnim.start({
       y: [0, -10, 0],
       transition: {
         duration: 3,
         repeat: Infinity,
-        ease: "easeInOut"
-      }
+        ease: "easeInOut",
+      },
     });
-    
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [floatingAnim]);
 
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log('Searching with:', searchData);
+    console.log("Searching with:", searchData);
     // Add search logic here
   };
 
@@ -59,7 +66,7 @@ const Hero = () => {
             duration: 8 + i * 2,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: i * 0.5
+            delay: i * 0.5,
           }}
         />
       ))}
@@ -69,14 +76,14 @@ const Hero = () => {
   return (
     <section id="home" className="hero">
       <FloatingElements />
-      
-      <div 
+
+      <div
         className="hero-overlay"
         style={{
           transform: `translateY(${scrollY * 0.5}px)`,
         }}
       ></div>
-      
+
       <div className="hero-content">
         <motion.div
           className="hero-text"
@@ -92,15 +99,16 @@ const Hero = () => {
           >
             Find Your Dream <span className="highlight">Home</span>
           </motion.h1>
-          
+
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            Discover the perfect property that matches your lifestyle and budget with our expert agents
+            Discover the perfect property that matches your lifestyle and budget
+            with our expert agents
           </motion.p>
-          
+
           <motion.div
             className="hero-buttons"
             initial={{ opacity: 0, y: 30 }}
@@ -114,14 +122,16 @@ const Hero = () => {
             >
               Explore Properties
             </motion.button>
-            
-            <motion.button
-              className="btn-secondary"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Meet Our Agents
-            </motion.button>
+
+            <Link to="/agents">
+              <motion.button
+                className="btn-secondary"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Meet Our Agents
+              </motion.button>
+            </Link>
           </motion.div>
         </motion.div>
 
@@ -138,7 +148,9 @@ const Hero = () => {
                 type="text"
                 placeholder="Enter location"
                 value={searchData.location}
-                onChange={(e) => setSearchData({ ...searchData, location: e.target.value })}
+                onChange={(e) =>
+                  setSearchData({ ...searchData, location: e.target.value })
+                }
               />
             </div>
 
@@ -146,7 +158,9 @@ const Hero = () => {
               <FaHome className="input-icon" />
               <select
                 value={searchData.propertyType}
-                onChange={(e) => setSearchData({ ...searchData, propertyType: e.target.value })}
+                onChange={(e) =>
+                  setSearchData({ ...searchData, propertyType: e.target.value })
+                }
               >
                 <option value="">Property Type</option>
                 <option value="house">House</option>
@@ -161,7 +175,9 @@ const Hero = () => {
               <FaDollarSign className="input-icon" />
               <select
                 value={searchData.priceRange}
-                onChange={(e) => setSearchData({ ...searchData, priceRange: e.target.value })}
+                onChange={(e) =>
+                  setSearchData({ ...searchData, priceRange: e.target.value })
+                }
               >
                 <option value="">Price Range</option>
                 <option value="0-100000">$0 - $100,000</option>
@@ -178,16 +194,16 @@ const Hero = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               initial={{ boxShadow: "0 0 0 0 rgba(102, 126, 234, 0.7)" }}
-              animate={{ 
+              animate={{
                 boxShadow: [
                   "0 0 0 0 rgba(102, 126, 234, 0.7)",
                   "0 0 0 10px rgba(102, 126, 234, 0)",
-                  "0 0 0 0 rgba(102, 126, 234, 0.7)"
-                ]
+                  "0 0 0 0 rgba(102, 126, 234, 0.7)",
+                ],
               }}
               transition={{
                 duration: 2,
-                repeat: Infinity
+                repeat: Infinity,
               }}
             >
               <FaSearch /> Search
@@ -211,7 +227,7 @@ const Hero = () => {
             </motion.h3>
             <p>Properties</p>
           </motion.div>
-          
+
           <motion.div className="stat-item" animate={floatingAnim}>
             <motion.h3
               initial={{ scale: 0 }}
@@ -222,7 +238,7 @@ const Hero = () => {
             </motion.h3>
             <p>Happy Clients</p>
           </motion.div>
-          
+
           <motion.div className="stat-item" animate={floatingAnim}>
             <motion.h3
               initial={{ scale: 0 }}
@@ -233,7 +249,7 @@ const Hero = () => {
             </motion.h3>
             <p>Expert Agents</p>
           </motion.div>
-          
+
           <motion.div className="stat-item" animate={floatingAnim}>
             <motion.h3
               initial={{ scale: 0 }}
@@ -245,8 +261,8 @@ const Hero = () => {
             <p>Years Experience</p>
           </motion.div>
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           className="scroll-indicator"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

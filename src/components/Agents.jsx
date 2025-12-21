@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Agents.css";
-import config from "../config";
+import API_BASE_URL from "../config";
 
 const Agents = () => {
   const [agents, setAgents] = useState([]);
@@ -14,7 +14,7 @@ const Agents = () => {
   const fetchAgents = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${config.API_BASE_URL}/api/agents`);
+      const response = await fetch(`${API_BASE_URL}/api/agents`);
       const data = await response.json();
       setAgents(data);
     } catch (error) {
