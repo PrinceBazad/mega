@@ -32,7 +32,11 @@ const Properties = () => {
   useEffect(() => {
     const handleLocationChange = (e) => {
       setLocationChanging(true);
-      setSelectedLocation(e.detail.location);
+      const newLocation = e.detail.location;
+      setSelectedLocation(newLocation);
+
+      // Apply location filter immediately
+      applyLocationFilter(newLocation);
 
       // Simulate loading delay for better UX
       setTimeout(() => {
@@ -45,44 +49,28 @@ const Properties = () => {
     // Check initial location from localStorage
     const savedLocation = localStorage.getItem("selectedLocation");
     if (savedLocation) {
-      setSelectedLocation(savedLocation);
+      const normalizedLocation = savedLocation.toLowerCase();
+      setSelectedLocation(normalizedLocation);
+      applyLocationFilter(normalizedLocation);
     }
 
     return () => {
       window.removeEventListener("locationChanged", handleLocationChange);
     };
-  }, []);
+  }, [properties]);
 
-  // Fetch properties from backend
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/properties`);
-        const data = await response.json();
-        setProperties(data);
-        setFilteredProperties(data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching properties:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchProperties();
-  }, []);
-
-  // Apply filters including location filter
-  useEffect(() => {
+  // Apply location filter function
+  const applyLocationFilter = (location) => {
     let filtered = [...properties];
 
     // Apply location filter based on selected location
-    if (selectedLocation === "gurugram") {
+    if (location === "gurugram") {
       filtered = filtered.filter(
         (prop) =>
           prop.location.toLowerCase().includes("gurugram") ||
           prop.location.toLowerCase().includes("gurgaon")
       );
-    } else if (selectedLocation === "delhi") {
+    } else if (location === "delhi") {
       filtered = filtered.filter(
         (prop) =>
           prop.location.toLowerCase().includes("delhi") ||
@@ -90,7 +78,7 @@ const Properties = () => {
       );
     }
 
-    // Apply other filters
+    // Apply other existing filters
     if (searchFilters.location) {
       filtered = filtered.filter((prop) =>
         prop.location
@@ -124,6 +112,37 @@ const Properties = () => {
     }
 
     setFilteredProperties(filtered);
+  };
+
+  // Fetch properties from backend
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/properties`);
+        const data = await response.json();
+        setProperties(data);
+        setFilteredProperties(data);
+        setLoading(false);
+        
+        // Apply location filter after initial load if needed
+        const savedLocation = localStorage.getItem("selectedLocation");
+        if (savedLocation) {
+          const normalizedLocation = savedLocation.toLowerCase();
+          setSelectedLocation(normalizedLocation);
+          applyLocationFilter(normalizedLocation);
+        }
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, []);
+
+  // Apply filters including location filter when search filters change
+  useEffect(() => {
+    applyLocationFilter(selectedLocation);
   }, [searchFilters, properties, selectedLocation]);
 
   const handleFilterChange = (e) => {

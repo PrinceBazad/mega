@@ -15,6 +15,8 @@ const PropertiesPage = () => {
   const [properties, setProperties] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [locationChanging, setLocationChanging] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState("gurugram");
   const [searchFilters, setSearchFilters] = useState({
     location: "",
     propertyType: "",
@@ -25,28 +27,55 @@ const PropertiesPage = () => {
 
   const navigate = useNavigate();
 
-  // Fetch properties from backend
+  // Listen for location changes
   useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/properties`);
-        const data = await response.json();
-        setProperties(data);
-        setFilteredProperties(data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching properties:", error);
-        setLoading(false);
-      }
+    const handleLocationChange = (e) => {
+      setLocationChanging(true);
+      const newLocation = e.detail.location;
+      setSelectedLocation(newLocation);
+      applyLocationFilter(newLocation);
+
+      // Simulate loading delay for better UX
+      setTimeout(() => {
+        setLocationChanging(false);
+      }, 500);
     };
 
-    fetchProperties();
-  }, []);
+    window.addEventListener("locationChanged", handleLocationChange);
 
-  // Apply filters
-  useEffect(() => {
+    // Check initial location from localStorage
+    const savedLocation = localStorage.getItem("selectedLocation");
+    if (savedLocation) {
+      const normalizedLocation = savedLocation.toLowerCase();
+      setSelectedLocation(normalizedLocation);
+      applyLocationFilter(normalizedLocation);
+    }
+
+    return () => {
+      window.removeEventListener("locationChanged", handleLocationChange);
+    };
+  }, [properties]);
+
+  // Apply location filter function
+  const applyLocationFilter = (location) => {
     let filtered = [...properties];
 
+    // Apply location filter based on selected location
+    if (location === "gurugram") {
+      filtered = filtered.filter(
+        (prop) =>
+          prop.location.toLowerCase().includes("gurugram") ||
+          prop.location.toLowerCase().includes("gurgaon")
+      );
+    } else if (location === "delhi") {
+      filtered = filtered.filter(
+        (prop) =>
+          prop.location.toLowerCase().includes("delhi") ||
+          prop.location.toLowerCase().includes("new delhi")
+      );
+    }
+
+    // Apply other existing filters
     if (searchFilters.location) {
       filtered = filtered.filter((prop) =>
         prop.location
@@ -80,7 +109,38 @@ const PropertiesPage = () => {
     }
 
     setFilteredProperties(filtered);
-  }, [searchFilters, properties]);
+  };
+
+  // Fetch properties from backend
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/properties`);
+        const data = await response.json();
+        setProperties(data);
+        setFilteredProperties(data);
+        setLoading(false);
+        
+        // Apply location filter after initial load if needed
+        const savedLocation = localStorage.getItem("selectedLocation");
+        if (savedLocation) {
+          const normalizedLocation = savedLocation.toLowerCase();
+          setSelectedLocation(normalizedLocation);
+          applyLocationFilter(normalizedLocation);
+        }
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, []);
+
+  // Apply filters including location filter when search filters change
+  useEffect(() => {
+    applyLocationFilter(selectedLocation);
+  }, [searchFilters, properties, selectedLocation]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -144,7 +204,11 @@ const PropertiesPage = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2>All Properties</h2>
+          <h2>
+            All Properties in{" "}
+            {selectedLocation.charAt(0).toUpperCase() +
+              selectedLocation.slice(1)}
+          </h2>
           <p>Browse our complete collection of properties</p>
         </motion.div>
 
@@ -226,6 +290,16 @@ const PropertiesPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Loading indicator when location is changing */}
+        {locationChanging && (
+          <div className="loading-overlay">
+            <div className="loading-spinner">
+              <div className="spinner"></div>
+              <p>Loading properties for {selectedLocation}...</p>
+            </div>
+          </div>
+        )}
 
         <motion.div
           className="properties-grid"
