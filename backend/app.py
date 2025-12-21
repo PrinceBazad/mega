@@ -8,6 +8,20 @@ import uuid
 app = Flask(__name__)
 CORS(app)
 
+# Add explicit CORS handling for all routes
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+
+# Handle OPTIONS requests explicitly
+@app.before_request
+def handle_options():
+    if request.method == 'OPTIONS':
+        return jsonify({'status': 'OK'}), 200
+
 # Configuration
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'fallback_secret_key_for_dev')
 
@@ -111,6 +125,54 @@ properties = [
 ]
 
 inquiries = []
+
+# Sample agents data
+agents = [
+    {
+        'id': 1,
+        'name': 'John Smith',
+        'email': 'john.smith@megareality.com',
+        'phone': '+91 98765 43210',
+        'position': 'Senior Real Estate Agent',
+        'experience': '8 years',
+        'properties_sold': 120,
+        'image': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+        'bio': 'Specialized in luxury properties and commercial real estate with extensive knowledge of local market trends.'
+    },
+    {
+        'id': 2,
+        'name': 'Sarah Johnson',
+        'email': 'sarah.johnson@megareality.com',
+        'phone': '+91 98765 43211',
+        'position': 'Residential Property Expert',
+        'experience': '6 years',
+        'properties_sold': 95,
+        'image': 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop',
+        'bio': 'Focuses on residential properties with expertise in first-time home buyers and family housing.'
+    },
+    {
+        'id': 3,
+        'name': 'Michael Brown',
+        'email': 'michael.brown@megareality.com',
+        'phone': '+91 98765 43212',
+        'position': 'Commercial Real Estate Specialist',
+        'experience': '10 years',
+        'properties_sold': 150,
+        'image': 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop',
+        'bio': 'Expert in commercial properties, office spaces, and retail locations with strong negotiation skills.'
+    },
+    {
+        'id': 4,
+        'name': 'Emily Davis',
+        'email': 'emily.davis@megareality.com',
+        'phone': '+91 98765 43213',
+        'position': 'Property Investment Advisor',
+        'experience': '7 years',
+        'properties_sold': 110,
+        'image': 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop',
+        'bio': 'Helps clients with property investment strategies and portfolio management for maximum ROI.'
+    }
+]
 
 # Routes
 @app.route('/api/health', methods=['GET'])
@@ -347,6 +409,84 @@ def delete_property(property_id):
     
     properties = [p for p in properties if p['id'] != property_id]
     return jsonify({'message': 'Property deleted successfully'})
+
+# Agent Routes
+@app.route('/api/agents', methods=['GET'])
+def get_agents():
+    # Get query parameters for filtering
+    search_name = request.args.get('name')
+    
+    # Filter agents
+    filtered_agents = agents.copy()
+    
+    if search_name:
+        filtered_agents = [a for a in filtered_agents if search_name.lower() in a['name'].lower()]
+    
+    return jsonify(filtered_agents)
+
+@app.route('/api/agents/<int:agent_id>', methods=['GET'])
+def get_agent(agent_id):
+    agent = next((a for a in agents if a['id'] == agent_id), None)
+    if agent:
+        return jsonify(agent)
+    return jsonify({'message': 'Agent not found'}), 404
+
+# Admin Agent Management Routes
+@app.route('/api/admin/agents', methods=['GET'])
+def get_admin_agents():
+    # In a real app, this would require authentication
+    return jsonify(agents)
+
+@app.route('/api/admin/agents', methods=['POST'])
+def create_agent():
+    # In a real app, this would require authentication
+    data = request.get_json()
+    
+    new_agent = {
+        'id': max([a['id'] for a in agents]) + 1 if agents else 1,
+        'name': data['name'],
+        'email': data.get('email', ''),
+        'phone': data.get('phone', ''),
+        'position': data.get('position', ''),
+        'experience': data.get('experience', ''),
+        'properties_sold': data.get('properties_sold', 0),
+        'image': data.get('image', ''),
+        'bio': data.get('bio', '')
+    }
+    
+    agents.append(new_agent)
+    return jsonify(new_agent), 201
+
+@app.route('/api/admin/agents/<int:agent_id>', methods=['PUT'])
+def update_agent(agent_id):
+    # In a real app, this would require authentication
+    agent = next((a for a in agents if a['id'] == agent_id), None)
+    if not agent:
+        return jsonify({'message': 'Agent not found'}), 404
+    
+    data = request.get_json()
+    
+    agent['name'] = data.get('name', agent['name'])
+    agent['email'] = data.get('email', agent['email'])
+    agent['phone'] = data.get('phone', agent['phone'])
+    agent['position'] = data.get('position', agent['position'])
+    agent['experience'] = data.get('experience', agent['experience'])
+    agent['properties_sold'] = data.get('properties_sold', agent['properties_sold'])
+    agent['image'] = data.get('image', agent['image'])
+    agent['bio'] = data.get('bio', agent['bio'])
+    
+    return jsonify(agent)
+
+@app.route('/api/admin/agents/<int:agent_id>', methods=['DELETE'])
+def delete_agent(agent_id):
+    # In a real app, this would require authentication
+    global agents
+    agent = next((a for a in agents if a['id'] == agent_id), None)
+    if not agent:
+        return jsonify({'message': 'Agent not found'}), 404
+    
+    agents = [a for a in agents if a['id'] != agent_id]
+    return jsonify({'message': 'Agent deleted successfully'})
 
 # Inquiry Routes
 @app.route('/api/inquiries', methods=['POST'])

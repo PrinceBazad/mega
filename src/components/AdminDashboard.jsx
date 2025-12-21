@@ -367,8 +367,8 @@ const AdminDashboard = () => {
 
     try {
       const url = editingAgent
-        ? `${config.API_BASE_URL}/api/admin/agents/${editingAgent.id}`
-        : `${config.API_BASE_URL}/api/admin/agents`;
+        ? `${API_BASE_URL}/api/admin/agents/${editingAgent.id}`
+        : `${API_BASE_URL}/api/admin/agents`;
 
       const method = editingAgent ? "PUT" : "POST";
 
@@ -423,7 +423,7 @@ const AdminDashboard = () => {
     if (window.confirm("Are you sure you want to delete this agent?")) {
       try {
         const response = await fetch(
-          `${config.API_BASE_URL}/api/admin/agents/${agentId}`,
+          `${API_BASE_URL}/api/admin/agents/${agentId}`,
           {
             method: "DELETE",
           }
