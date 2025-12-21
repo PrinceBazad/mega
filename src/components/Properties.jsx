@@ -123,7 +123,7 @@ const Properties = () => {
         setProperties(data);
         setFilteredProperties(data);
         setLoading(false);
-        
+
         // Apply location filter after initial load if needed
         const savedLocation = localStorage.getItem("selectedLocation");
         if (savedLocation) {

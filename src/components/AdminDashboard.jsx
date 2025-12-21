@@ -10,6 +10,7 @@ import {
   FaList,
   FaEye,
   FaUserFriends,
+  FaBuilding,
 } from "react-icons/fa";
 import API_BASE_URL from "../config";
 import "./AdminDashboard.css";
@@ -57,6 +58,17 @@ const AdminDashboard = () => {
     properties_sold: 0,
     image: "",
     bio: "",
+  });
+
+  // Builder management state
+  const [builders, setBuilders] = useState([]);
+  const [showAddBuilderForm, setShowAddBuilderForm] = useState(false);
+  const [editingBuilder, setEditingBuilder] = useState(null);
+  const [builderForm, setBuilderForm] = useState({
+    name: "",
+    projects_count: 0,
+    image: "",
+    description: "",
   });
 
   const navigate = useNavigate();
@@ -113,6 +125,14 @@ const AdminDashboard = () => {
         if (response.ok) {
           const data = await response.json();
           setAgents(data);
+        }
+      } else if (activeTab === "builders") {
+        const response = await fetch(`${API_BASE_URL}/api/admin/builders`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setBuilders(data);
         }
       }
     } catch (error) {
@@ -436,6 +456,77 @@ const AdminDashboard = () => {
         }
       } catch (error) {
         console.error("Error deleting agent:", error);
+      }
+    }
+  };
+
+  // Handle builder form submission
+  const handleBuilderSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const url = editingBuilder
+        ? `${API_BASE_URL}/api/admin/builders/${editingBuilder.id}`
+        : `${API_BASE_URL}/api/admin/builders`;
+
+      const method = editingBuilder ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(builderForm),
+      });
+
+      if (response.ok) {
+        fetchData();
+        setShowAddBuilderForm(false);
+        setEditingBuilder(null);
+        setBuilderForm({
+          name: "",
+          projects_count: 0,
+          image: "",
+          description: "",
+        });
+      } else {
+        console.error("Failed to save builder");
+      }
+    } catch (error) {
+      console.error("Error saving builder:", error);
+    }
+  };
+
+  // Edit builder
+  const handleEditBuilder = (builder) => {
+    setEditingBuilder(builder);
+    setBuilderForm({
+      name: builder.name,
+      projects_count: builder.projects_count,
+      image: builder.image,
+      description: builder.description,
+    });
+    setShowAddBuilderForm(true);
+  };
+
+  // Delete builder
+  const handleDeleteBuilder = async (builderId) => {
+    if (window.confirm("Are you sure you want to delete this builder?")) {
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/admin/builders/${builderId}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        if (response.ok) {
+          fetchData();
+        } else {
+          console.error("Failed to delete builder");
+        }
+      } catch (error) {
+        console.error("Error deleting builder:", error);
       }
     }
   };
@@ -908,6 +999,12 @@ const AdminDashboard = () => {
             >
               <FaUserFriends /> Agents
             </button>
+            <button
+              className={activeTab === "builders" ? "active" : ""}
+              onClick={() => setActiveTab("builders")}
+            >
+              <FaBuilding /> Builders
+            </button>
             <button className="logout-btn" onClick={handleLogout}>
               <FaSignOutAlt /> Logout
             </button>{" "}
@@ -1108,6 +1205,150 @@ const AdminDashboard = () => {
                       <button
                         className="btn-delete"
                         onClick={() => handleDeleteAgent(agent.id)}
+                      >
+                        <FaTrash /> Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}{" "}
+          {activeTab === "builders" && (
+            <div className="dashboard-content">
+              <div className="content-header">
+                <h2>Builders Management</h2>
+                <button
+                  className="btn-primary"
+                  onClick={() => {
+                    setEditingBuilder(null);
+                    setBuilderForm({
+                      name: "",
+                      projects_count: 0,
+                      image: "",
+                      description: "",
+                    });
+                    setShowAddBuilderForm(true);
+                  }}
+                >
+                  <FaPlus /> Add Builder
+                </button>
+              </div>
+
+              {showAddBuilderForm && (
+                <div className="modal-overlay">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h3>
+                        {editingBuilder ? "Edit Builder" : "Add New Builder"}
+                      </h3>
+                      <button
+                        className="close-btn"
+                        onClick={() => {
+                          setShowAddBuilderForm(false);
+                          setEditingBuilder(null);
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                    <form
+                      onSubmit={handleBuilderSubmit}
+                      className="builder-form"
+                    >
+                      <div className="form-group">
+                        <label>Name *</label>
+                        <input
+                          type="text"
+                          value={builderForm.name}
+                          onChange={(e) =>
+                            setBuilderForm({
+                              ...builderForm,
+                              name: e.target.value,
+                            })
+                          }
+                          required
+                        />
+                      </div>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Projects Count</label>
+                          <input
+                            type="number"
+                            value={builderForm.projects_count}
+                            onChange={(e) =>
+                              setBuilderForm({
+                                ...builderForm,
+                                projects_count: parseInt(e.target.value) || 0,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Image URL</label>
+                          <input
+                            type="text"
+                            value={builderForm.image}
+                            onChange={(e) =>
+                              setBuilderForm({
+                                ...builderForm,
+                                image: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label>Description</label>
+                        <textarea
+                          value={builderForm.description}
+                          onChange={(e) =>
+                            setBuilderForm({
+                              ...builderForm,
+                              description: e.target.value,
+                            })
+                          }
+                          rows="3"
+                        ></textarea>
+                      </div>
+                      <div className="form-actions">
+                        <button
+                          type="button"
+                          className="btn-cancel"
+                          onClick={() => {
+                            setShowAddBuilderForm(false);
+                            setEditingBuilder(null);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button type="submit" className="btn-submit">
+                          {editingBuilder ? "Update Builder" : "Add Builder"}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+
+              <div className="builders-list">
+                {builders.map((builder) => (
+                  <div key={builder.id} className="builder-item">
+                    <div className="builder-info">
+                      <h4>{builder.name}</h4>
+                      <p>{builder.projects_count} Projects</p>
+                      <p>{builder.description}</p>
+                    </div>
+                    <div className="builder-actions">
+                      <button
+                        className="btn-edit"
+                        onClick={() => handleEditBuilder(builder)}
+                      >
+                        <FaEdit /> Edit
+                      </button>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDeleteBuilder(builder.id)}
                       >
                         <FaTrash /> Delete
                       </button>

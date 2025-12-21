@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import {
   FaBed,
   FaBath,
@@ -24,6 +24,8 @@ const PropertiesPage = () => {
     maxPrice: "",
     status: "",
   });
+  const [searchParams] = useSearchParams();
+  const builderId = searchParams.get("builder");
 
   const navigate = useNavigate();
 
@@ -108,6 +110,13 @@ const PropertiesPage = () => {
       );
     }
 
+    // If filtering by builder, apply that filter
+    if (builderId) {
+      // In a real app, you would filter by builder ID
+      // For now, we'll just show all properties since we don't have builder associations
+      console.log("Filtering by builder ID:", builderId);
+    }
+
     setFilteredProperties(filtered);
   };
 
@@ -120,7 +129,7 @@ const PropertiesPage = () => {
         setProperties(data);
         setFilteredProperties(data);
         setLoading(false);
-        
+
         // Apply location filter after initial load if needed
         const savedLocation = localStorage.getItem("selectedLocation");
         if (savedLocation) {
@@ -205,11 +214,15 @@ const PropertiesPage = () => {
           transition={{ duration: 0.6 }}
         >
           <h2>
-            All Properties in{" "}
+            {builderId ? "Builder Projects" : "All Properties"} in{" "}
             {selectedLocation.charAt(0).toUpperCase() +
               selectedLocation.slice(1)}
           </h2>
-          <p>Browse our complete collection of properties</p>
+          <p>
+            {builderId
+              ? "Browse properties from this top builder"
+              : "Browse our complete collection of properties"}
+          </p>
         </motion.div>
 
         {/* Search and Filter Section */}

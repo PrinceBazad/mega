@@ -174,6 +174,52 @@ agents = [
     }
 ]
 
+# Sample top builders data
+builders = [
+    {
+        'id': 1,
+        'name': 'DLF Limited',
+        'projects_count': 125,
+        'image': 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=400&fit=crop',
+        'description': 'Leading real estate developer with projects across India'
+    },
+    {
+        'id': 2,
+        'name': 'Amrapali Group',
+        'projects_count': 89,
+        'image': 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=400&fit=crop',
+        'description': 'Premium residential and commercial property developer'
+    },
+    {
+        'id': 3,
+        'name': 'Godrej Properties',
+        'projects_count': 156,
+        'image': 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=400&fit=crop',
+        'description': 'Innovative sustainable living solutions provider'
+    },
+    {
+        'id': 4,
+        'name': 'Prestige Estates',
+        'projects_count': 98,
+        'image': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&h=400&fit=crop',
+        'description': 'Luxury residential and commercial developments'
+    },
+    {
+        'id': 5,
+        'name': 'Oberoi Realty',
+        'projects_count': 72,
+        'image': 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=400&fit=crop',
+        'description': 'High-end luxury property developers'
+    },
+    {
+        'id': 6,
+        'name': 'Tata Housing',
+        'projects_count': 112,
+        'image': 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=400&fit=crop',
+        'description': 'Quality affordable and premium housing solutions'
+    }
+]
+
 # Routes
 @app.route('/api/health', methods=['GET'])
 def health_check():
@@ -487,6 +533,67 @@ def delete_agent(agent_id):
     
     agents = [a for a in agents if a['id'] != agent_id]
     return jsonify({'message': 'Agent deleted successfully'})
+
+# Builder Routes
+@app.route('/api/builders', methods=['GET'])
+def get_builders():
+    return jsonify(builders)
+
+@app.route('/api/builders/<int:builder_id>', methods=['GET'])
+def get_builder(builder_id):
+    builder = next((b for b in builders if b['id'] == builder_id), None)
+    if builder:
+        return jsonify(builder)
+    return jsonify({'message': 'Builder not found'}), 404
+
+# Admin Builder Management Routes
+@app.route('/api/admin/builders', methods=['GET'])
+def get_admin_builders():
+    # In a real app, this would require authentication
+    return jsonify(builders)
+
+@app.route('/api/admin/builders', methods=['POST'])
+def create_builder():
+    # In a real app, this would require authentication
+    data = request.get_json()
+    
+    new_builder = {
+        'id': max([b['id'] for b in builders]) + 1 if builders else 1,
+        'name': data['name'],
+        'projects_count': data.get('projects_count', 0),
+        'image': data.get('image', ''),
+        'description': data.get('description', '')
+    }
+    
+    builders.append(new_builder)
+    return jsonify(new_builder), 201
+
+@app.route('/api/admin/builders/<int:builder_id>', methods=['PUT'])
+def update_builder(builder_id):
+    # In a real app, this would require authentication
+    builder = next((b for b in builders if b['id'] == builder_id), None)
+    if not builder:
+        return jsonify({'message': 'Builder not found'}), 404
+    
+    data = request.get_json()
+    
+    builder['name'] = data.get('name', builder['name'])
+    builder['projects_count'] = data.get('projects_count', builder['projects_count'])
+    builder['image'] = data.get('image', builder['image'])
+    builder['description'] = data.get('description', builder['description'])
+    
+    return jsonify(builder)
+
+@app.route('/api/admin/builders/<int:builder_id>', methods=['DELETE'])
+def delete_builder(builder_id):
+    # In a real app, this would require authentication
+    global builders
+    builder = next((b for b in builders if b['id'] == builder_id), None)
+    if not builder:
+        return jsonify({'message': 'Builder not found'}), 404
+    
+    builders = [b for b in builders if b['id'] != builder_id]
+    return jsonify({'message': 'Builder deleted successfully'})
 
 # Inquiry Routes
 @app.route('/api/inquiries', methods=['POST'])

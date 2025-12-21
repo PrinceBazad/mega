@@ -12,6 +12,7 @@ import Services from "./components/Services";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Agents from "./components/Agents";
+import TopBuilders from "./components/TopBuilders";
 import Footer from "./components/Footer";
 import AdminLogin from "./components/AdminLogin";
 import AdminDashboard from "./components/AdminDashboard";
@@ -43,6 +44,7 @@ function App() {
                 <Navbar />
                 <Hero />
                 <Properties />
+                <TopBuilders />
                 <Services />
                 <About />
                 <Contact />

@@ -15,8 +15,8 @@ const TopBar = () => {
     setSelectedLocation(location);
     localStorage.setItem("selectedLocation", location);
     // Dispatch event with location data
-    const event = new CustomEvent("locationChanged", { 
-      detail: { location: location.toLowerCase() } 
+    const event = new CustomEvent("locationChanged", {
+      detail: { location: location.toLowerCase() },
     });
     window.dispatchEvent(event);
   };
