@@ -111,7 +111,9 @@ const Services = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2>Our <span className="highlight">Services</span></h2>
+          <h2>
+            Our <span className="highlight">Services</span>
+          </h2>
           <p>Comprehensive real estate solutions tailored to your needs</p>
         </motion.div>
 
@@ -166,9 +168,9 @@ const Services = () => {
                   <p>{service.description}</p>
                   <motion.button
                     className="service-btn"
-                    whileHover={{ 
+                    whileHover={{
                       scale: 1.05,
-                      backgroundColor: "#764ba2"
+                      backgroundColor: "#764ba2",
                     }}
                     whileTap={{ scale: 0.95 }}
                     initial={{ opacity: 0 }}

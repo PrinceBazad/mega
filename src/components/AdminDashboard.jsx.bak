@@ -1,0 +1,1126 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  FaHome,
+  FaPlus,
+  FaEdit,
+  FaTrash,
+  FaSignOutAlt,
+  FaUsers,
+  FaList,
+  FaEye,
+  FaUserFriends,
+} from "react-icons/fa";
+import API_BASE_URL from "../config";
+import "./AdminDashboard.css";
+const AdminDashboard = () => {
+  const [activeTab, setActiveTab] = useState("properties");
+  const [properties, setProperties] = useState([]);
+  const [inquiries, setInquiries] = useState([]);
+  const [admins, setAdmins] = useState([]);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [showAddAdminForm, setShowAddAdminForm] = useState(false);
+  const [showEditAdminForm, setShowEditAdminForm] = useState(false);
+  const [editingProperty, setEditingProperty] = useState(null);
+  const [editingAdmin, setEditingAdmin] = useState(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    price: "",
+    location: "",
+    property_type: "House",
+    status: "Available",
+    bedrooms: "",
+    bathrooms: "",
+    area_sqft: "",
+    images: [""],
+  });
+  const [adminFormData, setAdminFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    role: "admin",
+  });
+  const [imageInputs, setImageInputs] = useState([""]);
+
+  // Agent management state
+  const [agents, setAgents] = useState([]);
+  const [showAddAgentForm, setShowAddAgentForm] = useState(false);
+  const [editingAgent, setEditingAgent] = useState(null);
+  const [agentForm, setAgentForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    position: "",
+    experience: "",
+    properties_sold: 0,
+    image: "",
+    bio: "",
+  });
+
+  const navigate = useNavigate();
+
+  // Check if user is authenticated
+  useEffect(() => {
+    const token = localStorage.getItem("adminToken");
+    if (!token) {
+      navigate("/admin/login");
+    }
+  }, [navigate]);
+
+  // Fetch data
+  useEffect(() => {
+    fetchData();
+  }, [activeTab]);
+
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      if (activeTab === "properties") {
+        const response = await fetch(`${API_BASE_URL}/api/admin/properties`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setProperties(data);
+        }
+      } else if (activeTab === "inquiries") {
+        const response = await fetch(`${API_BASE_URL}/api/admin/inquiries`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setInquiries(data);
+        }
+      } else if (activeTab === "admins") {
+        const response = await fetch(`${API_BASE_URL}/api/admins`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setAdmins(data);
+        }
+      } else if (activeTab === "agents") {
+        const response = await fetch(`${API_BASE_URL}/api/admin/agents`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setAgents(data);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("adminToken");
+    navigate("/admin/login");
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleAdminInputChange = (e) => {
+    const { name, value } = e.target;
+    setAdminFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleImageInputChange = (index, value) => {
+    const newImages = [...imageInputs];
+    newImages[index] = value;
+    setImageInputs(newImages);
+    setFormData((prev) => ({
+      ...prev,
+      images: newImages,
+    }));
+  };
+
+  const addImageInput = () => {
+    setImageInputs([...imageInputs, ""]);
+  };
+
+  const removeImageInput = (index) => {
+    if (imageInputs.length > 1) {
+      const newImages = imageInputs.filter((_, i) => i !== index);
+      setImageInputs(newImages);
+      setFormData((prev) => ({
+        ...prev,
+        images: newImages,
+      }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("adminToken");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const propertyData = {
+        ...formData,
+        price: parseFloat(formData.price),
+        bedrooms: parseInt(formData.bedrooms) || 0,
+        bathrooms: parseInt(formData.bathrooms) || 0,
+        area_sqft: parseInt(formData.area_sqft) || 0,
+        images: imageInputs.filter((url) => url.trim() !== ""),
+      };
+
+      const url = editingProperty
+        ? `${API_BASE_URL}/api/admin/properties/${editingProperty.id}`
+        : `${API_BASE_URL}/api/admin/properties`;
+
+      const method = editingProperty ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
+        headers,
+        body: JSON.stringify(propertyData),
+      });
+
+      if (response.ok) {
+        setShowAddForm(false);
+        setShowEditForm(false);
+        setEditingProperty(null);
+        resetForm();
+        fetchData();
+      } else {
+        console.error("Failed to save property");
+      }
+    } catch (error) {
+      console.error("Error saving property:", error);
+    }
+  };
+
+  const handleAdminSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("adminToken");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const url = editingAdmin
+        ? `${API_BASE_URL}/api/admins/${editingAdmin.id}`
+        : `${API_BASE_URL}/api/admin/register`;
+
+      const method = editingAdmin ? "PUT" : "POST";
+
+      // For updates, we don't send password unless it's changed
+      const adminData = { ...adminFormData };
+      if (editingAdmin && !adminData.password) {
+        delete adminData.password;
+      }
+
+      const response = await fetch(url, {
+        method,
+        headers,
+        body: JSON.stringify(adminData),
+      });
+
+      if (response.ok) {
+        setShowAddAdminForm(false);
+        setShowEditAdminForm(false);
+        setEditingAdmin(null);
+        resetAdminForm();
+        fetchData();
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to save admin:", errorData.message);
+      }
+    } catch (error) {
+      console.error("Error saving admin:", error);
+    }
+  };
+
+  const handleEdit = (property) => {
+    setEditingProperty(property);
+    setFormData({
+      title: property.title,
+      description: property.description,
+      price: property.price.toString(),
+      location: property.location,
+      property_type: property.property_type,
+      status: property.status,
+      bedrooms: property.bedrooms?.toString() || "",
+      bathrooms: property.bathrooms?.toString() || "",
+      area_sqft: property.area_sqft?.toString() || "",
+      images: property.images || [""],
+    });
+    setImageInputs(property.images || [""]);
+    setShowEditForm(true);
+  };
+
+  const handleEditAdmin = (admin) => {
+    setEditingAdmin(admin);
+    setAdminFormData({
+      name: admin.name,
+      email: admin.email,
+      password: "", // Don't prefill password
+      role: admin.role,
+    });
+    setShowEditAdminForm(true);
+  };
+
+  const handleDelete = async (id) => {
+    if (window.confirm("Are you sure you want to delete this property?")) {
+      try {
+        const token = localStorage.getItem("adminToken");
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/admin/properties/${id}`,
+          {
+            method: "DELETE",
+            headers,
+          }
+        );
+
+        if (response.ok) {
+          fetchData();
+        } else {
+          console.error("Failed to delete property");
+        }
+      } catch (error) {
+        console.error("Error deleting property:", error);
+      }
+    }
+  };
+
+  const handleDeleteAdmin = async (id) => {
+    if (window.confirm("Are you sure you want to delete this admin?")) {
+      try {
+        const token = localStorage.getItem("adminToken");
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
+
+        const response = await fetch(`${API_BASE_URL}/api/admins/${id}`, {
+          method: "DELETE",
+          headers,
+        });
+
+        if (response.ok) {
+          fetchData();
+        } else {
+          const errorData = await response.json();
+          alert(errorData.message);
+        }
+      } catch (error) {
+        console.error("Error deleting admin:", error);
+      }
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      title: "",
+      description: "",
+      price: "",
+      location: "",
+      property_type: "House",
+      status: "Available",
+      bedrooms: "",
+      bathrooms: "",
+      area_sqft: "",
+      images: [""],
+    });
+    setImageInputs([""]);
+  };
+
+  const resetAdminForm = () => {
+    setAdminFormData({
+      name: "",
+      email: "",
+      password: "",
+      role: "admin",
+    });
+  };
+
+  // Handle agent form submission
+  const handleAgentSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const url = editingAgent
+        ? `${config.API_BASE_URL}/api/admin/agents/${editingAgent.id}`
+        : `${config.API_BASE_URL}/api/admin/agents`;
+
+      const method = editingAgent ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(agentForm),
+      });
+
+      if (response.ok) {
+        fetchAgents();
+        setShowAddAgentForm(false);
+        setEditingAgent(null);
+        setAgentForm({
+          name: "",
+          email: "",
+          phone: "",
+          position: "",
+          experience: "",
+          properties_sold: 0,
+          image: "",
+          bio: "",
+        });
+      } else {
+        console.error("Failed to save agent");
+      }
+    } catch (error) {
+      console.error("Error saving agent:", error);
+    }
+  };
+
+  // Edit agent
+  const handleEditAgent = (agent) => {
+    setEditingAgent(agent);
+    setAgentForm({
+      name: agent.name,
+      email: agent.email,
+      phone: agent.phone,
+      position: agent.position,
+      experience: agent.experience,
+      properties_sold: agent.properties_sold,
+      image: agent.image,
+      bio: agent.bio,
+    });
+    setShowAddAgentForm(true);
+  };
+
+  // Delete agent
+  const handleDeleteAgent = async (agentId) => {
+    if (window.confirm("Are you sure you want to delete this agent?")) {
+      try {
+        const response = await fetch(
+          `${config.API_BASE_URL}/api/admin/agents/${agentId}`,
+          {
+            method: "DELETE",
+          }
+        );
+
+        if (response.ok) {
+          fetchAgents();
+        } else {
+          console.error("Failed to delete agent");
+        }
+      } catch (error) {
+        console.error("Error deleting agent:", error);
+      }
+    }
+  };
+
+  const PropertyManagement = () => (
+    <div className="dashboard-content">
+      <div className="content-header">
+        <h2>Property Management</h2>
+        <button
+          className="btn-primary"
+          onClick={() => {
+            resetForm();
+            setShowAddForm(true);
+            setEditingProperty(null);
+          }}
+        >
+          <FaPlus /> Add Property
+        </button>
+      </div>
+
+      <div className="properties-grid">
+        {properties.map((property) => (
+          <div key={property.id} className="property-card">
+            <div className="property-image">
+              {property.images && property.images.length > 0 ? (
+                <img src={property.images[0]} alt={property.title} />
+              ) : (
+                <div className="no-image">No Image</div>
+              )}
+            </div>
+            <div className="property-info">
+              <h3>{property.title}</h3>
+              <p className="property-location">{property.location}</p>
+              <p className="property-price">
+                ${property.price.toLocaleString()}
+              </p>
+              <div className="property-actions">
+                <button
+                  className="btn-edit"
+                  onClick={() => handleEdit(property)}
+                >
+                  <FaEdit /> Edit
+                </button>
+                <button
+                  className="btn-delete"
+                  onClick={() => handleDelete(property.id)}
+                >
+                  <FaTrash /> Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Add Property Form Modal */}
+      {(showAddForm || showEditForm) && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3>{editingProperty ? "Edit Property" : "Add New Property"}</h3>
+              <button
+                className="close-btn"
+                onClick={() => {
+                  setShowAddForm(false);
+                  setShowEditForm(false);
+                  setEditingProperty(null);
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <form onSubmit={handleSubmit} className="property-form">
+              <div className="form-group">
+                <label>Title *</label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Description</label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  rows="4"
+                />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Price ($) *</label>
+                  <input
+                    type="number"
+                    name="price"
+                    value={formData.price}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Location *</label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Property Type</label>
+                  <select
+                    name="property_type"
+                    value={formData.property_type}
+                    onChange={handleInputChange}
+                  >
+                    <option value="House">House</option>
+                    <option value="Flat">Flat</option>
+                    <option value="Plot">Plot</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Status</label>
+                  <select
+                    name="status"
+                    value={formData.status}
+                    onChange={handleInputChange}
+                  >
+                    <option value="Available">Available</option>
+                    <option value="Sold">Sold</option>
+                    <option value="Rent">Rent</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Bedrooms</label>
+                  <input
+                    type="number"
+                    name="bedrooms"
+                    value={formData.bedrooms}
+                    onChange={handleInputChange}
+                    min="0"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Bathrooms</label>
+                  <input
+                    type="number"
+                    name="bathrooms"
+                    value={formData.bathrooms}
+                    onChange={handleInputChange}
+                    min="0"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>Area (sqft)</label>
+                  <input
+                    type="number"
+                    name="area_sqft"
+                    value={formData.area_sqft}
+                    onChange={handleInputChange}
+                    min="0"
+                  />
+                </div>
+              </div>
+
+              {/* Image URLs Section */}
+              <div className="form-group">
+                <label>Image URLs</label>
+                <div className="image-inputs">
+                  {imageInputs.map((url, index) => (
+                    <div key={index} className="image-input-group">
+                      <input
+                        type="url"
+                        placeholder="Enter image URL"
+                        value={url}
+                        onChange={(e) =>
+                          handleImageInputChange(index, e.target.value)
+                        }
+                      />
+                      {imageInputs.length > 1 && (
+                        <button
+                          type="button"
+                          className="btn-remove-image"
+                          onClick={() => removeImageInput(index)}
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="btn-add-image"
+                    onClick={addImageInput}
+                  >
+                    + Add Image URL
+                  </button>
+                </div>
+              </div>
+
+              {imageInputs.some((url) => url.trim() !== "") && (
+                <div className="image-preview">
+                  <h4>Image Preview</h4>
+                  <div className="preview-images">
+                    {imageInputs
+                      .filter((url) => url.trim() !== "")
+                      .map((url, index) => (
+                        <img
+                          key={index}
+                          src={url}
+                          alt={`Preview ${index + 1}`}
+                        />
+                      ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="btn-cancel"
+                  onClick={() => {
+                    setShowAddForm(false);
+                    setShowEditForm(false);
+                    setEditingProperty(null);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn-submit">
+                  {editingProperty ? "Update Property" : "Add Property"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  const InquiryManagement = () => (
+    <div className="dashboard-content">
+      <div className="content-header">
+        <h2>Inquiry Management</h2>
+      </div>
+
+      <div className="inquiries-table">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Property ID</th>
+              <th>Message</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {inquiries.map((inquiry) => (
+              <tr key={inquiry.id}>
+                <td>{inquiry.id}</td>
+                <td>{inquiry.user_name}</td>
+                <td>{inquiry.email}</td>
+                <td>{inquiry.phone || "N/A"}</td>
+                <td>{inquiry.property_id || "N/A"}</td>
+                <td>{inquiry.message}</td>
+                <td>{new Date(inquiry.created_at).toLocaleDateString()}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+
+  const AdminManagement = () => (
+    <div className="dashboard-content">
+      <div className="content-header">
+        <h2>Admin Management</h2>
+        <button
+          className="btn-primary"
+          onClick={() => {
+            resetAdminForm();
+            setShowAddAdminForm(true);
+            setEditingAdmin(null);
+          }}
+        >
+          <FaPlus /> Add Admin
+        </button>
+      </div>
+
+      <div className="admins-table">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Created At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {admins.map((admin) => (
+              <tr key={admin.id}>
+                <td>{admin.id}</td>
+                <td>{admin.name}</td>
+                <td>{admin.email}</td>
+                <td>{admin.role}</td>
+                <td>{new Date(admin.created_at).toLocaleDateString()}</td>
+                <td>
+                  <button
+                    className="btn-edit"
+                    onClick={() => handleEditAdmin(admin)}
+                  >
+                    <FaEdit /> Edit
+                  </button>
+                  <button
+                    className="btn-delete"
+                    onClick={() => handleDeleteAdmin(admin.id)}
+                  >
+                    <FaTrash /> Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Add/Edit Admin Form Modal */}
+      {(showAddAdminForm || showEditAdminForm) && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h3>{editingAdmin ? "Edit Admin" : "Add New Admin"}</h3>
+              <button
+                className="close-btn"
+                onClick={() => {
+                  setShowAddAdminForm(false);
+                  setShowEditAdminForm(false);
+                  setEditingAdmin(null);
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <form onSubmit={handleAdminSubmit} className="admin-form">
+              <div className="form-group">
+                <label>Name *</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={adminFormData.name}
+                  onChange={handleAdminInputChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Email *</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={adminFormData.email}
+                  onChange={handleAdminInputChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Password {!editingAdmin && "*"}</label>
+                <input
+                  type="password"
+                  name="password"
+                  value={adminFormData.password}
+                  onChange={handleAdminInputChange}
+                  {...(!editingAdmin ? { required: true } : {})}
+                />
+                {editingAdmin && (
+                  <small>Leave blank to keep current password</small>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label>Role</label>
+                <select
+                  name="role"
+                  value={adminFormData.role}
+                  onChange={handleAdminInputChange}
+                >
+                  <option value="admin">Admin</option>
+                  <option value="super_admin">Super Admin</option>
+                </select>
+              </div>
+
+              <div className="form-actions">
+                <button
+                  type="button"
+                  className="btn-cancel"
+                  onClick={() => {
+                    setShowAddAdminForm(false);
+                    setShowEditAdminForm(false);
+                    setEditingAdmin(null);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn-submit">
+                  {editingAdmin ? "Update Admin" : "Add Admin"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <div className="admin-dashboard">
+      <div className="dashboard-layout">
+        {/* Sidebar */}
+        <div className="dashboard-sidebar">
+          <div className="sidebar-header">
+            <h2>Admin Panel</h2>
+          </div>
+
+          <nav className="sidebar-nav">
+            <button
+              className={activeTab === "properties" ? "active" : ""}
+              onClick={() => setActiveTab("properties")}
+            >
+              <FaHome /> Properties
+            </button>
+            <button
+              className={activeTab === "inquiries" ? "active" : ""}
+              onClick={() => setActiveTab("inquiries")}
+            >
+              <FaList /> Inquiries
+            </button>
+            <button
+              className={activeTab === "admins" ? "active" : ""}
+              onClick={() => setActiveTab("admins")}
+            >
+              <FaUsers /> Admins
+            </button>
+            <button
+              className={activeTab === "agents" ? "active" : ""}
+              onClick={() => setActiveTab("agents")}
+            >
+              <FaUserFriends /> Agents
+            </button>
+            <button className="logout-btn" onClick={handleLogout}>
+              <FaSignOutAlt /> Logout
+            </button>{" "}
+          </nav>
+        </div>
+
+        {/* Main Content */}
+        <div className="dashboard-main">
+          {activeTab === "properties" && <PropertyManagement />}
+          {activeTab === "inquiries" && <InquiryManagement />}
+          {activeTab === "admins" && <AdminManagement />}
+          {activeTab === "agents" && (
+            <div className="dashboard-content">
+              <div className="content-header">
+                <h2>Agents Management</h2>
+                <button
+                  className="btn-primary"
+                  onClick={() => {
+                    setEditingAgent(null);
+                    setAgentForm({
+                      name: "",
+                      email: "",
+                      phone: "",
+                      position: "",
+                      experience: "",
+                      properties_sold: 0,
+                      image: "",
+                      bio: "",
+                    });
+                    setShowAddAgentForm(true);
+                  }}
+                >
+                  <FaPlus /> Add Agent
+                </button>
+              </div>
+
+              {showAddAgentForm && (
+                <div className="modal-overlay">
+                  <div className="modal-content">
+                    <div className="modal-header">
+                      <h3>{editingAgent ? "Edit Agent" : "Add New Agent"}</h3>
+                      <button
+                        className="close-btn"
+                        onClick={() => {
+                          setShowAddAgentForm(false);
+                          setEditingAgent(null);
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                    <form onSubmit={handleAgentSubmit} className="agent-form">
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Name *</label>
+                          <input
+                            type="text"
+                            value={agentForm.name}
+                            onChange={(e) =>
+                              setAgentForm({
+                                ...agentForm,
+                                name: e.target.value,
+                              })
+                            }
+                            required
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Email *</label>
+                          <input
+                            type="email"
+                            value={agentForm.email}
+                            onChange={(e) =>
+                              setAgentForm({
+                                ...agentForm,
+                                email: e.target.value,
+                              })
+                            }
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Phone</label>
+                          <input
+                            type="text"
+                            value={agentForm.phone}
+                            onChange={(e) =>
+                              setAgentForm({
+                                ...agentForm,
+                                phone: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Position</label>
+                          <input
+                            type="text"
+                            value={agentForm.position}
+                            onChange={(e) =>
+                              setAgentForm({
+                                ...agentForm,
+                                position: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="form-row">
+                        <div className="form-group">
+                          <label>Experience</label>
+                          <input
+                            type="text"
+                            value={agentForm.experience}
+                            onChange={(e) =>
+                              setAgentForm({
+                                ...agentForm,
+                                experience: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label>Properties Sold</label>
+                          <input
+                            type="number"
+                            value={agentForm.properties_sold}
+                            onChange={(e) =>
+                              setAgentForm({
+                                ...agentForm,
+                                properties_sold: parseInt(e.target.value) || 0,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label>Image URL</label>
+                        <input
+                          type="text"
+                          value={agentForm.image}
+                          onChange={(e) =>
+                            setAgentForm({
+                              ...agentForm,
+                              image: e.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Bio</label>
+                        <textarea
+                          value={agentForm.bio}
+                          onChange={(e) =>
+                            setAgentForm({ ...agentForm, bio: e.target.value })
+                          }
+                          rows="3"
+                        ></textarea>
+                      </div>
+                      <div className="form-actions">
+                        <button
+                          type="button"
+                          className="btn-cancel"
+                          onClick={() => {
+                            setShowAddAgentForm(false);
+                            setEditingAgent(null);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button type="submit" className="btn-submit">
+                          {editingAgent ? "Update Agent" : "Add Agent"}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
+
+              <div className="agents-list">
+                {agents.map((agent) => (
+                  <div key={agent.id} className="agent-item">
+                    <div className="agent-info">
+                      <h4>{agent.name}</h4>
+                      <p>{agent.position}</p>
+                      <p>{agent.email}</p>
+                      <p>{agent.phone}</p>
+                    </div>
+                    <div className="agent-actions">
+                      <button
+                        className="btn-edit"
+                        onClick={() => handleEditAgent(agent)}
+                      >
+                        <FaEdit /> Edit
+                      </button>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDeleteAgent(agent.id)}
+                      >
+                        <FaTrash /> Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}{" "}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AdminDashboard;

@@ -1,12 +1,12 @@
 .navbar {
   position: fixed;
-  top: 50px; /* Adjusted to account for LocationSelector height */
+  top: 40px; /* Adjusted to account for TopBar height */
   left: 0;
   width: 100%;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
-  z-index: 1000;
+  z-index: 999;
   transition: all 0.3s ease;
 }
 
@@ -152,6 +152,6 @@
   }
 
   .navbar {
-    top: 40px; /* Adjusted for mobile */
+    top: 35px; /* Adjusted for mobile TopBar height */
   }
 }

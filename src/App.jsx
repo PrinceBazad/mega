@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Loading from "./components/Loading";
 import Navbar from "./components/Navbar";
-import LocationSelector from "./components/LocationSelector";
+import TopBar from "./components/TopBar";
 import Hero from "./components/Hero";
 import Properties from "./components/Properties";
 import PropertiesPage from "./components/PropertiesPage";
@@ -39,7 +39,7 @@ function App() {
             path="/"
             element={
               <div className="app">
-                <LocationSelector />
+                <TopBar />
                 <Navbar />
                 <Hero />
                 <Properties />
@@ -55,7 +55,7 @@ function App() {
             path="/properties"
             element={
               <div className="app">
-                <LocationSelector />
+                <TopBar />
                 <Navbar />
                 <PropertiesPage />
                 <Footer />
@@ -67,7 +67,7 @@ function App() {
             path="/property/:id"
             element={
               <div className="app">
-                <LocationSelector />
+                <TopBar />
                 <Navbar />
                 <PropertyDetail />
                 <Footer />
@@ -79,7 +79,7 @@ function App() {
             path="/agents"
             element={
               <div className="app">
-                <LocationSelector />
+                <TopBar />
                 <Navbar />
                 <Agents />
                 <Footer />

@@ -115,13 +115,15 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
-            <motion.button
-              className="btn-primary"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Explore Properties
-            </motion.button>
+            <Link to="/properties">
+              <motion.button
+                className="btn-primary"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Explore Properties
+              </motion.button>
+            </Link>
 
             <Link to="/agents">
               <motion.button

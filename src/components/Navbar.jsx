@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import "./Navbar.css";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +18,13 @@ const Navbar = () => {
   }, []);
 
   const scrollToSection = (sectionId) => {
+    // If we're not on the home page, navigate to home first, then scroll
+    if (location.pathname !== "/") {
+      window.location.href = `/#${sectionId}`;
+      setMobileMenuOpen(false);
+      return;
+    }
+
     const section = document.getElementById(sectionId);
     if (section) {
       section.scrollIntoView({ behavior: "smooth" });
