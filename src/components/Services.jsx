@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import {
   FaHome,
   FaHandshake,
@@ -57,12 +57,13 @@ const Services = () => {
   ]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const controls = useAnimation();
 
   // Auto-scroll functionality
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % services.length);
-    }, 3000); // Change slide every 3 seconds
+    }, 4000); // Change slide every 4 seconds
 
     return () => clearInterval(interval);
   }, [services.length]);
@@ -77,6 +78,29 @@ const Services = () => {
     );
   };
 
+  // Animation for service cards entrance
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
     <section id="services" className="services">
       <div className="services-container">
@@ -87,7 +111,7 @@ const Services = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2>Our Services</h2>
+          <h2>Our <span className="highlight">Services</span></h2>
           <p>Comprehensive real estate solutions tailored to your needs</p>
         </motion.div>
 
@@ -97,30 +121,43 @@ const Services = () => {
           </button>
 
           <div className="services-wrapper">
-            <div
+            <motion.div
               className="services-track"
               style={{
                 transform: `translateX(-${
                   currentIndex * (100 / Math.min(services.length, 4))
                 }%)`,
               }}
+              animate={controls}
             >
-              {services.map((service) => (
+              {services.map((service, index) => (
                 <motion.div
                   key={service.id}
                   className="service-card"
+                  variants={itemVariants}
+                  initial="hidden"
+                  animate="visible"
                   whileHover={{
-                    y: -10,
-                    boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+                    y: -15,
+                    boxShadow: "0 25px 50px rgba(0,0,0,0.15)",
                     transition: { duration: 0.3 },
                   }}
                 >
                   <motion.div
                     className="service-icon"
                     whileHover={{
-                      scale: 1.1,
-                      rotate: 5,
-                      transition: { duration: 0.3 },
+                      scale: 1.15,
+                      rotate: [0, 5, -5, 0],
+                      transition: { duration: 0.5 },
+                    }}
+                    animate={{
+                      y: [0, -10, 0],
+                      transition: {
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: index * 0.2,
+                      },
                     }}
                   >
                     {service.icon}
@@ -129,14 +166,20 @@ const Services = () => {
                   <p>{service.description}</p>
                   <motion.button
                     className="service-btn"
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ 
+                      scale: 1.05,
+                      backgroundColor: "#764ba2"
+                    }}
                     whileTap={{ scale: 0.95 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.3 }}
                   >
                     Learn More
                   </motion.button>
                 </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
 
           <button className="slider-btn next" onClick={nextSlide}>
@@ -146,10 +189,16 @@ const Services = () => {
 
         <div className="slider-dots">
           {services.map((_, index) => (
-            <span
+            <motion.span
               key={index}
               className={`dot ${index === currentIndex ? "active" : ""}`}
               onClick={() => setCurrentIndex(index)}
+              whileHover={{ scale: 1.3 }}
+              whileTap={{ scale: 0.9 }}
+              animate={{
+                scale: index === currentIndex ? 1.3 : 1,
+                backgroundColor: index === currentIndex ? "#667eea" : "#ccc",
+              }}
             />
           ))}
         </div>

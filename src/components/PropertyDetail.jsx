@@ -50,7 +50,7 @@ const PropertyDetail = () => {
       if (response.ok) {
         const data = await response.json();
         setProperty(data);
-        
+
         // Fetch similar properties
         fetchSimilarProperties(data.property_type, data.location);
       } else {
@@ -66,12 +66,14 @@ const PropertyDetail = () => {
   const fetchSimilarProperties = async (type, location) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/api/properties?type=${type}&location=${encodeURIComponent(location)}`
+        `${API_BASE_URL}/api/properties?type=${type}&location=${encodeURIComponent(
+          location
+        )}`
       );
       if (response.ok) {
         const data = await response.json();
         // Filter out the current property and limit to 3
-        const filtered = data.filter(p => p.id !== parseInt(id)).slice(0, 3);
+        const filtered = data.filter((p) => p.id !== parseInt(id)).slice(0, 3);
         setSimilarProperties(filtered);
       }
     } catch (err) {
@@ -81,7 +83,7 @@ const PropertyDetail = () => {
 
   const nextImage = () => {
     if (property && property.images) {
-      setCurrentImageIndex((prev) => 
+      setCurrentImageIndex((prev) =>
         prev === property.images.length - 1 ? 0 : prev + 1
       );
     }
@@ -89,7 +91,7 @@ const PropertyDetail = () => {
 
   const prevImage = () => {
     if (property && property.images) {
-      setCurrentImageIndex((prev) => 
+      setCurrentImageIndex((prev) =>
         prev === 0 ? property.images.length - 1 : prev - 1
       );
     }
@@ -345,36 +347,36 @@ const PropertyDetail = () => {
               )}
               <form className="contact-form" onSubmit={handleContactFormSubmit}>
                 <div className="form-group">
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="name"
-                    placeholder="Your Name" 
-                    required 
+                    placeholder="Your Name"
+                    required
                     value={contactForm.name}
                     onChange={handleContactFormChange}
                   />
                 </div>
                 <div className="form-group">
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     name="email"
-                    placeholder="Your Email" 
-                    required 
+                    placeholder="Your Email"
+                    required
                     value={contactForm.email}
                     onChange={handleContactFormChange}
                   />
                 </div>
                 <div className="form-group">
-                  <input 
-                    type="tel" 
+                  <input
+                    type="tel"
                     name="phone"
-                    placeholder="Your Phone" 
+                    placeholder="Your Phone"
                     value={contactForm.phone}
                     onChange={handleContactFormChange}
                   />
                 </div>
                 <div className="form-group">
-                  <textarea 
+                  <textarea
                     name="message"
                     placeholder="I'm interested in this property. Please provide more details."
                     rows="4"
@@ -382,15 +384,15 @@ const PropertyDetail = () => {
                     onChange={handleContactFormChange}
                   ></textarea>
                 </div>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   className="submit-btn"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Sending..." : "Send Message"}
                 </button>
               </form>
-              
+
               <div className="social-share">
                 <p>Or contact us directly:</p>
                 <div className="social-links">

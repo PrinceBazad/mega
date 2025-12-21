@@ -179,7 +179,9 @@ const Contact = () => {
                 </div>
               )}
 
-              {submitError && <div className="error-message">{submitError}</div>}
+              {submitError && (
+                <div className="error-message">{submitError}</div>
+              )}
 
               <form onSubmit={handleSubmit} className="contact-form">
                 <div className="form-row">

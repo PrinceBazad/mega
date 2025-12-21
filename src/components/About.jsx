@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 import { FaAward, FaUsers, FaHandshake, FaStar } from 'react-icons/fa';
 import './About.css';
 
@@ -57,6 +57,9 @@ const About = () => {
     }
   ];
 
+  // Animation controls
+  const featureControls = useAnimation();
+
   return (
     <section id="about" className="about">
       <div className="about-container">
@@ -67,7 +70,7 @@ const About = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2>About MegaReality</h2>
+          <h2>About <span className="highlight">MegaReality</span></h2>
           <p>Your trusted partner in finding the perfect property</p>
         </motion.div>
 
@@ -91,6 +94,48 @@ const About = () => {
               comprehensive services from property search to closing. Our deep market knowledge 
               and extensive network ensure you get the best deals and opportunities.
             </p>
+            
+            <motion.div 
+              className="about-stats"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="stat-item">
+                <motion.h4
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.5, type: "spring" }}
+                >
+                  15+
+                </motion.h4>
+                <p>Years Experience</p>
+              </div>
+              <div className="stat-item">
+                <motion.h4
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.6, type: "spring" }}
+                >
+                  1000+
+                </motion.h4>
+                <p>Properties Sold</p>
+              </div>
+              <div className="stat-item">
+                <motion.h4
+                  initial={{ scale: 0 }}
+                  whileInView={{ scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.7, type: "spring" }}
+                >
+                  50+
+                </motion.h4>
+                <p>Expert Agents</p>
+              </div>
+            </motion.div>
           </motion.div>
 
           <motion.div
@@ -108,9 +153,22 @@ const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ 
+                  scale: 1.03,
+                  y: -5,
+                  transition: { duration: 0.3 }
+                }}
               >
-                <div className="feature-icon">{feature.icon}</div>
+                <motion.div 
+                  className="feature-icon"
+                  whileHover={{
+                    scale: 1.1,
+                    rotate: [0, 10, -10, 0],
+                    transition: { duration: 0.5 }
+                  }}
+                >
+                  {feature.icon}
+                </motion.div>
                 <div className="feature-content">
                   <h4>{feature.title}</h4>
                   <p>{feature.description}</p>
@@ -127,7 +185,7 @@ const About = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h3>Meet Our Expert Team</h3>
+          <h3>Meet Our Expert <span className="highlight">Team</span></h3>
           <div className="team-grid">
             {agents.map((agent, index) => (
               <motion.div
@@ -137,15 +195,35 @@ const About = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
-                whileHover={{ y: -10 }}
+                whileHover={{ 
+                  y: -15,
+                  boxShadow: "0 25px 50px rgba(0,0,0,0.15)",
+                  transition: { duration: 0.3 }
+                }}
               >
                 <div className="agent-image">
-                  <img src={agent.image} alt={agent.name} />
+                  <motion.img 
+                    src={agent.image} 
+                    alt={agent.name}
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.5 }}
+                  />
                 </div>
                 <div className="agent-info">
                   <h4>{agent.name}</h4>
                   <p className="agent-role">{agent.role}</p>
                   <p className="agent-sales">{agent.sales}</p>
+                  
+                  <motion.button
+                    className="agent-contact-btn"
+                    whileHover={{ 
+                      scale: 1.05,
+                      backgroundColor: "#764ba2"
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    Contact Agent
+                  </motion.button>
                 </div>
               </motion.div>
             ))}
@@ -157,4 +235,3 @@ const About = () => {
 };
 
 export default About;
-
