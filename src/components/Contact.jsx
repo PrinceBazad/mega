@@ -7,6 +7,7 @@ import {
   FaClock,
   FaPaperPlane,
 } from "react-icons/fa";
+import API_BASE_URL from "../config";
 import "./Contact.css";
 
 const Contact = () => {
@@ -38,7 +39,7 @@ const Contact = () => {
       };
 
       // Submit to backend API
-      const response = await fetch("http://localhost:5000/api/inquiries", {
+      const response = await fetch(`${API_BASE_URL}/api/inquiries`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -108,45 +109,34 @@ const Contact = () => {
   ];
 
   return (
-    <section id="contact" className="contact">
-      <div className="contact-container">
+    <section className="contact-page">
+      <div className="container">
         <motion.div
-          className="section-header"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          className="page-header"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h2>Get In Touch</h2>
-          <p>Have questions? We'd love to hear from you</p>
+          <h1>Contact Us</h1>
+          <p>Get in touch with our real estate experts</p>
         </motion.div>
 
         <div className="contact-content">
           <motion.div
             className="contact-info"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <h3>Contact Information</h3>
-            <p className="contact-description">
-              Reach out to us for any inquiries about properties, services, or
-              partnerships. Our team is here to help you find your dream
-              property.
+            <h2>Get In Touch</h2>
+            <p>
+              Have questions about our properties or services? Our team is ready
+              to help you find your dream home.
             </p>
 
             <div className="contact-details">
               {contactInfo.map((item, index) => (
-                <motion.div
-                  key={index}
-                  className="contact-item"
-                  initial={{ opacity: 0, x: -30 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  whileHover={{ x: 10 }}
-                >
+                <div key={index} className="contact-item">
                   <div className="contact-icon">{item.icon}</div>
                   <div className="contact-text">
                     <h4>{item.title}</h4>
@@ -156,105 +146,120 @@ const Contact = () => {
                       <p>{item.info}</p>
                     )}
                   </div>
-                </motion.div>
+                </div>
               ))}
+            </div>
+
+            <div className="map-container">
+              <iframe
+                title="Office Location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.1234567890123!2d-74.0059413!3d40.7127753!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQyJzQ2LjAiTiA3NMKwMDAnMjEuNCJX!5e0!3m2!1sen!2sus!4v1234567890123!5m2!1sen!2sus"
+                width="100%"
+                height="250"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+              ></iframe>
             </div>
           </motion.div>
 
           <motion.div
-            className="contact-form-container"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            className="contact-form-section"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
           >
-            {submitSuccess && (
-              <div className="success-message">
-                Thank you! Your inquiry has been submitted successfully. We will
-                contact you soon.
-              </div>
-            )}
+            <div className="form-wrapper">
+              <h2>Send us a Message</h2>
+              <p>Fill out the form below and we'll get back to you shortly.</p>
 
-            {submitError && <div className="error-message">{submitError}</div>}
+              {submitSuccess && (
+                <div className="success-message">
+                  Thank you for your inquiry! We'll contact you soon.
+                </div>
+              )}
 
-            <form onSubmit={handleSubmit} className="contact-form">
-              <div className="form-row">
+              {submitError && <div className="error-message">{submitError}</div>}
+
+              <form onSubmit={handleSubmit} className="contact-form">
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Name *</label>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      placeholder="Your name"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Email *</label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      placeholder="your@email.com"
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Phone</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="(555) 123-4567"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label>Subject *</label>
+                    <input
+                      type="text"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      required
+                      placeholder="How can we help?"
+                    />
+                  </div>
+                </div>
+
                 <div className="form-group">
-                  <label>Name *</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
+                  <label>Message *</label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
                     onChange={handleChange}
                     required
-                    placeholder="Your name"
+                    rows="5"
+                    placeholder="Tell us about your requirements..."
                   />
                 </div>
-                <div className="form-group">
-                  <label>Email *</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    placeholder="your@email.com"
-                  />
-                </div>
-              </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Phone</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    placeholder="(555) 123-4567"
-                  />
-                </div>
-                <div className="form-group">
-                  <label>Subject *</label>
-                  <input
-                    type="text"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                    placeholder="How can we help?"
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>Message *</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows="5"
-                  placeholder="Tell us about your requirements..."
-                />
-              </div>
-
-              <motion.button
-                type="submit"
-                className="submit-btn"
-                disabled={isSubmitting}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {isSubmitting ? (
-                  "Sending..."
-                ) : (
-                  <>
-                    <FaPaperPlane /> Send Message
-                  </>
-                )}
-              </motion.button>
-            </form>
+                <motion.button
+                  type="submit"
+                  className="submit-btn"
+                  disabled={isSubmitting}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {isSubmitting ? (
+                    "Sending..."
+                  ) : (
+                    <>
+                      <FaPaperPlane /> Send Message
+                    </>
+                  )}
+                </motion.button>
+              </form>
+            </div>
           </motion.div>
         </div>
       </div>
