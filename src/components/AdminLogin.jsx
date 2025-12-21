@@ -1,65 +1,49 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../config";
 import "./AdminLogin.css";
 
 const AdminLogin = () => {
-  const [credentials, setCredentials] = useState({
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setCredentials({
-      ...credentials,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    // Basic validation
-    if (!credentials.email || !credentials.password) {
-      setError("Please enter both email and password");
-      setLoading(false);
-      return;
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(credentials.email)) {
-      setError("Please enter a valid email address");
-      setLoading(false);
-      return;
-    }
+    // Debug information
+    console.log("API Base URL:", API_BASE_URL);
+    console.log("Full login URL:", `${API_BASE_URL}/api/admin/login`);
 
     try {
-      const response = await fetch("http://localhost:5000/api/admin/login", {
+      const response = await fetch(`${API_BASE_URL}/api/admin/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(credentials),
+        body: JSON.stringify({ email, password }),
       });
+
+      console.log("Response status:", response.status);
+      console.log("Response headers:", response.headers);
 
       const data = await response.json();
 
-      if (response.ok && data.access_token && data.admin) {
-        // Save token to localStorage
+      if (response.ok) {
+        // Store token in localStorage
         localStorage.setItem("adminToken", data.access_token);
-        localStorage.setItem("admin", JSON.stringify(data.admin));
+        // Redirect to admin dashboard
         navigate("/admin/dashboard");
-      } else if (response.status === 401) {
-        setError("Invalid email or password");
       } else {
-        setError(data.message || "Login failed. Please try again.");
+        setError(data.message || "Login failed");
       }
     } catch (err) {
+      console.error("Login error:", err);
       setError("Network error. Please check your connection and try again.");
     } finally {
       setLoading(false);
@@ -71,22 +55,21 @@ const AdminLogin = () => {
       <div className="login-container">
         <div className="login-header">
           <h2>Admin Login</h2>
-          <p>Access the real estate management dashboard</p>
+          <p>Sign in to access the admin dashboard</p>
         </div>
 
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
-              name="email"
-              value={credentials.email}
-              onChange={handleChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="admin@example.com"
+              disabled={loading}
             />
           </div>
 
@@ -95,11 +78,10 @@ const AdminLogin = () => {
             <input
               type="password"
               id="password"
-              name="password"
-              value={credentials.password}
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="Enter your password"
+              disabled={loading}
             />
           </div>
 
