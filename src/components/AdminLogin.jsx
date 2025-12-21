@@ -33,10 +33,16 @@ const AdminLogin = () => {
       console.log("Response headers:", response.headers);
 
       const data = await response.json();
+      console.log("Response data:", data);
 
       if (response.ok) {
         // Store token in localStorage
         localStorage.setItem("adminToken", data.access_token);
+        // Also store admin info if available
+        if (data.admin) {
+          localStorage.setItem("admin", JSON.stringify(data.admin));
+        }
+        console.log("Login successful, redirecting to dashboard...");
         // Redirect to admin dashboard
         navigate("/admin/dashboard");
       } else {
