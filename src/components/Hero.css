@@ -9,14 +9,15 @@
 }
 
 .hero::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=1920&q=80') center/cover;
-  opacity: 0.15;
+  background: url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920&q=80")
+    center/cover;
+  opacity: 0.25;
   animation: zoomEffect 20s infinite alternate;
 }
 
@@ -26,7 +27,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.9) 0%,
+    rgba(118, 75, 162, 0.9) 100%
+  );
 }
 
 .hero-content {
@@ -56,7 +61,7 @@
 }
 
 .hero-title .highlight::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -10px;
   left: 0;
@@ -82,7 +87,8 @@
   flex-wrap: wrap;
 }
 
-.btn-primary, .btn-secondary {
+.btn-primary,
+.btn-secondary {
   padding: 1rem 2rem;
   border: none;
   border-radius: 50px;
@@ -237,7 +243,11 @@
 .floating-element {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.3) 0%, rgba(255, 140, 0, 0.3) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.3) 0%,
+    rgba(255, 140, 0, 0.3) 100%
+  );
   z-index: 0;
   filter: blur(20px);
 }
@@ -287,7 +297,7 @@
   .hero-title {
     font-size: 3rem;
   }
-  
+
   .hero-text p {
     font-size: 1.2rem;
   }
@@ -297,34 +307,35 @@
   .hero {
     padding-top: 60px;
   }
-  
+
   .hero-title {
     font-size: 2.5rem;
   }
-  
+
   .hero-text p {
     font-size: 1.1rem;
   }
-  
+
   .hero-buttons {
     flex-direction: column;
     align-items: center;
   }
-  
-  .btn-primary, .btn-secondary {
+
+  .btn-primary,
+  .btn-secondary {
     width: 80%;
     max-width: 300px;
   }
-  
+
   .search-form {
     grid-template-columns: 1fr;
     padding: 1.5rem;
   }
-  
+
   .stat-item h3 {
     font-size: 2rem;
   }
-  
+
   .stat-item p {
     font-size: 1rem;
   }
@@ -334,15 +345,15 @@
   .hero-title {
     font-size: 2rem;
   }
-  
+
   .hero-content {
     padding: 1rem;
   }
-  
+
   .search-form {
     gap: 1rem;
   }
-  
+
   .search-input-group input,
   .search-input-group select {
     padding: 0.8rem 0.8rem 0.8rem 40px;

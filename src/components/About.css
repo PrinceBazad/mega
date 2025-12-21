@@ -1,12 +1,17 @@
 .about {
   padding: 6rem 2rem;
-  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  background: linear-gradient(
+      rgba(247, 250, 252, 0.9),
+      rgba(237, 242, 247, 0.9)
+    ),
+    url("https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=1920&q=80")
+      center/cover fixed;
   position: relative;
   overflow: hidden;
 }
 
 .about::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -45,7 +50,7 @@
 }
 
 .section-header h2::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -15px;
   left: 50%;
@@ -79,7 +84,7 @@
 }
 
 .about-text h3::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -10px;
   left: 0;
@@ -187,7 +192,7 @@
 }
 
 .team-section h3::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -15px;
   left: 50%;
@@ -214,7 +219,7 @@
 }
 
 .agent-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -294,27 +299,27 @@
   .about {
     padding: 5rem 2rem;
   }
-  
+
   .section-header h2 {
     font-size: 2.5rem;
   }
-  
+
   .team-section h3 {
     font-size: 2.2rem;
   }
-  
+
   .about-content {
     gap: 3rem;
   }
-  
+
   .about-text h3 {
     font-size: 2rem;
   }
-  
+
   .about-stats {
     padding: 1.5rem;
   }
-  
+
   .stat-item h4 {
     font-size: 2rem;
   }
@@ -324,23 +329,23 @@
   .about-content {
     grid-template-columns: 1fr;
   }
-  
+
   .about-features {
     margin-top: 2rem;
   }
-  
+
   .feature-item {
     padding: 1.5rem;
   }
-  
+
   .feature-content h4 {
     font-size: 1.2rem;
   }
-  
+
   .feature-content p {
     font-size: 1rem;
   }
-  
+
   .about-stats {
     flex-direction: column;
     gap: 1.5rem;
@@ -352,49 +357,49 @@
   .about {
     padding: 4rem 1.5rem;
   }
-  
+
   .section-header {
     margin-bottom: 3rem;
   }
-  
+
   .section-header h2 {
     font-size: 2.2rem;
   }
-  
+
   .section-header p {
     font-size: 1.1rem;
   }
-  
+
   .team-section h3 {
     font-size: 2rem;
   }
-  
+
   .about-content {
     gap: 2.5rem;
     margin-bottom: 4rem;
   }
-  
+
   .about-text h3 {
     font-size: 1.8rem;
   }
-  
+
   .about-text p {
     font-size: 1rem;
   }
-  
+
   .team-grid {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
   }
-  
+
   .agent-image {
     height: 280px;
   }
-  
+
   .agent-info {
     padding: 1.5rem;
   }
-  
+
   .agent-info h4 {
     font-size: 1.3rem;
   }
@@ -404,61 +409,61 @@
   .about {
     padding: 3rem 1rem;
   }
-  
+
   .section-header h2 {
     font-size: 2rem;
   }
-  
+
   .section-header h2::after {
     width: 80px;
     height: 4px;
   }
-  
+
   .section-header p {
     font-size: 1rem;
   }
-  
+
   .team-section h3 {
     font-size: 1.8rem;
   }
-  
+
   .about-content {
     gap: 2rem;
     margin-bottom: 3rem;
   }
-  
+
   .about-text h3 {
     font-size: 1.6rem;
   }
-  
+
   .feature-item {
     flex-direction: column;
     text-align: center;
     gap: 1rem;
   }
-  
+
   .about-stats {
     padding: 1rem;
     gap: 1rem;
   }
-  
+
   .stat-item h4 {
     font-size: 1.8rem;
   }
-  
+
   .team-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .agent-image {
     height: 250px;
   }
-  
+
   .agent-info h4 {
     font-size: 1.2rem;
   }
-  
+
   .agent-contact-btn {
     padding: 0.7rem 1.2rem;
     font-size: 0.9rem;
