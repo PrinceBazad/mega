@@ -237,6 +237,11 @@ def get_property(property_id):
     return jsonify({'message': 'Property not found'}), 404
 
 # Protected Admin Routes
+@app.route('/api/admin/properties', methods=['GET'])
+def get_admin_properties():
+    # In a real app, this would require authentication
+    return jsonify(properties)
+
 @app.route('/api/admin/properties', methods=['POST'])
 def create_property():
     # In a real app, this would require authentication
