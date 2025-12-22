@@ -146,6 +146,22 @@ const PropertiesPage = () => {
     fetchProperties();
   }, []);
 
+  // Initialize search filters with URL parameters
+  useEffect(() => {
+    const location = searchParams.get("location") || "";
+    const propertyType = searchParams.get("type") || "";
+    const minPrice = searchParams.get("min_price") || "";
+    const maxPrice = searchParams.get("max_price") || "";
+    const status = searchParams.get("status") || "";
+
+    setSearchFilters({
+      location,
+      propertyType,
+      minPrice,
+      maxPrice,
+      status,
+    });
+  }, [searchParams]);
   // Apply filters including location filter when search filters change
   useEffect(() => {
     applyLocationFilter(selectedLocation);
