@@ -486,27 +486,43 @@
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 1rem;
+  }
+
+  .dashboard-layout {
+    flex-direction: column;
+  }
+
   .dashboard-sidebar {
     width: 100%;
     height: auto;
     position: relative;
+    margin-bottom: 1rem;
   }
 
   .dashboard-main {
     margin-left: 0;
   }
 
+  .sidebar-header {
+    padding: 1rem;
+    text-align: center;
+  }
+
   .sidebar-nav {
     flex-direction: row;
     flex-wrap: wrap;
+    padding: 0.5rem;
   }
 
   .sidebar-nav button {
     flex: 1;
     text-align: center;
-    padding: 10px;
-    margin: 5px;
+    padding: 0.75rem;
+    margin: 0.25rem;
     border-radius: 5px;
+    font-size: 0.9rem;
   }
 
   .sidebar-nav button i,
@@ -514,10 +530,32 @@
     margin-right: 0;
     display: block;
     margin-bottom: 5px;
+    font-size: 1.2rem;
+  }
+
+  .content-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .content-header h2 {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .properties-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .property-card {
+    max-width: 100%;
   }
 
   .form-row {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .image-input-group {
@@ -526,24 +564,91 @@
 
   .form-actions {
     flex-direction: column;
+    gap: 1rem;
   }
 
   .btn-cancel,
   .btn-submit {
     width: 100%;
+    padding: 1rem;
+  }
+
+  .inquiries-table,
+  .admins-table {
+    padding: 1rem;
+  }
+
+  .inquiries-table table,
+  .admins-table table {
+    font-size: 0.9rem;
+  }
+
+  .inquiries-table th,
+  .inquiries-table td,
+  .admins-table th,
+  .admins-table td {
+    padding: 0.75rem 0.5rem;
   }
 
   .builders-list {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
   .builder-item {
     flex-direction: column;
     align-items: flex-start;
-    gap: 15px;
+    gap: 1rem;
+    padding: 1rem;
   }
 
   .builder-actions {
     align-self: flex-end;
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-dashboard {
+    padding: 0.5rem;
+  }
+
+  .sidebar-nav button {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .sidebar-nav button i,
+  .sidebar-nav button svg {
+    font-size: 1rem;
+  }
+
+  .content-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .property-card {
+    margin-bottom: 1rem;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: 0.75rem;
+  }
+
+  .inquiries-table th,
+  .inquiries-table td,
+  .admins-table th,
+  .admins-table td {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  .preview-images img {
+    width: 60px;
+    height: 60px;
   }
 }

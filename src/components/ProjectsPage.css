@@ -305,15 +305,11 @@
     gap: 1.5rem;
   }
 
-  .project-header h3 {
+  .project-info h3 {
     font-size: 1.1rem;
   }
 
-  .project-price {
-    font-size: 1.1rem;
-  }
-
-  .project-features {
+  .project-details {
     flex-direction: column;
     gap: 0.75rem;
   }
@@ -336,22 +332,40 @@
     padding: 1rem;
   }
 
-  .project-header {
-    flex-direction: column;
-    gap: 0.5rem;
-    align-items: flex-start;
-  }
-
-  .project-price {
+  .project-info h3 {
     font-size: 1rem;
   }
 
-  .feature {
+  .project-status {
+    font-size: 0.9rem;
+  }
+
+  .detail {
     flex-direction: row;
     gap: 0.5rem;
   }
 
-  .feature span {
+  .detail .label {
     font-size: 0.8rem;
+  }
+
+  .detail .value {
+    font-size: 0.8rem;
+  }
+
+  .btn-view-details {
+    padding: 0.6rem;
+    font-size: 0.9rem;
+  }
+
+  .filter-group input,
+  .filter-group select {
+    padding: 0.6rem 0.6rem 0.6rem 2rem;
+    font-size: 0.9rem;
+  }
+
+  .btn-clear {
+    padding: 0.6rem 1rem;
+    font-size: 0.9rem;
   }
 }

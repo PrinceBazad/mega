@@ -25,6 +25,19 @@ body {
   overflow-x: hidden;
 }
 
+/* Improved Mobile Responsiveness */
+@media (max-width: 768px) {
+  .app {
+    padding-top: 90px; /* Account for LocationSelector (40px) + Navbar (50px) on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding-top: 85px; /* Adjusted for smaller screens */
+  }
+}
+
 h1,
 h2,
 h3,
