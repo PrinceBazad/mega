@@ -343,9 +343,10 @@ const PropertiesPage = () => {
                 key={property.id}
                 className="property-card"
                 variants={cardVariants}
-                whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                onClick={() => navigate(`/property/${property.id}`)}
-                style={{ cursor: "pointer" }}
+                whileHover={{ y: -10 }}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
               >
                 <div className="property-image">
                   {property.images && property.images.length > 0 ? (
@@ -355,60 +356,38 @@ const PropertiesPage = () => {
                       loading="lazy"
                     />
                   ) : (
-                    <div className="placeholder-image">No Image</div>
+                    <div className="no-image">No Image</div>
                   )}
-                  {property.featured && (
-                    <span className="badge-featured">Featured</span>
-                  )}
-                  <motion.button
-                    className="btn-favorite"
-                    whileHover={{ scale: 1.2 }}
-                    whileTap={{ scale: 0.9 }}
-                  >
-                    <FaHeart />
-                  </motion.button>
-                </div>
-
-                <div className="property-info">
-                  <div className="property-header">
+                  
+                  {/* Property info overlay */}
+                  <div className="property-overlay">
                     <h3>{property.title}</h3>
                     <p className="property-price">
                       ${property.price.toLocaleString()}
                     </p>
                   </div>
-
-                  <div className="property-location">
-                    <FaMapMarkerAlt />
-                    <span>{property.location}</span>
+                  
+                  {/* More Details button that appears on hover */}
+                  <div className="property-details-btn">
+                    <button
+                      className="btn-more-details"
+                      onClick={() => navigate(`/property/${property.id}`)}
+                    >
+                      More Details
+                    </button>
                   </div>
-
-                  <div className="property-features">
-                    <div className="feature">
-                      <FaBed />
-                      <span>{property.bedrooms || 0} Beds</span>
-                    </div>
-                    <div className="feature">
-                      <FaBath />
-                      <span>{property.bathrooms || 0} Baths</span>
-                    </div>
-                    <div className="feature">
-                      <FaRulerCombined />
-                      <span>{property.area_sqft || 0} sqft</span>
-                    </div>
-                  </div>
-
-                  <motion.button
-                    className="btn-view-details"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/property/${property.id}`);
-                    }}
-                  >
-                    View Details
-                  </motion.button>
                 </div>
+                
+                <div className="property-location">
+                  <FaMapMarkerAlt />
+                  <span>{property.location}</span>
+                </div>
+
+                {property.builder_name && (
+                  <p className="property-builder">
+                    Builder: {property.builder_name}
+                  </p>
+                )}
               </motion.div>
             ))
           ) : (

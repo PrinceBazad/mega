@@ -311,11 +311,14 @@ const Properties = () => {
         >
           {filteredProperties.length > 0 ? (
             filteredProperties.map((property) => (
-              <div
+              <motion.div
                 key={property.id}
                 className="property-card"
-                onClick={() => navigate(`/property/${property.id}`)}
-                style={{ cursor: "pointer" }}
+                variants={cardVariants}
+                whileHover={{ y: -10 }}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
               >
                 <div className="property-image">
                   {property.images && property.images.length > 0 ? (
@@ -327,37 +330,37 @@ const Properties = () => {
                   ) : (
                     <div className="no-image">No Image</div>
                   )}
-                </div>
-
-                <div className="property-info">
-                  <h3>{property.title}</h3>
-
-                  <div className="property-location">
-                    <FaMapMarkerAlt />
-                    <span>{property.location}</span>
-                  </div>
-
-                  {property.builder_name && (
-                    <p className="property-builder">
-                      Builder: {property.builder_name}
+                  
+                  {/* Property info overlay */}
+                  <div className="property-overlay">
+                    <h3>{property.title}</h3>
+                    <p className="property-price">
+                      ${property.price.toLocaleString()}
                     </p>
-                  )}
-
-                  <p className="property-price">
-                    ${property.price.toLocaleString()}
-                  </p>
-
-                  <button
-                    className="btn-view-details"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/property/${property.id}`);
-                    }}
-                  >
-                    View Details
-                  </button>
+                  </div>
+                  
+                  {/* More Details button that appears on hover */}
+                  <div className="property-details-btn">
+                    <button
+                      className="btn-more-details"
+                      onClick={() => navigate(`/property/${property.id}`)}
+                    >
+                      More Details
+                    </button>
+                  </div>
                 </div>
-              </div>
+                
+                <div className="property-location">
+                  <FaMapMarkerAlt />
+                  <span>{property.location}</span>
+                </div>
+
+                {property.builder_name && (
+                  <p className="property-builder">
+                    Builder: {property.builder_name}
+                  </p>
+                )}
+              </motion.div>
             ))
           ) : (
             <div className="no-properties">
