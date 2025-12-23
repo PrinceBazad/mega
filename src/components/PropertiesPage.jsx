@@ -358,7 +358,7 @@ const PropertiesPage = () => {
                   ) : (
                     <div className="no-image">No Image</div>
                   )}
-                  
+
                   {/* Property info overlay */}
                   <div className="property-overlay">
                     <h3>{property.title}</h3>
@@ -366,7 +366,7 @@ const PropertiesPage = () => {
                       ${property.price.toLocaleString()}
                     </p>
                   </div>
-                  
+
                   {/* More Details button that appears on hover */}
                   <div className="property-details-btn">
                     <button
@@ -377,7 +377,7 @@ const PropertiesPage = () => {
                     </button>
                   </div>
                 </div>
-                
+
                 <div className="property-location">
                   <FaMapMarkerAlt />
                   <span>{property.location}</span>

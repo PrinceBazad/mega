@@ -116,9 +116,7 @@ const Services = () => {
             <motion.div
               className="services-track"
               style={{
-                transform: `translateX(-${
-                  currentIndex * (100 / Math.min(services.length, 4))
-                }%)`,
+                transform: `translateX(-${currentIndex * (100 / 3)}%)`,
               }}
             >
               {services.map((service, index) => (
@@ -155,19 +153,6 @@ const Services = () => {
                   </motion.div>
                   <h3>{service.title}</h3>
                   <p>{service.description}</p>
-                  <motion.button
-                    className="service-btn"
-                    whileHover={{
-                      scale: 1.05,
-                      backgroundColor: "#764ba2",
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    Learn More
-                  </motion.button>
                 </motion.div>
               ))}
             </motion.div>
