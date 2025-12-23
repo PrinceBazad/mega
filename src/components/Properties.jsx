@@ -10,13 +10,6 @@ const Properties = () => {
   const [filteredProperties, setFilteredProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [locationChanging, setLocationChanging] = useState(false);
-  const [searchFilters, setSearchFilters] = useState({
-    location: "",
-    propertyType: "",
-    minPrice: "",
-    maxPrice: "",
-    status: "",
-  });
   const [selectedLocation, setSelectedLocation] = useState("gurugram");
 
   const navigate = useNavigate();
@@ -71,39 +64,6 @@ const Properties = () => {
       );
     }
 
-    // Apply other existing filters
-    if (searchFilters.location) {
-      filtered = filtered.filter((prop) =>
-        prop.location
-          .toLowerCase()
-          .includes(searchFilters.location.toLowerCase())
-      );
-    }
-
-    if (searchFilters.propertyType) {
-      filtered = filtered.filter(
-        (prop) => prop.property_type === searchFilters.propertyType
-      );
-    }
-
-    if (searchFilters.minPrice) {
-      filtered = filtered.filter(
-        (prop) => prop.price >= parseFloat(searchFilters.minPrice)
-      );
-    }
-
-    if (searchFilters.maxPrice) {
-      filtered = filtered.filter(
-        (prop) => prop.price <= parseFloat(searchFilters.maxPrice)
-      );
-    }
-
-    if (searchFilters.status) {
-      filtered = filtered.filter(
-        (prop) => prop.status === searchFilters.status
-      );
-    }
-
     setFilteredProperties(filtered);
   };
 
@@ -132,29 +92,6 @@ const Properties = () => {
 
     fetchProperties();
   }, []);
-
-  // Apply filters including location filter when search filters change
-  useEffect(() => {
-    applyLocationFilter(selectedLocation);
-  }, [searchFilters, properties, selectedLocation]);
-
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setSearchFilters((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const clearFilters = () => {
-    setSearchFilters({
-      location: "",
-      propertyType: "",
-      minPrice: "",
-      maxPrice: "",
-      status: "",
-    });
-  };
 
   const handleViewAllProperties = () => {
     // Navigate to the dedicated properties page
@@ -213,85 +150,6 @@ const Properties = () => {
           <p>Explore our handpicked selection of premium properties</p>
         </motion.div>
 
-        {/* Search and Filter Section */}
-        <div className="search-filters">
-          <div className="filter-row">
-            <div className="filter-group">
-              <label htmlFor="location">Location</label>
-              <input
-                type="text"
-                id="location"
-                name="location"
-                placeholder="City, State or Zip"
-                value={searchFilters.location}
-                onChange={handleFilterChange}
-              />
-            </div>
-
-            <div className="filter-group">
-              <label htmlFor="propertyType">Property Type</label>
-              <select
-                id="propertyType"
-                name="propertyType"
-                value={searchFilters.propertyType}
-                onChange={handleFilterChange}
-              >
-                <option value="">All Types</option>
-                <option value="House">House</option>
-                <option value="Flat">Flat</option>
-                <option value="Plot">Plot</option>
-              </select>
-            </div>
-
-            <div className="filter-group">
-              <label htmlFor="status">Status</label>
-              <select
-                id="status"
-                name="status"
-                value={searchFilters.status}
-                onChange={handleFilterChange}
-              >
-                <option value="">All Status</option>
-                <option value="Available">Available</option>
-                <option value="Sold">Sold</option>
-                <option value="Rent">Rent</option>
-              </select>
-            </div>
-          </div>
-
-          <div className="filter-row">
-            <div className="filter-group">
-              <label htmlFor="minPrice">Min Price ($)</label>
-              <input
-                type="number"
-                id="minPrice"
-                name="minPrice"
-                placeholder="Min Price"
-                value={searchFilters.minPrice}
-                onChange={handleFilterChange}
-              />
-            </div>
-
-            <div className="filter-group">
-              <label htmlFor="maxPrice">Max Price ($)</label>
-              <input
-                type="number"
-                id="maxPrice"
-                name="maxPrice"
-                placeholder="Max Price"
-                value={searchFilters.maxPrice}
-                onChange={handleFilterChange}
-              />
-            </div>
-
-            <div className="filter-actions">
-              <button className="btn-clear" onClick={clearFilters}>
-                Clear Filters
-              </button>
-            </div>
-          </div>
-        </div>
-
         {/* Loading indicator when location is changing */}
         {locationChanging && (
           <div className="loading-overlay">
@@ -310,7 +168,7 @@ const Properties = () => {
           viewport={{ once: true, margin: "-100px" }}
         >
           {filteredProperties.length > 0 ? (
-            filteredProperties.map((property) => (
+            filteredProperties.slice(0, 6).map((property) => (
               <motion.div
                 key={property.id}
                 className="property-card"
@@ -330,7 +188,7 @@ const Properties = () => {
                   ) : (
                     <div className="no-image">No Image</div>
                   )}
-
+                  
                   {/* Property info overlay */}
                   <div className="property-overlay">
                     <h3>{property.title}</h3>
@@ -338,7 +196,7 @@ const Properties = () => {
                       ${property.price.toLocaleString()}
                     </p>
                   </div>
-
+                  
                   {/* More Details button that appears on hover */}
                   <div className="property-details-btn">
                     <button
@@ -349,7 +207,7 @@ const Properties = () => {
                     </button>
                   </div>
                 </div>
-
+                
                 <div className="property-location">
                   <FaMapMarkerAlt />
                   <span>{property.location}</span>
@@ -365,7 +223,6 @@ const Properties = () => {
           ) : (
             <div className="no-properties">
               <p>No properties found matching your criteria.</p>
-              <button onClick={clearFilters}>Clear Filters</button>
             </div>
           )}
         </motion.div>
