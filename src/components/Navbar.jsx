@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { motion } from "framer-motion";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -36,40 +37,67 @@ const Navbar = () => {
     <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          <div className="logo-icon">MR</div>
+          <motion.div 
+            className="logo-icon"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            MR
+          </motion.div>
           <div className="logo-text">MegaReality</div>
         </Link>
 
         <div className="navbar-menu desktop">
-          <button
+          <motion.button
             className="nav-link"
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => scrollToSection("properties")}
           >
             Properties
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             className="nav-link"
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => scrollToSection("services")}
           >
             Services
-          </button>
-          <Link to="/agents" className="nav-link">
-            Agents
+          </motion.button>
+          <Link to="/agents" className="nav-link" style={{ textDecoration: 'none' }}>
+            <motion.div
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              Agents
+            </motion.div>
           </Link>
-          <button className="nav-link" onClick={() => scrollToSection("about")}>
-            About
-          </button>
-          <button
+          <motion.button 
             className="nav-link"
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => scrollToSection("about")}
+          >
+            About
+          </motion.button>
+          <motion.button
+            className="nav-link"
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => scrollToSection("contact")}
           >
             Contact
-          </button>
+          </motion.button>
         </div>
 
         <div className="navbar-actions desktop">
-          <Link to="/admin/login" className="nav-action-btn">
-            Admin Login
+          <Link to="/admin/login" className="nav-action-btn" style={{ textDecoration: 'none' }}>
+            <motion.div
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Admin Login
+            </motion.div>
           </Link>
         </div>
 
@@ -82,35 +110,53 @@ const Navbar = () => {
 
         {mobileMenuOpen && (
           <div className="mobile-menu">
-            <button
+            <motion.button
               className="mobile-nav-link"
+              whileHover={{ x: 5 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => scrollToSection("properties")}
             >
               Properties
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               className="mobile-nav-link"
+              whileHover={{ x: 5 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => scrollToSection("services")}
             >
               Services
-            </button>
-            <Link to="/agents" className="mobile-nav-link">
-              Agents
+            </motion.button>
+            <Link to="/agents" className="mobile-nav-link" style={{ textDecoration: 'none' }}>
+              <motion.div
+                whileHover={{ x: 5 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Agents
+              </motion.div>
             </Link>
-            <button
+            <motion.button
               className="mobile-nav-link"
+              whileHover={{ x: 5 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => scrollToSection("about")}
             >
               About
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               className="mobile-nav-link"
+              whileHover={{ x: 5 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => scrollToSection("contact")}
             >
               Contact
-            </button>
-            <Link to="/admin/login" className="mobile-action-btn">
-              Admin Login
+            </motion.button>
+            <Link to="/admin/login" className="mobile-action-btn" style={{ textDecoration: 'none' }}>
+              <motion.div
+                whileHover={{ scale: 1.03, y: -1 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                Admin Login
+              </motion.div>
             </Link>
           </div>
         )}

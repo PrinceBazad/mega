@@ -1,9 +1,9 @@
-import { motion } from 'framer-motion';
-import './Loading.css';
+import { motion } from "framer-motion";
+import "./Loading.css";
 
 const Loading = () => {
   return (
-    <motion.div 
+    <motion.div
       className="loading-container"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -12,21 +12,21 @@ const Loading = () => {
       <div className="loading-content">
         {/* Animated logo with multiple elements */}
         <div className="loading-logo-container">
-          <motion.div 
+          <motion.div
             className="loading-logo"
-            animate={{ 
+            animate={{
               scale: [1, 1.1, 1],
-              rotate: [0, 15, -15, 0]
+              rotate: [0, 15, -15, 0],
             }}
-            transition={{ 
+            transition={{
               duration: 3,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: "easeInOut",
             }}
           >
             <span className="logo-text">MR</span>
           </motion.div>
-          
+
           {/* Floating particles around the logo */}
           {[...Array(8)].map((_, i) => (
             <motion.div
@@ -38,14 +38,14 @@ const Loading = () => {
               }}
               transition={{
                 rotate: { duration: 4, repeat: Infinity, ease: "linear" },
-                scale: { duration: 2, repeat: Infinity, delay: i * 0.2 }
+                scale: { duration: 2, repeat: Infinity, delay: i * 0.2 },
               }}
               style={{
-                position: 'absolute',
+                position: "absolute",
                 left: `${50 + 25 * Math.cos((i * 45 * Math.PI) / 180)}%`,
                 top: `${50 + 25 * Math.sin((i * 45 * Math.PI) / 180)}%`,
-                x: '-50%',
-                y: '-50%',
+                x: "-50%",
+                y: "-50%",
               }}
             />
           ))}
@@ -59,7 +59,7 @@ const Loading = () => {
         >
           MegaReality
         </motion.h2>
-        
+
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -72,27 +72,27 @@ const Loading = () => {
         {/* Enhanced loading bar with multiple animated elements */}
         <div className="loading-progress-container">
           <div className="loading-bar-background">
-            <motion.div 
+            <motion.div
               className="loading-bar-fill"
               initial={{ width: 0 }}
               animate={{ width: "100%" }}
-              transition={{ 
-                duration: 2, 
+              transition={{
+                duration: 2,
                 repeat: Infinity,
                 repeatType: "loop",
-                ease: "easeInOut"
+                ease: "easeInOut",
               }}
             />
-            <motion.div 
+            <motion.div
               className="loading-bar-pulse"
-              animate={{ 
+              animate={{
                 scale: [1, 1.2, 1],
-                opacity: [0.7, 1, 0.7]
+                opacity: [0.7, 1, 0.7],
               }}
-              transition={{ 
-                duration: 1.5, 
+              transition={{
+                duration: 1.5,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: "easeInOut",
               }}
             />
           </div>
@@ -106,12 +106,12 @@ const Loading = () => {
               className="loading-dot"
               animate={{
                 scale: [1, 1.5, 1],
-                opacity: [0.5, 1, 0.5]
+                opacity: [0.5, 1, 0.5],
               }}
               transition={{
                 duration: 1.5,
                 repeat: Infinity,
-                delay: i * 0.2
+                delay: i * 0.2,
               }}
             />
           ))}
@@ -135,7 +135,7 @@ const Loading = () => {
                 delay: i * 0.5,
               }}
               style={{
-                position: 'absolute',
+                position: "absolute",
                 width: `${30 + i * 10}px`,
                 height: `${30 + i * 10}px`,
                 left: `${10 + i * 15}%`,
