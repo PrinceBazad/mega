@@ -345,36 +345,143 @@
 }
 
 @media (max-width: 480px) {
-  .hero-title {
-    font-size: 1.6rem;
+  .hero {
+    padding-top: 85px;
+    min-height: 65vh;
   }
 
-  .hero-content {
-    padding: 1rem;
+  .hero-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.6rem;
   }
 
   .hero-text p {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    margin: 0 auto 1.2rem;
+    line-height: 1.5;
+  }
+
+  .hero-content {
+    padding: 1rem 0.5rem;
+  }
+
+  .hero-buttons {
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
   }
 
   .btn-primary,
   .btn-secondary {
-    width: 80%;
-    padding: 0.6rem 1rem;
+    width: 90%;
+    max-width: 220px;
+    padding: 0.6rem 0.8rem;
     font-size: 0.8rem;
   }
 
+  .hero-search {
+    margin: 0 auto 1.5rem;
+    padding: 0 0.5rem;
+  }
+
   .search-form {
+    padding: 1rem;
     gap: 0.6rem;
   }
 
   .search-input-group input,
   .search-input-group select {
     padding: 0.6rem 0.6rem 0.6rem 28px;
-    font-size: 13px;
+    font-size: 12px;
+  }
+
+  .input-icon {
+    font-size: 12px;
+    left: 8px;
+  }
+
+  .search-btn {
+    padding: 0.6rem 1rem;
+    font-size: 12px;
+  }
+
+  .hero-stats {
+    gap: 1rem;
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  .stat-item {
+    padding: 0.7rem;
   }
 
   .stat-item h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .stat-item p {
+    font-size: 0.75rem;
+  }
+
+  .scroll-indicator {
+    bottom: 15px;
+    font-size: 0.7rem;
+  }
+
+  .scroll-indicator svg {
+    font-size: 1rem;
+    margin-bottom: 2px;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero {
+    padding-top: 80px;
+    min-height: 60vh;
+  }
+
+  .hero-title {
     font-size: 1.4rem;
+  }
+
+  .hero-text p {
+    font-size: 0.8rem;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 95%;
+    max-width: 200px;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.75rem;
+  }
+
+  .search-form {
+    padding: 0.8rem;
+    gap: 0.5rem;
+  }
+
+  .search-input-group input,
+  .search-input-group select {
+    padding: 0.5rem 0.5rem 0.5rem 25px;
+    font-size: 11px;
+  }
+
+  .input-icon {
+    font-size: 11px;
+    left: 6px;
+  }
+
+  .search-btn {
+    padding: 0.5rem 0.8rem;
+    font-size: 11px;
+  }
+
+  .stat-item h3 {
+    font-size: 1.2rem;
+  }
+
+  .stat-item p {
+    font-size: 0.7rem;
   }
 }
