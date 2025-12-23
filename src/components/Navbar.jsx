@@ -37,7 +37,7 @@ const Navbar = () => {
     <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
-          <motion.div 
+          <motion.div
             className="logo-icon"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -64,15 +64,16 @@ const Navbar = () => {
           >
             Services
           </motion.button>
-          <Link to="/agents" className="nav-link" style={{ textDecoration: 'none' }}>
-            <motion.div
-              whileHover={{ y: -2 }}
-              whileTap={{ scale: 0.98 }}
-            >
+          <Link
+            to="/agents"
+            className="nav-link"
+            style={{ textDecoration: "none" }}
+          >
+            <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
               Agents
             </motion.div>
           </Link>
-          <motion.button 
+          <motion.button
             className="nav-link"
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
@@ -91,7 +92,11 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-actions desktop">
-          <Link to="/admin/login" className="nav-action-btn" style={{ textDecoration: 'none' }}>
+          <Link
+            to="/admin/login"
+            className="nav-action-btn"
+            style={{ textDecoration: "none" }}
+          >
             <motion.div
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
@@ -126,11 +131,12 @@ const Navbar = () => {
             >
               Services
             </motion.button>
-            <Link to="/agents" className="mobile-nav-link" style={{ textDecoration: 'none' }}>
-              <motion.div
-                whileHover={{ x: 5 }}
-                whileTap={{ scale: 0.98 }}
-              >
+            <Link
+              to="/agents"
+              className="mobile-nav-link"
+              style={{ textDecoration: "none" }}
+            >
+              <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
                 Agents
               </motion.div>
             </Link>
@@ -150,7 +156,11 @@ const Navbar = () => {
             >
               Contact
             </motion.button>
-            <Link to="/admin/login" className="mobile-action-btn" style={{ textDecoration: 'none' }}>
+            <Link
+              to="/admin/login"
+              className="mobile-action-btn"
+              style={{ textDecoration: "none" }}
+            >
               <motion.div
                 whileHover={{ scale: 1.03, y: -1 }}
                 whileTap={{ scale: 0.97 }}

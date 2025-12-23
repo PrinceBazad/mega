@@ -7,6 +7,10 @@ import {
   FaHome,
   FaDollarSign,
   FaChevronDown,
+  FaHouseUser,
+  FaBuilding,
+  FaLandmark,
+  FaChartLine
 } from "react-icons/fa";
 import "./Hero.css";
 
@@ -28,9 +32,9 @@ const Hero = () => {
 
     // Floating animation for stats
     floatingAnim.start({
-      y: [0, -10, 0],
+      y: [0, -15, 0],
       transition: {
-        duration: 3,
+        duration: 4,
         repeat: Infinity,
         ease: "easeInOut",
       },
@@ -71,29 +75,57 @@ const Hero = () => {
     navigate(url);
   };
 
-  // Animated background elements
+  // Enhanced animated background elements
   const FloatingElements = () => (
     <>
-      {[...Array(5)].map((_, i) => (
+      {/* Main floating elements */}
+      {[...Array(8)].map((_, i) => (
         <motion.div
           key={i}
           className="floating-element"
           style={{
-            left: `${10 + i * 20}%`,
-            top: `${20 + (i % 2) * 30}%`,
-            width: `${20 + i * 10}px`,
-            height: `${20 + i * 10}px`,
+            left: `${5 + i * 12}%`,
+            top: `${15 + (i % 3) * 20}%`,
+            width: `${25 + i * 5}px`,
+            height: `${25 + i * 5}px`,
           }}
           animate={{
-            y: [0, -30, 0],
-            x: [0, 10, 0],
+            y: [0, -40, 0],
+            x: [0, 20, 0],
             rotate: [0, 180, 360],
+            scale: [1, 1.2, 1],
           }}
           transition={{
             duration: 8 + i * 2,
             repeat: Infinity,
             ease: "easeInOut",
             delay: i * 0.5,
+          }}
+        />
+      ))}
+      
+      {/* Additional floating elements for more depth */}
+      {[...Array(6)].map((_, i) => (
+        <motion.div
+          key={`secondary-${i}`}
+          className="floating-element-secondary"
+          style={{
+            left: `${20 + i * 15}%`,
+            top: `${60 + (i % 2) * 15}%`,
+            width: `${15 + i * 3}px`,
+            height: `${15 + i * 3}px`,
+          }}
+          animate={{
+            y: [0, -25, 0],
+            x: [0, -15, 0],
+            rotate: [0, -180, 0],
+            opacity: [0.3, 0.8, 0.3],
+          }}
+          transition={{
+            duration: 6 + i,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.3,
           }}
         />
       ))}
@@ -107,58 +139,68 @@ const Hero = () => {
       <div
         className="hero-overlay"
         style={{
-          transform: `translateY(${scrollY * 0.5}px)`,
+          transform: `translateY(${scrollY * 0.3}px)`,
         }}
       ></div>
+
+      <div className="hero-gradient-overlay"></div>
 
       <div className="hero-content">
         <motion.div
           className="hero-text"
-          initial={{ opacity: 0, y: 50 }}
+          initial={{ opacity: 0, y: 80 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1, ease: "easeOut" }}
         >
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
+            transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
             className="hero-title"
           >
-            Find Your Dream <span className="highlight">Home</span>
+            Discover Your <span className="highlight">Perfect Home</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
+            transition={{ delay: 0.4, duration: 0.8, ease: "easeOut" }}
           >
-            Discover the perfect property that matches your lifestyle and budget
-            with our expert agents
+            Find your dream property with our premium real estate platform. 
+            Browse thousands of listings with advanced search and personalized recommendations.
           </motion.p>
 
           <motion.div
             className="hero-buttons"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
+            transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
           >
             <Link to="/properties">
               <motion.button
                 className="btn-primary"
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, y: -3 }}
                 whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.7 }}
               >
-                Explore Properties
+                <FaHouseUser className="btn-icon" />
+                Browse Properties
               </motion.button>
             </Link>
 
             <Link to="/agents">
               <motion.button
                 className="btn-secondary"
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, y: -3 }}
                 whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.8 }}
               >
-                Meet Our Agents
+                <FaBuilding className="btn-icon" />
+                Meet Agents
               </motion.button>
             </Link>
           </motion.div>
@@ -166,16 +208,20 @@ const Hero = () => {
 
         <motion.div
           className="hero-search"
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
+          initial={{ opacity: 0, y: 80, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ delay: 0.9, duration: 0.8, ease: "easeOut" }}
         >
+          <div className="search-header">
+            <h3>Find Your Dream Property</h3>
+            <p>Search from thousands of available listings</p>
+          </div>
           <form onSubmit={handleSearch} className="search-form">
             <div className="search-input-group">
               <FaMapMarkerAlt className="input-icon" />
               <input
                 type="text"
-                placeholder="Enter location"
+                placeholder="Enter location (e.g. Delhi, Gurugram)"
                 value={searchData.location}
                 onChange={(e) =>
                   setSearchData({ ...searchData, location: e.target.value })
@@ -197,6 +243,7 @@ const Hero = () => {
                 <option value="condo">Condo</option>
                 <option value="villa">Villa</option>
                 <option value="land">Land</option>
+                <option value="commercial">Commercial</option>
               </select>
             </div>
 
@@ -220,90 +267,59 @@ const Hero = () => {
             <motion.button
               type="submit"
               className="search-btn"
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.95 }}
-              initial={{ boxShadow: "0 0 0 0 rgba(102, 126, 234, 0.7)" }}
-              animate={{
-                boxShadow: [
-                  "0 0 0 0 rgba(102, 126, 234, 0.7)",
-                  "0 0 0 10px rgba(102, 126, 234, 0)",
-                  "0 0 0 0 rgba(102, 126, 234, 0.7)",
-                ],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1 }}
             >
-              <FaSearch /> Search
+              <FaSearch className="btn-icon" />
+              Find Properties
             </motion.button>
           </form>
         </motion.div>
 
         <motion.div
-          className="hero-stats"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 0.8 }}
+          className="hero-features"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.1, duration: 0.8 }}
         >
-          <motion.div className="stat-item" animate={floatingAnim}>
-            <motion.h3
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 1.2, type: "spring" }}
-            >
-              1000+
-            </motion.h3>
+          <div className="feature-card">
+            <FaHouseUser className="feature-icon" />
+            <h4>10,000+</h4>
             <p>Properties</p>
-          </motion.div>
-
-          <motion.div className="stat-item" animate={floatingAnim}>
-            <motion.h3
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 1.3, type: "spring" }}
-            >
-              500+
-            </motion.h3>
-            <p>Happy Clients</p>
-          </motion.div>
-
-          <motion.div className="stat-item" animate={floatingAnim}>
-            <motion.h3
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 1.4, type: "spring" }}
-            >
-              50+
-            </motion.h3>
-            <p>Expert Agents</p>
-          </motion.div>
-
-          <motion.div className="stat-item" animate={floatingAnim}>
-            <motion.h3
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 1.5, type: "spring" }}
-            >
-              15+
-            </motion.h3>
-            <p>Years Experience</p>
-          </motion.div>
+          </div>
+          <div className="feature-card">
+            <FaBuilding className="feature-icon" />
+            <h4>500+</h4>
+            <p>Agents</p>
+          </div>
+          <div className="feature-card">
+            <FaLandmark className="feature-icon" />
+            <h4>100+</h4>
+            <p>Developers</p>
+          </div>
+          <div className="feature-card">
+            <FaChartLine className="feature-icon" />
+            <h4>98%</h4>
+            <p>Satisfaction</p>
+          </div>
         </motion.div>
 
         <motion.div
           className="scroll-indicator"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2 }}
+          transition={{ delay: 1.5, duration: 0.8 }}
         >
           <motion.div
-            animate={{ y: [0, 10, 0] }}
+            animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           >
             <FaChevronDown />
           </motion.div>
-          <span>Scroll to explore</span>
+          <span>Explore more</span>
         </motion.div>
       </div>
     </section>
