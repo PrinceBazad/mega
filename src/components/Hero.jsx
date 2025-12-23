@@ -42,35 +42,35 @@ const Hero = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     console.log("Searching with:", searchData);
-    
+
     // Build query parameters
     const params = new URLSearchParams();
-    
+
     if (searchData.location) {
-      params.append('location', searchData.location);
+      params.append("location", searchData.location);
     }
-    
+
     if (searchData.propertyType) {
-      params.append('type', searchData.propertyType);
+      params.append("type", searchData.propertyType);
     }
-    
+
     // Parse price range
     if (searchData.priceRange) {
-      const [min, max] = searchData.priceRange.split('-');
-      if (min && min !== '0') {
-        params.append('min_price', min);
+      const [min, max] = searchData.priceRange.split("-");
+      if (min && min !== "0") {
+        params.append("min_price", min);
       }
-      if (max && max !== '+') {
-        params.append('max_price', max);
+      if (max && max !== "+") {
+        params.append("max_price", max);
       }
     }
-    
+
     // Navigate to properties page with search parameters
     const queryString = params.toString();
-    const url = queryString ? `/properties?${queryString}` : '/properties';
+    const url = queryString ? `/properties?${queryString}` : "/properties";
     navigate(url);
   };
-  
+
   // Animated background elements
   const FloatingElements = () => (
     <>
