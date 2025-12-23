@@ -74,7 +74,6 @@ const Footer = () => {
             <ul className="footer-links">
               <li><button onClick={() => scrollToSection('home')}>Home</button></li>
               <li><button onClick={() => scrollToSection('properties')}>Properties</button></li>
-              <li><button onClick={() => scrollToSection('services')}>Services</button></li>
               <li><button onClick={() => scrollToSection('about')}>About Us</button></li>
               <li><button onClick={() => scrollToSection('contact')}>Contact</button></li>
             </ul>
@@ -86,23 +85,6 @@ const Footer = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <h3>Services</h3>
-            <ul className="footer-links">
-              <li><a href="#">Buy Property</a></li>
-              <li><a href="#">Sell Property</a></li>
-              <li><a href="#">Rent Property</a></li>
-              <li><a href="#">Property Valuation</a></li>
-              <li><a href="#">Consultation</a></li>
-            </ul>
-          </motion.div>
-
-          <motion.div
-            className="footer-section"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
           >
             <h3>Contact Info</h3>
             <ul className="footer-contact">
@@ -144,4 +126,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
