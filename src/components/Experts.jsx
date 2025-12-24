@@ -33,14 +33,16 @@ const Experts = () => {
   const visibleExperts = filteredExperts.slice(currentIndex, currentIndex + 3);
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => 
+    setCurrentIndex((prevIndex) =>
       prevIndex + 3 >= filteredExperts.length ? 0 : prevIndex + 3
     );
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => 
-      prevIndex - 3 < 0 ? Math.floor((filteredExperts.length - 1) / 3) * 3 : prevIndex - 3
+    setCurrentIndex((prevIndex) =>
+      prevIndex - 3 < 0
+        ? Math.floor((filteredExperts.length - 1) / 3) * 3
+        : prevIndex - 3
     );
   };
 
@@ -89,8 +91,12 @@ const Experts = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2>Meet Our <span className="highlight">Experts</span></h2>
-          <p>Connect with our real estate professionals who are here to guide you</p>
+          <h2>
+            Meet Our <span className="highlight">Experts</span>
+          </h2>
+          <p>
+            Connect with our real estate professionals who are here to guide you
+          </p>
         </motion.div>
 
         <div className="experts-search-container">
@@ -114,7 +120,7 @@ const Experts = () => {
             <button className="carousel-btn prev" onClick={prevSlide}>
               &lt;
             </button>
-            
+
             <motion.div
               className="experts-grid"
               variants={containerVariants}
@@ -150,14 +156,18 @@ const Experts = () => {
                       </div>
                     </div>
                     <div className="expert-contact">
-                      <p><strong>Email:</strong> {expert.email}</p>
-                      <p><strong>Phone:</strong> {expert.phone}</p>
+                      <p>
+                        <strong>Email:</strong> {expert.email}
+                      </p>
+                      <p>
+                        <strong>Phone:</strong> {expert.phone}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
               ))}
             </motion.div>
-            
+
             <button className="carousel-btn next" onClick={nextSlide}>
               &gt;
             </button>
@@ -177,11 +187,18 @@ const Experts = () => {
             <p>Expert Agents</p>
           </div>
           <div className="stat-item">
-            <h3>{experts.reduce((sum, expert) => sum + expert.properties_sold, 0)}</h3>
+            <h3>
+              {experts.reduce((sum, expert) => sum + expert.properties_sold, 0)}
+            </h3>
             <p>Properties Sold</p>
           </div>
           <div className="stat-item">
-            <h3>{experts.length > 0 ? Math.max(...experts.map(e => parseInt(e.experience) || 0))}+</h3>
+            <h3>
+              {experts.length > 0
+                ? Math.max(...experts.map((e) => parseInt(e.experience) || 0)) +
+                  "+"
+                : "0+"}
+            </h3>
             <p>Years Experience</p>
           </div>
         </motion.div>
