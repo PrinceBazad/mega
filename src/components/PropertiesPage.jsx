@@ -29,38 +29,9 @@ const PropertiesPage = () => {
 
   const navigate = useNavigate();
 
-  // Listen for location changes
-  useEffect(() => {
-    const handleLocationChange = (e) => {
-      setLocationChanging(true);
-      const newLocation = e.detail.location;
-      setSelectedLocation(newLocation);
-      applyLocationFilter(newLocation);
-
-      // Simulate loading delay for better UX
-      setTimeout(() => {
-        setLocationChanging(false);
-      }, 500);
-    };
-
-    window.addEventListener("locationChanged", handleLocationChange);
-
-    // Check initial location from localStorage
-    const savedLocation = localStorage.getItem("selectedLocation");
-    if (savedLocation) {
-      const normalizedLocation = savedLocation.toLowerCase();
-      setSelectedLocation(normalizedLocation);
-      applyLocationFilter(normalizedLocation);
-    }
-
-    return () => {
-      window.removeEventListener("locationChanged", handleLocationChange);
-    };
-  }, [properties]);
-
   // Apply location filter function
   const applyLocationFilter = (location) => {
-    if (!location) return; // Handle undefined/null location
+    if (!location || !properties.length) return; // Handle undefined/null location and empty properties
 
     let filtered = [...properties];
 
@@ -122,6 +93,35 @@ const PropertiesPage = () => {
     setFilteredProperties(filtered);
   };
 
+  // Listen for location changes
+  useEffect(() => {
+    const handleLocationChange = (e) => {
+      setLocationChanging(true);
+      const newLocation = e.detail.location;
+      setSelectedLocation(newLocation);
+      applyLocationFilter(newLocation);
+
+      // Simulate loading delay for better UX
+      setTimeout(() => {
+        setLocationChanging(false);
+      }, 500);
+    };
+
+    window.addEventListener("locationChanged", handleLocationChange);
+
+    // Check initial location from localStorage
+    const savedLocation = localStorage.getItem("selectedLocation");
+    if (savedLocation) {
+      const normalizedLocation = savedLocation.toLowerCase();
+      setSelectedLocation(normalizedLocation);
+      applyLocationFilter(normalizedLocation);
+    }
+
+    return () => {
+      window.removeEventListener("locationChanged", handleLocationChange);
+    };
+  }, [applyLocationFilter]); // Added applyLocationFilter to dependency array
+
   // Fetch properties from backend
   useEffect(() => {
     const fetchProperties = async () => {
@@ -148,6 +148,13 @@ const PropertiesPage = () => {
     fetchProperties();
   }, []);
 
+  // Re-apply location filter whenever properties change
+  useEffect(() => {
+    if (properties.length > 0) {
+      applyLocationFilter(selectedLocation);
+    }
+  }, [properties, selectedLocation, applyLocationFilter]);
+
   // Initialize search filters with URL parameters
   useEffect(() => {
     const location = searchParams.get("location") || "";
@@ -164,10 +171,6 @@ const PropertiesPage = () => {
       status,
     });
   }, [searchParams]);
-  // Apply filters including location filter when search filters change
-  useEffect(() => {
-    applyLocationFilter(selectedLocation);
-  }, [searchFilters, properties, selectedLocation]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;

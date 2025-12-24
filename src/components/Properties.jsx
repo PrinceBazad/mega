@@ -14,6 +14,30 @@ const Properties = () => {
 
   const navigate = useNavigate();
 
+  // Apply location filter function
+  const applyLocationFilter = (location) => {
+    if (!location || !properties.length) return; // Handle undefined/null location and empty properties
+
+    let filtered = [...properties];
+
+    // Apply location filter based on selected location
+    if (location === "gurugram") {
+      filtered = filtered.filter(
+        (prop) =>
+          prop.location.toLowerCase().includes("gurugram") ||
+          prop.location.toLowerCase().includes("gurgaon")
+      );
+    } else if (location === "delhi") {
+      filtered = filtered.filter(
+        (prop) =>
+          prop.location.toLowerCase().includes("delhi") ||
+          prop.location.toLowerCase().includes("new delhi")
+      );
+    }
+
+    setFilteredProperties(filtered);
+  };
+
   // Listen for location changes
   useEffect(() => {
     const handleLocationChange = (e) => {
@@ -43,31 +67,7 @@ const Properties = () => {
     return () => {
       window.removeEventListener("locationChanged", handleLocationChange);
     };
-  }, [properties]);
-
-  // Apply location filter function
-  const applyLocationFilter = (location) => {
-    if (!location) return; // Handle undefined/null location
-
-    let filtered = [...properties];
-
-    // Apply location filter based on selected location
-    if (location === "gurugram") {
-      filtered = filtered.filter(
-        (prop) =>
-          prop.location.toLowerCase().includes("gurugram") ||
-          prop.location.toLowerCase().includes("gurgaon")
-      );
-    } else if (location === "delhi") {
-      filtered = filtered.filter(
-        (prop) =>
-          prop.location.toLowerCase().includes("delhi") ||
-          prop.location.toLowerCase().includes("new delhi")
-      );
-    }
-
-    setFilteredProperties(filtered);
-  };
+  }, [applyLocationFilter]); // Added applyLocationFilter to dependency array
 
   // Fetch properties from backend
   useEffect(() => {
@@ -94,6 +94,13 @@ const Properties = () => {
 
     fetchProperties();
   }, []);
+
+  // Re-apply location filter whenever properties change
+  useEffect(() => {
+    if (properties.length > 0) {
+      applyLocationFilter(selectedLocation);
+    }
+  }, [properties, selectedLocation, applyLocationFilter]);
 
   const handleViewAllProperties = () => {
     // Navigate to the dedicated properties page
