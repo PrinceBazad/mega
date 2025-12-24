@@ -75,3 +75,4 @@ function App() {
 }
 
 export default App;
+// No Experts component - completely removed
