@@ -1,16 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import './TopBar.css';
+import React, { useState, useEffect } from "react";
+import "./TopBar.css";
 
 const TopBar = () => {
-  const [selectedLocation, setSelectedLocation] = useState('Gurugram');
+  const [selectedLocation, setSelectedLocation] = useState("Gurugram");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const locations = [
-    'Gurugram', 'Delhi'
-  ];
+  const locations = ["Gurugram", "Delhi"];
 
   useEffect(() => {
-    const savedLocation = localStorage.getItem('selectedLocation');
+    const savedLocation = localStorage.getItem("selectedLocation");
     if (savedLocation) {
       setSelectedLocation(savedLocation);
     }
@@ -18,19 +16,21 @@ const TopBar = () => {
 
   const handleLocationChange = (location) => {
     setSelectedLocation(location);
-    localStorage.setItem('selectedLocation', location);
-    
+    localStorage.setItem("selectedLocation", location);
+
     // Dispatch a custom event to notify other components
-    window.dispatchEvent(new CustomEvent('locationChanged', { detail: location }));
-    
+    window.dispatchEvent(
+      new CustomEvent("locationChanged", { detail: location })
+    );
+
     setIsDropdownOpen(false);
   };
 
   return (
     <div className="top-bar">
       <div className="location-selector">
-        <button 
-          className="location-button" 
+        <button
+          className="location-button"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         >
           <span className="location-icon">📍</span>

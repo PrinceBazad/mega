@@ -47,6 +47,8 @@ const Properties = () => {
 
   // Apply location filter function
   const applyLocationFilter = (location) => {
+    if (!location) return; // Handle undefined/null location
+
     let filtered = [...properties];
 
     // Apply location filter based on selected location
@@ -144,8 +146,9 @@ const Properties = () => {
         >
           <h2>
             Featured Properties in{" "}
-            {selectedLocation.charAt(0).toUpperCase() +
-              selectedLocation.slice(1)}
+            {selectedLocation &&
+              selectedLocation.charAt(0).toUpperCase() +
+                selectedLocation.slice(1)}
           </h2>
           <p>Explore our handpicked selection of premium properties</p>
         </motion.div>
@@ -155,7 +158,7 @@ const Properties = () => {
           <div className="loading-overlay">
             <div className="loading-spinner">
               <div className="spinner"></div>
-              <p>Loading properties for {selectedLocation}...</p>
+              <p>Loading properties for {selectedLocation || "location"}...</p>
             </div>
           </div>
         )}
