@@ -26,6 +26,42 @@ body {
   overflow-x: hidden;
 }
 
+/* Dark Mode Styles */
+:root {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --text-light: #718096;
+  --border-color: #e2e8f0;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --card-bg: #ffffff;
+  --header-bg: #1a202c;
+  --footer-bg: #1a202c;
+}
+
+.dark-mode {
+  --bg-primary: #1a202c;
+  --bg-secondary: #2d3748;
+  --text-primary: #f7fafc;
+  --text-secondary: #a0aec0;
+  --text-light: #718096;
+  --border-color: #4a5568;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --card-bg: #2d3748;
+  --header-bg: #1a202c;
+  --footer-bg: #1a202c;
+}
+
+body.dark-mode {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+body.dark-mode * {
+  background-color: inherit;
+}
+
 /* Improved Mobile Responsiveness */
 @media (max-width: 768px) {
   .app {
@@ -86,7 +122,7 @@ img {
 
 .section-header h2 {
   font-size: 2.5rem;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   position: relative;
   display: inline-block;
@@ -106,7 +142,7 @@ img {
 
 .section-header p {
   font-size: 1.2rem;
-  color: #666;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 1rem auto 0;
 }
