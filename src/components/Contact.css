@@ -1,24 +1,8 @@
 .contact {
   padding: 4rem 1.5rem;
-  background: linear-gradient(
-      rgba(255, 255, 255, 0.9),
-      rgba(247, 250, 252, 0.9)
-    ),
-    url("https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=1920&q=80")
-      center/cover fixed;
+  background: var(--bg-primary);
   position: relative;
   overflow: hidden;
-}
-
-.contact::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 80px;
-  background: linear-gradient(to bottom, white, transparent);
-  z-index: 1;
 }
 
 .contact-container {
@@ -35,7 +19,7 @@
 
 .page-header h1 {
   font-size: 2rem;
-  color: #1a202c;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   position: relative;
   display: inline-block;
@@ -55,7 +39,7 @@
 
 .page-header p {
   font-size: 1rem;
-  color: #718096;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 1rem auto 0;
   font-weight: 300;
@@ -65,7 +49,7 @@
   display: grid;
   grid-template-columns: 1fr 1.5fr;
   gap: 2.5rem;
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--card-bg);
   border-radius: 15px;
   padding: 2.5rem;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
@@ -74,7 +58,7 @@
 
 .contact-info h2 {
   font-size: 1.8rem;
-  color: #1a202c;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   position: relative;
 }
@@ -91,7 +75,7 @@
 }
 
 .contact-description {
-  color: #718096;
+  color: var(--text-secondary);
   line-height: 1.7;
   margin-bottom: 1.5rem;
   font-size: 0.95rem;
@@ -113,7 +97,7 @@
 }
 
 .contact-item:hover {
-  background: #f7fafc;
+  background: var(--bg-secondary);
   transform: translateY(-2px);
 }
 
@@ -133,14 +117,14 @@
 
 .contact-text h4 {
   font-size: 1.1rem;
-  color: #1a202c;
+  color: var(--text-primary);
   margin-bottom: 0.2rem;
   font-weight: 700;
 }
 
 .contact-text p,
 .contact-text a {
-  color: #718096;
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: 0.95rem;
 }
@@ -159,7 +143,7 @@
 
 .form-wrapper h2 {
   font-size: 1.8rem;
-  color: #1a202c;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   position: relative;
 }
@@ -176,7 +160,7 @@
 }
 
 .form-wrapper p {
-  color: #718096;
+  color: var(--text-secondary);
   line-height: 1.7;
   margin-bottom: 1.5rem;
   font-size: 0.95rem;
@@ -221,7 +205,7 @@
 }
 
 .form-group label {
-  color: #1a202c;
+  color: var(--text-primary);
   font-weight: 600;
   font-size: 0.9rem;
 }
@@ -229,12 +213,13 @@
 .form-group input,
 .form-group textarea {
   padding: 0.8rem;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--border-color);
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.3s ease;
   font-family: inherit;
-  background: white;
+  background: var(--card-bg);
+  color: var(--text-primary);
 }
 
 .form-group input:focus,

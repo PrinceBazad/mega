@@ -1,32 +1,14 @@
 .services {
   padding: 4rem 0;
-  background: linear-gradient(
-      rgba(248, 249, 250, 0.9),
-      rgba(233, 236, 239, 0.9)
-    ),
-    url("https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=1920&q=80")
-      center/cover fixed;
+  background: var(--bg-primary);
   position: relative;
   overflow: hidden;
-}
-
-.services::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 80px;
-  background: linear-gradient(to bottom, #f8f9fa, transparent);
-  z-index: 1;
 }
 
 .services-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
-  position: relative;
-  z-index: 2;
 }
 
 .section-header {
@@ -36,7 +18,7 @@
 
 .section-header h2 {
   font-size: 2rem;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 1rem;
   position: relative;
   display: inline-block;
@@ -64,7 +46,7 @@
 
 .section-header p {
   font-size: 1rem;
-  color: #666;
+  color: var(--text-secondary);
   max-width: 600px;
   margin: 1rem auto 0;
   font-weight: 300;
@@ -126,7 +108,7 @@
 
 .service-card {
   flex: 0 0 calc(33.333% - 20px);
-  background: white;
+  background: var(--card-bg);
   border-radius: 15px;
   padding: 30px 25px;
   text-align: center;
@@ -172,13 +154,13 @@
 
 .service-card h3 {
   font-size: 1.3rem;
-  color: #333;
+  color: var(--text-primary);
   margin-bottom: 15px;
   font-weight: 700;
 }
 
 .service-card p {
-  color: #666;
+  color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: 0;
   min-height: 70px;

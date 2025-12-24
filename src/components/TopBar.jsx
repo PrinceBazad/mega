@@ -9,10 +9,12 @@ const TopBar = () => {
   useEffect(() => {
     // Check for saved theme preference or system preference
     const savedTheme = localStorage.getItem("theme");
-    const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
+    const systemPrefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+
     if (savedTheme) {
-      const isDark = savedTheme === 'dark';
+      const isDark = savedTheme === "dark";
       setDarkMode(isDark);
       applyTheme(isDark);
     } else {
@@ -29,15 +31,15 @@ const TopBar = () => {
 
   const applyTheme = (isDark) => {
     if (isDark) {
-      document.documentElement.classList.add('dark-mode');
-      document.documentElement.classList.remove('light-mode');
-      document.body.classList.add('dark-mode');
-      document.body.classList.remove('light-mode');
+      document.documentElement.classList.add("dark-mode");
+      document.documentElement.classList.remove("light-mode");
+      document.body.classList.add("dark-mode");
+      document.body.classList.remove("light-mode");
     } else {
-      document.documentElement.classList.add('light-mode');
-      document.documentElement.classList.remove('dark-mode');
-      document.body.classList.add('light-mode');
-      document.body.classList.remove('dark-mode');
+      document.documentElement.classList.add("light-mode");
+      document.documentElement.classList.remove("dark-mode");
+      document.body.classList.add("light-mode");
+      document.body.classList.remove("dark-mode");
     }
     localStorage.setItem("theme", isDark ? "dark" : "light");
   };
@@ -61,8 +63,12 @@ const TopBar = () => {
   return (
     <div className="top-bar">
       <div className="theme-toggle" onClick={toggleTheme}>
-        {darkMode ? <FaMoon className="theme-icon" /> : <FaSun className="theme-icon" />}
-        <span className="theme-label">{darkMode ? 'Dark' : 'Light'}</span>
+        {darkMode ? (
+          <FaMoon className="theme-icon" />
+        ) : (
+          <FaSun className="theme-icon" />
+        )}
+        <span className="theme-label">{darkMode ? "Dark" : "Light"}</span>
       </div>
       <div className="location-selector">
         <span className="location-label">Location:</span>
