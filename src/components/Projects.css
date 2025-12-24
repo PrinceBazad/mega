@@ -1,12 +1,32 @@
 .projects {
   padding: 100px 0 80px;
-  background: #f8fafc;
+  background: linear-gradient(
+      rgba(248, 249, 250, 0.9),
+      rgba(233, 236, 239, 0.9)
+    ),
+    url("https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=1920&q=80")
+      center/cover fixed;
+  position: relative;
+  overflow: hidden;
+}
+
+.projects::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, #f8f9fa, transparent);
+  z-index: 1;
 }
 
 .projects-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 2rem;
+  position: relative;
+  z-index: 2;
 }
 
 .section-header {
