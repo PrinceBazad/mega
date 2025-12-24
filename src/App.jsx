@@ -1,168 +1,72 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
-import Loading from "./components/Loading";
+import { motion } from "framer-motion";
 import Navbar from "./components/Navbar";
 import TopBar from "./components/TopBar";
 import Hero from "./components/Hero";
 import Properties from "./components/Properties";
 import PropertiesPage from "./components/PropertiesPage";
 import PropertyDetail from "./components/PropertyDetail";
-import Projects from "./components/Projects";
-import ProjectsPage from "./components/ProjectsPage";
-import ProjectDetail from "./components/ProjectDetail";
 import Services from "./components/Services";
 import About from "./components/About";
+import Projects from "./components/Projects";
 import Contact from "./components/Contact";
-import Agents from "./components/Agents";
-import TopBuilders from "./components/TopBuilders";
 import Footer from "./components/Footer";
 import AdminLogin from "./components/AdminLogin";
 import AdminDashboard from "./components/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Agents from "./components/Agents";
+import Loading from "./components/Loading";
 import "./App.css";
 
 function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Initialize theme
-    const savedTheme = localStorage.getItem("theme");
-    const systemPrefersDark =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-    if (savedTheme) {
-      const isDark = savedTheme === "dark";
-      if (isDark) {
-        document.documentElement.classList.add("dark-mode");
-        document.documentElement.classList.remove("light-mode");
-        document.body.classList.add("dark-mode");
-        document.body.classList.remove("light-mode");
-      } else {
-        document.documentElement.classList.add("light-mode");
-        document.documentElement.classList.remove("dark-mode");
-        document.body.classList.add("light-mode");
-        document.body.classList.remove("dark-mode");
-      }
-    } else {
-      const isDark = systemPrefersDark;
-      if (isDark) {
-        document.documentElement.classList.add("dark-mode");
-        document.documentElement.classList.remove("light-mode");
-        document.body.classList.add("dark-mode");
-        document.body.classList.remove("light-mode");
-      } else {
-        document.documentElement.classList.add("light-mode");
-        document.documentElement.classList.remove("dark-mode");
-        document.body.classList.add("light-mode");
-        document.body.classList.remove("dark-mode");
-      }
-    }
-
     // Simulate loading time
     setTimeout(() => {
       setLoading(false);
     }, 2500);
   }, []);
 
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <Router>
-      <AnimatePresence>{loading && <Loading />}</AnimatePresence>
-
-      {!loading && (
+      <div className="app">
+        <TopBar />
+        <Navbar />
         <Routes>
-          {/* Public Routes */}
           <Route
             path="/"
             element={
-              <div className="app">
-                <TopBar />
-                <Navbar />
+              <>
                 <Hero />
                 <Properties />
-                <Projects />
-                <TopBuilders />
                 <Services />
                 <About />
+                <Projects />
                 <Contact />
-                <Footer />
-              </div>
+              </>
             }
           />
-
+          <Route path="/properties" element={<PropertiesPage />} />
+          <Route path="/property/:id" element={<PropertyDetail />} />
+          <Route path="/admin" element={<AdminLogin />} />
           <Route
-            path="/properties"
-            element={
-              <div className="app">
-                <TopBar />
-                <Navbar />
-                <PropertiesPage />
-                <Footer />
-              </div>
-            }
-          />
-
-          <Route
-            path="/property/:id"
-            element={
-              <div className="app">
-                <TopBar />
-                <Navbar />
-                <PropertyDetail />
-                <Footer />
-              </div>
-            }
-          />
-
-          <Route
-            path="/agents"
-            element={
-              <div className="app">
-                <TopBar />
-                <Navbar />
-                <Agents />
-                <Footer />
-              </div>
-            }
-          />
-
-          <Route
-            path="/projects"
-            element={
-              <div className="app">
-                <TopBar />
-                <Navbar />
-                <ProjectsPage />
-                <Footer />
-              </div>
-            }
-          />
-
-          <Route
-            path="/project/:id"
-            element={
-              <div className="app">
-                <TopBar />
-                <Navbar />
-                <ProjectDetail />
-                <Footer />
-              </div>
-            }
-          />
-
-          {/* Admin Routes */}
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route
-            path="/admin/dashboard/*"
+            path="/admin/dashboard"
             element={
               <ProtectedRoute>
                 <AdminDashboard />
               </ProtectedRoute>
             }
           />
+          <Route path="/agents" element={<Agents />} />
         </Routes>
-      )}
+        <Footer />
+      </div>
     </Router>
   );
 }
