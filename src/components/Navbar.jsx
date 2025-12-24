@@ -1,13 +1,13 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaBars, FaTimes } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { FaBars, FaTimes } from "react-icons/fa";
 import "./Navbar.css";
 
 const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,18 +18,15 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (sectionId) => {
-    // If we're not on the home page, navigate to home first, then scroll
-    if (location.pathname !== "/") {
-      window.location.href = `/#${sectionId}`;
-      setMobileMenuOpen(false);
-      return;
-    }
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
-    const section = document.getElementById(sectionId);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
-      setMobileMenuOpen(false);
+  const scrollToSection = (sectionId) => {
+    setMobileMenuOpen(false);
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
     }
   };
 
@@ -38,16 +35,15 @@ const Navbar = () => {
       <div className="navbar-container">
         <Link to="/" className="navbar-logo">
           <motion.div
-            className="logo-icon"
+            className="logo-text"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            MR
+            MegaReality
           </motion.div>
-          <div className="logo-text">MegaReality</div>
         </Link>
 
-        <div className="navbar-menu desktop">
+        <div className="navbar-menu">
           <motion.button
             className="nav-link"
             whileHover={{ y: -2 }}
@@ -68,9 +64,9 @@ const Navbar = () => {
             className="nav-link"
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => scrollToSection("experts")}
+            onClick={() => scrollToSection("topbuilders")}
           >
-            Experts
+            Top Builders
           </motion.button>
           <motion.button
             className="nav-link"
@@ -134,9 +130,9 @@ const Navbar = () => {
               className="mobile-nav-link"
               whileHover={{ x: 5 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => scrollToSection("experts")}
+              onClick={() => scrollToSection("topbuilders")}
             >
-              Experts
+              Top Builders
             </motion.button>
             <motion.button
               className="mobile-nav-link"

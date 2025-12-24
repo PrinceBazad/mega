@@ -16,7 +16,6 @@ import AdminLogin from "./components/AdminLogin";
 import AdminDashboard from "./components/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Agents from "./components/Agents";
-import Experts from "./components/Experts";
 import TopBuilders from "./components/TopBuilders";
 import Loading from "./components/Loading";
 import "./App.css";
@@ -48,7 +47,6 @@ function App() {
                 <Hero />
                 <Properties />
                 <Services />
-                <Experts />
                 <TopBuilders />
                 <About />
                 <Projects />
