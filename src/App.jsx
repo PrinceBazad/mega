@@ -17,6 +17,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Agents from "./components/Agents";
 import Experts from "./components/Experts";
+import TopBuilders from "./components/TopBuilders";
 import Loading from "./components/Loading";
 import "./App.css";
 
@@ -48,6 +49,7 @@ function App() {
                 <Properties />
                 <Services />
                 <Experts />
+                <TopBuilders />
                 <About />
                 <Projects />
                 <Contact />
@@ -57,6 +59,7 @@ function App() {
           <Route path="/properties" element={<PropertiesPage />} />
           <Route path="/property/:id" element={<PropertyDetail />} />
           <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           <Route
             path="/admin/dashboard"
             element={
