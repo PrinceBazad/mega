@@ -64,15 +64,14 @@ const Navbar = () => {
           >
             Services
           </motion.button>
-          <Link
-            to="/agents"
+          <motion.button
             className="nav-link"
-            style={{ textDecoration: "none" }}
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={() => scrollToSection("experts")}
           >
-            <motion.div whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}>
-              Agents
-            </motion.div>
-          </Link>
+            Experts
+          </motion.button>
           <motion.button
             className="nav-link"
             whileHover={{ y: -2 }}
@@ -131,15 +130,14 @@ const Navbar = () => {
             >
               Services
             </motion.button>
-            <Link
-              to="/agents"
+            <motion.button
               className="mobile-nav-link"
-              style={{ textDecoration: "none" }}
+              whileHover={{ x: 5 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => scrollToSection("experts")}
             >
-              <motion.div whileHover={{ x: 5 }} whileTap={{ scale: 0.98 }}>
-                Agents
-              </motion.div>
-            </Link>
+              Experts
+            </motion.button>
             <motion.button
               className="mobile-nav-link"
               whileHover={{ x: 5 }}
