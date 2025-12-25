@@ -109,7 +109,7 @@ const Contact = () => {
   ];
 
   return (
-    <section className="contact-page">
+    <section id="contact" className="contact-page">
       <div className="container">
         <motion.div
           className="page-header"

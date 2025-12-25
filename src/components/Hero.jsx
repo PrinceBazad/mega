@@ -71,6 +71,14 @@ const Hero = () => {
     navigate(url);
   };
 
+  // Function to scroll to sections
+  const scrollToSection = (sectionId) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   // Animated background elements
   const FloatingElements = () => (
     <>
@@ -142,25 +150,23 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
-            <Link to="/properties">
-              <motion.button
-                className="btn-primary"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Explore Properties
-              </motion.button>
-            </Link>
+            <motion.button
+              className="btn-primary"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => scrollToSection("properties")}
+            >
+              Explore Properties
+            </motion.button>
 
-            <Link to="/agents">
-              <motion.button
-                className="btn-secondary"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Meet Our Agents
-              </motion.button>
-            </Link>
+            <motion.button
+              className="btn-secondary"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => scrollToSection("agents")}
+            >
+              Meet Our Agents
+            </motion.button>
           </motion.div>
         </motion.div>
 
