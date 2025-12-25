@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { FaMapMarkerAlt, FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import {
+  FaMapMarkerAlt,
+  FaArrowLeft,
+  FaArrowRight,
+  FaBuilding,
+} from "react-icons/fa";
 import API_BASE_URL from "../config";
 import "./Projects.css";
 
@@ -17,8 +22,8 @@ const Projects = () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/projects`);
         const data = await response.json();
-        // Show only first 3 projects on homepage
-        setProjects(data.slice(0, 3));
+        // Fetch all projects for carousel functionality
+        setProjects(data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching projects:", error);
@@ -100,7 +105,7 @@ const Projects = () => {
             className="carousel-btn prev-btn"
             onClick={prevProject}
             aria-label="Previous projects"
-            disabled={projects.length <= 3}
+            disabled={currentIndex === 0}
           >
             <FaArrowLeft />
           </button>
@@ -162,14 +167,8 @@ const Projects = () => {
 
                     <div className="project-details">
                       <div className="detail">
-                        <span className="label">Units:</span>
-                        <span className="value">{project.total_units}</span>
-                      </div>
-                      <div className="detail">
-                        <span className="label">Completion:</span>
-                        <span className="value">
-                          {project.completion_date || "TBD"}
-                        </span>
+                        <FaBuilding />
+                        <span>{project.total_units} Units</span>
                       </div>
                     </div>
 
@@ -200,7 +199,7 @@ const Projects = () => {
             className="carousel-btn next-btn"
             onClick={nextProject}
             aria-label="Next projects"
-            disabled={projects.length <= 3}
+            disabled={currentIndex + 3 >= projects.length}
           >
             <FaArrowRight />
           </button>
