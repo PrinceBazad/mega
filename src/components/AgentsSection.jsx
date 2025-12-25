@@ -71,8 +71,12 @@ const AgentsSection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2>Meet Our <span className="highlight">Agents</span></h2>
-          <p>Connect with our real estate professionals who are here to guide you</p>
+          <h2>
+            Meet Our <span className="highlight">Agents</span>
+          </h2>
+          <p>
+            Connect with our real estate professionals who are here to guide you
+          </p>
         </motion.div>
 
         <div className="agents-carousel">
@@ -114,6 +118,18 @@ const AgentsSection = () => {
           >
             <FaArrowRight />
           </button>
+        </div>
+
+        {/* Button to view all agents */}
+        <div className="view-all-agents">
+          <motion.a
+            href="/agents"
+            className="btn-view-all"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Meet Our Agents
+          </motion.a>
         </div>
       </div>
     </section>

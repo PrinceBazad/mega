@@ -41,6 +41,7 @@
   display: flex;
   align-items: center;
   gap: 2rem;
+  margin-bottom: 3rem;
 }
 
 .carousel-btn {
@@ -122,6 +123,31 @@
   font-weight: 500;
   margin: 0;
   font-size: 0.95rem;
+}
+
+.view-all-agents {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.btn-view-all {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+  border: none;
+}
+
+.btn-view-all:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(102, 126, 234, 0.4);
+  color: white;
 }
 
 /* Responsive Design */
