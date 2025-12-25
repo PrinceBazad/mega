@@ -44,8 +44,11 @@ const TopBuilders = () => {
   };
 
   const handleViewProjects = (builderId) => {
-    // Navigate to properties page with builder filter
-    navigate(`/properties?builder=${builderId}`);
+    // Scroll to properties section on the same page
+    const element = document.getElementById("properties");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   if (loading) {
@@ -69,7 +72,7 @@ const TopBuilders = () => {
   const visibleBuilders = builders.slice(currentIndex, currentIndex + 3);
 
   return (
-    <section className="top-builders">
+    <section id="topbuilders" className="top-builders">
       <div className="top-builders-container">
         <motion.div
           className="section-header"

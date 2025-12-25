@@ -211,7 +211,10 @@ const Properties = () => {
                   <div className="property-details-btn">
                     <button
                       className="btn-more-details"
-                      onClick={() => navigate(`/property/${property.id}`)}
+                      onClick={() => {
+                        // For now, keep the navigation to property details page
+                        navigate(`/property/${property.id}`);
+                      }}
                     >
                       More Details
                     </button>

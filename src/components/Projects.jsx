@@ -145,7 +145,11 @@ const Projects = () => {
                     className="btn-view-details"
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigate(`/project/${project.id}`);
+                      // Scroll to projects section on the same page
+                      const element = document.getElementById("projects");
+                      if (element) {
+                        element.scrollIntoView({ behavior: "smooth" });
+                      }
                     }}
                   >
                     View Details

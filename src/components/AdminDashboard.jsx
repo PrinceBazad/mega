@@ -549,12 +549,17 @@ const AdminDashboard = () => {
       const method = editingProject ? "PUT" : "POST";
 
       const projectData = {
-        ...projectForm,
+        title: projectForm.title,
+        description: projectForm.description,
+        location: projectForm.location,
+        status: projectForm.status,
+        completion_date: projectForm.completion_date,
         total_units: parseInt(projectForm.total_units) || 0,
         builder_id: projectForm.builder_id
           ? parseInt(projectForm.builder_id)
           : null,
         images: projectForm.images.filter((url) => url.trim() !== ""),
+        tag: projectForm.tag,
       };
 
       const response = await fetch(url, {
@@ -1048,7 +1053,9 @@ const AdminDashboard = () => {
                     onChange={(e) =>
                       setProjectForm({
                         ...projectForm,
-                        builder_id: e.target.value,
+                        builder_id: e.target.value
+                          ? parseInt(e.target.value)
+                          : "",
                       })
                     }
                   >
