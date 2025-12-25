@@ -562,11 +562,15 @@ const AdminDashboard = () => {
         tag: projectForm.tag,
       };
 
+      const token = localStorage.getItem("adminToken");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
       const response = await fetch(url, {
         method: method,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: headers,
         body: JSON.stringify(projectData),
       });
 
