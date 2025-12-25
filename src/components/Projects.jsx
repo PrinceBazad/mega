@@ -43,6 +43,7 @@ const Projects = () => {
     setCurrentIndex((prevIndex) => {
       // Move by 3 items at a time for smoother navigation
       const newIndex = prevIndex + 3;
+      // If we've reached or passed the end, cycle back to the beginning
       return newIndex >= projects.length ? 0 : newIndex;
     });
   };
@@ -51,7 +52,13 @@ const Projects = () => {
     setCurrentIndex((prevIndex) => {
       // Move by 3 items at a time for smoother navigation
       const newIndex = prevIndex - 3;
-      return newIndex < 0 ? Math.max(0, projects.length - 3) : newIndex;
+      // If going before first set, go to the last possible set
+      if (newIndex < 0) {
+        // Calculate the index for the last possible set of 3 items
+        const lastPossibleIndex = Math.max(0, projects.length - 3);
+        return lastPossibleIndex;
+      }
+      return newIndex;
     });
   };
 
@@ -105,7 +112,7 @@ const Projects = () => {
             className="carousel-btn prev-btn"
             onClick={prevProject}
             aria-label="Previous projects"
-            disabled={currentIndex === 0}
+            disabled={projects.length <= 3}
           >
             <FaArrowLeft />
           </button>
@@ -199,7 +206,9 @@ const Projects = () => {
             className="carousel-btn next-btn"
             onClick={nextProject}
             aria-label="Next projects"
-            disabled={currentIndex + 3 >= projects.length || projects.length <= 3}
+            disabled={
+              projects.length <= 3 || currentIndex + 3 >= projects.length
+            }
           >
             <FaArrowRight />
           </button>
