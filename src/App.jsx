@@ -17,6 +17,7 @@ import AdminDashboard from "./components/AdminDashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Agents from "./components/Agents";
 import TopBuilders from "./components/TopBuilders";
+import AgentsSection from "./components/AgentsSection";
 import Loading from "./components/Loading";
 import "./App.css";
 
@@ -48,6 +49,7 @@ function App() {
                 <Properties />
                 <Services />
                 <TopBuilders />
+                <AgentsSection />
                 <About />
                 <Projects />
                 <Contact />
