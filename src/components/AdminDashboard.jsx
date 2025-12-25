@@ -929,219 +929,6 @@ const AdminDashboard = () => {
           </div>
         </div>
       )}
-
-      {/* Add Project Form Modal */}
-      {showAddProjectForm && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h3>{editingProject ? "Edit Project" : "Add New Project"}</h3>
-              <button
-                className="close-btn"
-                onClick={() => {
-                  setShowAddProjectForm(false);
-                  setEditingProject(null);
-                }}
-              >
-                ×
-              </button>
-            </div>
-            <form onSubmit={handleProjectSubmit} className="project-form">
-              <div className="form-group">
-                <label>Title *</label>
-                <input
-                  type="text"
-                  value={projectForm.title}
-                  onChange={(e) =>
-                    setProjectForm({ ...projectForm, title: e.target.value })
-                  }
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Description</label>
-                <textarea
-                  value={projectForm.description}
-                  onChange={(e) =>
-                    setProjectForm({
-                      ...projectForm,
-                      description: e.target.value,
-                    })
-                  }
-                  rows="4"
-                />
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Location *</label>
-                  <input
-                    type="text"
-                    value={projectForm.location}
-                    onChange={(e) =>
-                      setProjectForm({
-                        ...projectForm,
-                        location: e.target.value,
-                      })
-                    }
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Status</label>
-                  <select
-                    value={projectForm.status}
-                    onChange={(e) =>
-                      setProjectForm({ ...projectForm, status: e.target.value })
-                    }
-                  >
-                    <option value="Available">Available</option>
-                    <option value="Working">Working</option>
-                    <option value="Completed">Completed</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Completion Date</label>
-                  <input
-                    type="date"
-                    value={projectForm.completion_date}
-                    onChange={(e) =>
-                      setProjectForm({
-                        ...projectForm,
-                        completion_date: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Total Units</label>
-                  <input
-                    type="number"
-                    value={projectForm.total_units}
-                    onChange={(e) =>
-                      setProjectForm({
-                        ...projectForm,
-                        total_units: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    min="0"
-                  />
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Tag</label>
-                  <select
-                    value={projectForm.tag}
-                    onChange={(e) =>
-                      setProjectForm({ ...projectForm, tag: e.target.value })
-                    }
-                  >
-                    <option value="available">Available</option>
-                    <option value="latest">Latest</option>
-                    <option value="working">Working</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label>Builder</label>
-                  <select
-                    value={projectForm.builder_id}
-                    onChange={(e) =>
-                      setProjectForm({
-                        ...projectForm,
-                        builder_id: e.target.value
-                          ? parseInt(e.target.value)
-                          : "",
-                      })
-                    }
-                  >
-                    <option value="">Select a Builder (Optional)</option>
-                    {builders.map((builder) => (
-                      <option key={builder.id} value={builder.id}>
-                        {builder.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Image URLs Section */}
-              <div className="form-group">
-                <label>Image URLs</label>
-                <div className="image-inputs">
-                  {projectForm.images.map((url, index) => (
-                    <div key={index} className="image-input-group">
-                      <input
-                        type="url"
-                        placeholder="Enter image URL"
-                        value={url}
-                        onChange={(e) => {
-                          const newImages = [...projectForm.images];
-                          newImages[index] = e.target.value;
-                          setProjectForm({ ...projectForm, images: newImages });
-                        }}
-                      />
-                      {projectForm.images.length > 1 && (
-                        <button
-                          type="button"
-                          className="btn-remove-image"
-                          onClick={() => {
-                            const newImages = projectForm.images.filter(
-                              (_, i) => i !== index
-                            );
-                            setProjectForm({
-                              ...projectForm,
-                              images: newImages,
-                            });
-                          }}
-                        >
-                          Remove
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    className="btn-add-image"
-                    onClick={() => {
-                      setProjectForm({
-                        ...projectForm,
-                        images: [...projectForm.images, ""],
-                      });
-                    }}
-                  >
-                    + Add Image URL
-                  </button>
-                </div>
-              </div>
-
-              <div className="form-actions">
-                <button
-                  type="button"
-                  className="btn-cancel"
-                  onClick={() => {
-                    setShowAddProjectForm(false);
-                    setEditingProject(null);
-                  }}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="btn-submit">
-                  {editingProject ? "Update Project" : "Add Project"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 
@@ -1454,6 +1241,229 @@ const AdminDashboard = () => {
           {activeTab === "inquiries" && <InquiryManagement />}
           {activeTab === "admins" && <AdminManagement />}
           {activeTab === "projects" && <ProjectManagement />}
+          {showAddProjectForm && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h3>{editingProject ? "Edit Project" : "Add New Project"}</h3>
+                  <button
+                    className="close-btn"
+                    onClick={() => {
+                      setShowAddProjectForm(false);
+                      setEditingProject(null);
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+                <form onSubmit={handleProjectSubmit} className="project-form">
+                  <div className="form-group">
+                    <label>Title *</label>
+                    <input
+                      type="text"
+                      value={projectForm.title}
+                      onChange={(e) =>
+                        setProjectForm({
+                          ...projectForm,
+                          title: e.target.value,
+                        })
+                      }
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Description</label>
+                    <textarea
+                      value={projectForm.description}
+                      onChange={(e) =>
+                        setProjectForm({
+                          ...projectForm,
+                          description: e.target.value,
+                        })
+                      }
+                      rows="4"
+                    />
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Location *</label>
+                      <input
+                        type="text"
+                        value={projectForm.location}
+                        onChange={(e) =>
+                          setProjectForm({
+                            ...projectForm,
+                            location: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Status</label>
+                      <select
+                        value={projectForm.status}
+                        onChange={(e) =>
+                          setProjectForm({
+                            ...projectForm,
+                            status: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="Available">Available</option>
+                        <option value="Working">Working</option>
+                        <option value="Completed">Completed</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Completion Date</label>
+                      <input
+                        type="date"
+                        value={projectForm.completion_date}
+                        onChange={(e) =>
+                          setProjectForm({
+                            ...projectForm,
+                            completion_date: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Total Units</label>
+                      <input
+                        type="number"
+                        value={projectForm.total_units}
+                        onChange={(e) =>
+                          setProjectForm({
+                            ...projectForm,
+                            total_units: parseInt(e.target.value) || 0,
+                          })
+                        }
+                        min="0"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Tag</label>
+                      <select
+                        value={projectForm.tag}
+                        onChange={(e) =>
+                          setProjectForm({
+                            ...projectForm,
+                            tag: e.target.value,
+                          })
+                        }
+                      >
+                        <option value="available">Available</option>
+                        <option value="latest">Latest</option>
+                        <option value="working">Working</option>
+                      </select>
+                    </div>
+
+                    <div className="form-group">
+                      <label>Builder</label>
+                      <select
+                        value={projectForm.builder_id}
+                        onChange={(e) =>
+                          setProjectForm({
+                            ...projectForm,
+                            builder_id: e.target.value
+                              ? parseInt(e.target.value)
+                              : "",
+                          })
+                        }
+                      >
+                        <option value="">Select a Builder (Optional)</option>
+                        {builders.map((builder) => (
+                          <option key={builder.id} value={builder.id}>
+                            {builder.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Image URLs Section */}
+                  <div className="form-group">
+                    <label>Image URLs</label>
+                    <div className="image-inputs">
+                      {projectForm.images.map((url, index) => (
+                        <div key={index} className="image-input-group">
+                          <input
+                            type="url"
+                            placeholder="Enter image URL"
+                            value={url}
+                            onChange={(e) => {
+                              const newImages = [...projectForm.images];
+                              newImages[index] = e.target.value;
+                              setProjectForm({
+                                ...projectForm,
+                                images: newImages,
+                              });
+                            }}
+                          />
+                          {projectForm.images.length > 1 && (
+                            <button
+                              type="button"
+                              className="btn-remove-image"
+                              onClick={() => {
+                                const newImages = projectForm.images.filter(
+                                  (_, i) => i !== index
+                                );
+                                setProjectForm({
+                                  ...projectForm,
+                                  images: newImages,
+                                });
+                              }}
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        className="btn-add-image"
+                        onClick={() => {
+                          setProjectForm({
+                            ...projectForm,
+                            images: [...projectForm.images, ""],
+                          });
+                        }}
+                      >
+                        + Add Image URL
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="form-actions">
+                    <button
+                      type="button"
+                      className="btn-cancel"
+                      onClick={() => {
+                        setShowAddProjectForm(false);
+                        setEditingProject(null);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button type="submit" className="btn-submit">
+                      {editingProject ? "Update Project" : "Add Project"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
           {activeTab === "agents" && (
             <div className="dashboard-content">
               <div className="content-header">
