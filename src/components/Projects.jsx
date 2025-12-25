@@ -199,7 +199,7 @@ const Projects = () => {
             className="carousel-btn next-btn"
             onClick={nextProject}
             aria-label="Next projects"
-            disabled={currentIndex + 3 >= projects.length}
+            disabled={currentIndex + 3 >= projects.length || projects.length <= 3}
           >
             <FaArrowRight />
           </button>
