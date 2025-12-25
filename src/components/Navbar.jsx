@@ -72,6 +72,14 @@ const Navbar = () => {
             className="nav-link"
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.98 }}
+            onClick={() => scrollToSection("projects")}
+          >
+            Projects
+          </motion.button>
+          <motion.button
+            className="nav-link"
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => scrollToSection("agents")}
           >
             Agents
@@ -141,6 +149,14 @@ const Navbar = () => {
               onClick={() => scrollToSection("topbuilders")}
             >
               Top Builders
+            </motion.button>
+            <motion.button
+              className="mobile-nav-link"
+              whileHover={{ x: 5 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => scrollToSection("projects")}
+            >
+              Projects
             </motion.button>
             <motion.button
               className="mobile-nav-link"
