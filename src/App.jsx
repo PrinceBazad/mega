@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { motion } from "framer-motion";
 import Navbar from "./components/Navbar";
@@ -19,23 +19,9 @@ import Agents from "./components/Agents";
 import TopBuilders from "./components/TopBuilders";
 import AgentsSection from "./components/AgentsSection";
 import AgentDetail from "./components/AgentDetail";
-import Loading from "./components/Loading";
 import "./App.css";
 
 function App() {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate loading time
-    setTimeout(() => {
-      setLoading(false);
-    }, 2500);
-  }, []);
-
-  if (loading) {
-    return <Loading />;
-  }
-
   return (
     <Router>
       <div className="app">

@@ -130,7 +130,7 @@ const AgentsSection = () => {
             className="btn-view-all"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => navigate('/agents')}
+            onClick={() => navigate("/agents")}
           >
             Meet Our Agents
           </motion.button>
