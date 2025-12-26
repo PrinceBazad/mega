@@ -42,39 +42,41 @@ function AppContent() {
     <div className="app">
       <TopBar />
       <Navbar />
-      <Routes key={location.key}>
-        <Route
-          path="/"
-          element={
-            <>
-              <Hero />
-              <Properties />
-              <Services />
-              <TopBuilders />
-              <AgentsSection />
-              <About />
-              <Projects />
-              <Contact />
-            </>
-          }
-        />
-        <Route path="/properties" element={<PropertiesPage />} />
-        <Route path="/property/:id" element={<PropertyDetail />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute>
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/agents" element={<Agents />} />
-        <Route path="/agent/:id" element={<AgentDetail />} />
-        <Route path="/project/:id" element={<ProjectDetail />} />
-      </Routes>
+      <div key={location.pathname + location.search}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Hero />
+                <Properties />
+                <Services />
+                <TopBuilders />
+                <AgentsSection />
+                <About />
+                <Projects />
+                <Contact />
+              </>
+            }
+          />
+          <Route path="/properties" element={<PropertiesPage />} />
+          <Route path="/property/:id" element={<PropertyDetail />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+            path="/admin/dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/agents" element={<Agents />} />
+          <Route path="/agent/:id" element={<AgentDetail />} />
+          <Route path="/project/:id" element={<ProjectDetail />} />
+        </Routes>
+      </div>
       <Footer />
     </div>
   );
