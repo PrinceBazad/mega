@@ -46,6 +46,7 @@ function App() {
           />
           <Route path="/properties" element={<PropertiesPage />} />
           <Route path="/property/:id" element={<PropertyDetail />} />
+          <Route path="/projects" element={<Projects />} />
           <Route path="/admin" element={<AdminLogin />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route
