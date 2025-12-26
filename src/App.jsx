@@ -42,8 +42,8 @@ function AppContent() {
     <div className="app">
       <TopBar />
       <Navbar />
-      <div key={location.pathname + location.search}>
-        <Routes>
+      <div className="app-content" key={location.key}>
+        <Routes location={location}>
           <Route
             path="/"
             element={
