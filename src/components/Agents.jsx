@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Agents.css";
 import API_BASE_URL from "../config";
 
@@ -6,6 +7,7 @@ const Agents = () => {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAgents();
@@ -69,7 +71,12 @@ const Agents = () => {
       ) : (
         <div className="agents-grid">
           {filteredAgents.map((agent) => (
-            <div key={agent.id} className="agent-card">
+            <div
+              key={agent.id}
+              className="agent-card"
+              onClick={() => navigate(`/agent/${agent.id}`)}
+              style={{ cursor: "pointer" }}
+            >
               <div className="agent-image">
                 <img src={agent.image} alt={agent.name} />
               </div>

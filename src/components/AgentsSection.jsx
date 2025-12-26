@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import API_BASE_URL from "../config";
 import "./AgentsSection.css";
 
@@ -8,6 +9,7 @@ const AgentsSection = () => {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAgents = async () => {
@@ -98,6 +100,8 @@ const AgentsSection = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ y: -10 }}
+                onClick={() => navigate(`/agent/${agent.id}`)}
+                style={{ cursor: "pointer" }}
               >
                 <div className="agent-image">
                   <img src={agent.image} alt={agent.name} loading="lazy" />
@@ -122,14 +126,14 @@ const AgentsSection = () => {
 
         {/* Button to view all agents */}
         <div className="view-all-agents">
-          <motion.a
-            href="/agents"
+          <motion.button
             className="btn-view-all"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
+            onClick={() => navigate('/agents')}
           >
             Meet Our Agents
-          </motion.a>
+          </motion.button>
         </div>
       </div>
     </section>
