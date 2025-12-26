@@ -83,17 +83,6 @@ const Agents = () => {
               <div className="agent-info">
                 <h3>{agent.name}</h3>
                 <p className="agent-position">{agent.position}</p>
-                <p className="agent-experience">
-                  {agent.experience} experience
-                </p>
-                <p className="agent-sales">
-                  {agent.properties_sold} properties sold
-                </p>
-                <p className="agent-bio">{agent.bio}</p>
-                <div className="agent-contact">
-                  <p>Email: {agent.email}</p>
-                  <p>Phone: {agent.phone}</p>
-                </div>
               </div>
             </div>
           ))}
