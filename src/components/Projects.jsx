@@ -62,27 +62,6 @@ const Projects = () => {
     });
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
-
   if (loading) {
     return (
       <section id="projects" className="projects">
@@ -117,20 +96,15 @@ const Projects = () => {
             <FaArrowLeft />
           </button>
 
-          <motion.div
+          <div
             className="projects-grid"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            key={currentIndex} // Add key to force re-render when index changes
           >
             {projects.length > 0 ? (
               visibleProjects.map((project) => (
-                <motion.div
+                <div
                   key={project.id}
                   className="project-card"
-                  variants={cardVariants}
-                  whileHover={{ y: -10, transition: { duration: 0.3 } }}
                   onClick={() => {
                     window.location.href = `/project/${project.id}`;
                   }}
@@ -181,14 +155,14 @@ const Projects = () => {
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))
             ) : (
               <div className="no-projects">
                 <p>No projects available at the moment.</p>
               </div>
             )}
-          </motion.div>
+          </div>
 
           <button
             className="carousel-btn next-btn"
