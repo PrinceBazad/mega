@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { FaMapMarkerAlt, FaSearch } from "react-icons/fa";
+import {
+  FaMapMarkerAlt,
+  FaSearch,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 import API_BASE_URL from "../config";
 import "./Properties.css";
 
@@ -128,6 +133,29 @@ const Properties = () => {
     },
   };
 
+  // Show 3 properties at a time
+  const propertiesToShow = filteredProperties.slice(0, 6);
+  const propertyGroups = [];
+  for (let i = 0; i < propertiesToShow.length; i += 3) {
+    propertyGroups.push(propertiesToShow.slice(i, i + 3));
+  }
+
+  const [currentGroupIndex, setCurrentGroupIndex] = useState(0);
+
+  const nextGroup = () => {
+    setCurrentGroupIndex((prevIndex) =>
+      prevIndex < propertyGroups.length - 1 ? prevIndex + 1 : 0
+    );
+  };
+
+  const prevGroup = () => {
+    setCurrentGroupIndex((prevIndex) =>
+      prevIndex > 0 ? prevIndex - 1 : propertyGroups.length - 1
+    );
+  };
+
+  const visibleProperties = propertyGroups[currentGroupIndex] || [];
+
   if (loading) {
     return (
       <section id="properties" className="properties">
@@ -170,66 +198,88 @@ const Properties = () => {
           </div>
         )}
 
-        <motion.div
-          className="properties-grid"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-        >
-          {filteredProperties.length > 0 ? (
-            filteredProperties.slice(0, 6).map((property) => (
-              <motion.div
-                key={property.id}
-                className="property-card"
-                variants={cardVariants}
-                whileHover={{ y: -10 }}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-                onClick={() => {
-                  window.location.href = `/property/${property.id}`;
-                }}
-                style={{ cursor: "pointer" }}
-              >
-                <div className="property-image">
-                  {property.images && property.images.length > 0 ? (
-                    <img
-                      src={property.images[0]}
-                      alt={property.title}
-                      loading="lazy"
-                    />
-                  ) : (
-                    <div className="no-image">No Image</div>
-                  )}
+        <div className="properties-scroller">
+          <button className="scroller-btn prev-btn" onClick={prevGroup}>
+            <FaChevronLeft />
+          </button>
 
-                  {/* Property info overlay */}
-                  <div className="property-overlay">
-                    <h3>{property.title}</h3>
-                    <p className="property-price">
-                      ${property.price.toLocaleString()}
-                    </p>
+          <motion.div
+            className="properties-grid"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            {visibleProperties.length > 0 ? (
+              visibleProperties.map((property) => (
+                <motion.div
+                  key={property.id}
+                  className="property-card"
+                  variants={cardVariants}
+                  whileHover={{ y: -10 }}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  onClick={() => {
+                    window.location.href = `/property/${property.id}`;
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
+                  <div className="property-image">
+                    {property.images && property.images.length > 0 ? (
+                      <img
+                        src={property.images[0]}
+                        alt={property.title}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="no-image">No Image</div>
+                    )}
+
+                    {/* Property info overlay */}
+                    <div className="property-overlay">
+                      <h3>{property.title}</h3>
+                      <p className="property-price">
+                        ${property.price.toLocaleString()}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <div className="property-location">
-                  <FaMapMarkerAlt />
-                  <span>{property.location}</span>
-                </div>
+                  <div className="property-location">
+                    <FaMapMarkerAlt />
+                    <span>{property.location}</span>
+                  </div>
 
-                {property.builder_name && (
-                  <p className="property-builder">
-                    Builder: {property.builder_name}
-                  </p>
-                )}
-              </motion.div>
-            ))
-          ) : (
-            <div className="no-properties">
-              <p>No properties found matching your criteria.</p>
-            </div>
-          )}
-        </motion.div>
+                  {property.builder_name && (
+                    <p className="property-builder">
+                      Builder: {property.builder_name}
+                    </p>
+                  )}
+                </motion.div>
+              ))
+            ) : (
+              <div className="no-properties">
+                <p>No properties found matching your criteria.</p>
+              </div>
+            )}
+          </motion.div>
+
+          <button className="scroller-btn next-btn" onClick={nextGroup}>
+            <FaChevronRight />
+          </button>
+        </div>
+
+        <div className="scroller-indicators">
+          {propertyGroups.map((_, index) => (
+            <button
+              key={index}
+              className={`indicator ${
+                index === currentGroupIndex ? "active" : ""
+              }`}
+              onClick={() => setCurrentGroupIndex(index)}
+            />
+          ))}
+        </div>
 
         <motion.div
           className="view-all-container"

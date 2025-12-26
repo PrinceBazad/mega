@@ -119,12 +119,53 @@
   transform: translateY(-2px);
 }
 
+/* Properties Scroller */
+.properties-scroller {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.scroller-btn {
+  background: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  z-index: 10;
+  position: relative;
+}
+
+.scroller-btn:hover {
+  background: #667eea;
+  color: white;
+  transform: scale(1.1);
+}
+
+.scroller-btn.prev-btn {
+  margin-right: 10px;
+}
+
+.scroller-btn.next-btn {
+  margin-left: 10px;
+}
+
 /* Properties Grid */
 .properties-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   padding: 20px 0;
+  max-width: 960px; /* Limit width for better scroller experience */
+  overflow: hidden;
 }
 
 .property-card {
@@ -341,6 +382,29 @@
 .loading-spinner p {
   color: #4a5568;
   font-weight: 500;
+}
+
+/* Scroller Indicators */
+.scroller-indicators {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 2rem;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: #cbd5e0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.indicator.active {
+  background: #667eea;
+  transform: scale(1.2);
 }
 
 /* Responsive Design */
