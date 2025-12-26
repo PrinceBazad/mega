@@ -38,8 +38,16 @@ function App() {
 function AppContent() {
   const location = useLocation();
 
+  // Force full re-render when leaving homepage
+  const [renderKey, setRenderKey] = React.useState(0);
+
+  React.useEffect(() => {
+    // Reset the render key when navigating to ensure re-render
+    setRenderKey((prev) => prev + 1);
+  }, [location.pathname]);
+
   return (
-    <div className="app" key={location.pathname + location.search}>
+    <div className="app" key={renderKey}>
       <TopBar />
       <Navbar />
       <Routes>
