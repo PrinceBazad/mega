@@ -187,7 +187,9 @@ const Properties = () => {
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
-                onClick={() => navigate(`/property/${property.id}`)}
+                onClick={() => {
+                  window.location.href = `/property/${property.id}`;
+                }}
                 style={{ cursor: "pointer" }}
               >
                 <div className="property-image">

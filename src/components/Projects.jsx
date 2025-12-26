@@ -131,7 +131,9 @@ const Projects = () => {
                   className="project-card"
                   variants={cardVariants}
                   whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                  onClick={() => navigate(`/project/${project.id}`)}
+                  onClick={() => {
+                    window.location.href = `/project/${project.id}`;
+                  }}
                   style={{ cursor: "pointer" }}
                 >
                   <div className="project-image">

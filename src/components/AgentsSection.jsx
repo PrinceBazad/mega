@@ -100,7 +100,9 @@ const AgentsSection = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ y: -10 }}
-                onClick={() => navigate(`/agent/${agent.id}`)}
+                onClick={() => {
+                  window.location.href = `/agent/${agent.id}`;
+                }}
                 style={{ cursor: "pointer" }}
               >
                 <div className="agent-image">

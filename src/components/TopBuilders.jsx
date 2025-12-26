@@ -118,7 +118,9 @@ const TopBuilders = () => {
                     className="btn-view-projects"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => handleViewProjects(builder.id)}
+                    onClick={() => {
+                      window.location.href = `/properties?builder=${builder.id}`;
+                    }}
                   >
                     View Projects
                   </motion.button>
