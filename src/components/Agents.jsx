@@ -74,7 +74,9 @@ const Agents = () => {
             <div
               key={agent.id}
               className="agent-card"
-              onClick={() => navigate(`/agent/${agent.id}`)}
+              onClick={() => {
+                window.location.href = `/agent/${agent.id}`;
+              }}
               style={{ cursor: "pointer" }}
             >
               <div className="agent-image">

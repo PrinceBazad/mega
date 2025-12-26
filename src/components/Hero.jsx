@@ -68,7 +68,7 @@ const Hero = () => {
     // Navigate to properties page with search parameters
     const queryString = params.toString();
     const url = queryString ? `/properties?${queryString}` : "/properties";
-    navigate(url);
+    window.location.href = url;
   };
 
   // Function to scroll to sections
