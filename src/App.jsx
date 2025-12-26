@@ -19,6 +19,7 @@ import Agents from "./components/Agents";
 import TopBuilders from "./components/TopBuilders";
 import AgentsSection from "./components/AgentsSection";
 import AgentDetail from "./components/AgentDetail";
+import ProjectDetail from "./components/ProjectDetail";
 import "./App.css";
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
           />
           <Route path="/agents" element={<Agents />} />
           <Route path="/agent/:id" element={<AgentDetail />} />
+          <Route path="/project/:id" element={<ProjectDetail />} />
         </Routes>
         <Footer />
       </div>

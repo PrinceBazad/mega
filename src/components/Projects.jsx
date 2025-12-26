@@ -178,20 +178,6 @@ const Projects = () => {
                         <span>{project.total_units} Units</span>
                       </div>
                     </div>
-
-                    <button
-                      className="btn-view-details"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Scroll to projects section on the same page
-                        const element = document.getElementById("projects");
-                        if (element) {
-                          element.scrollIntoView({ behavior: "smooth" });
-                        }
-                      }}
-                    >
-                      View Details
-                    </button>
                   </div>
                 </motion.div>
               ))
