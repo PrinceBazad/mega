@@ -240,3 +240,14 @@ img {
     font-size: 0.9rem;
   }
 }
+
+/* Loading App Styles */
+.loading-app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 1.2rem;
+  color: #667eea;
+  font-weight: 600;
+}

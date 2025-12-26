@@ -1,5 +1,10 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { Suspense } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { motion } from "framer-motion";
 import Navbar from "./components/Navbar";
 import TopBar from "./components/TopBar";
@@ -28,42 +33,52 @@ function App() {
       <div className="app">
         <TopBar />
         <Navbar />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Hero />
-                <Properties />
-                <Services />
-                <TopBuilders />
-                <AgentsSection />
-                <About />
-                <Projects />
-                <Contact />
-              </>
-            }
-          />
-          <Route path="/properties" element={<PropertiesPage />} />
-          <Route path="/property/:id" element={<PropertyDetail />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/admin" element={<AdminLogin />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route
-            path="/admin/dashboard"
-            element={
-              <ProtectedRoute>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/agents" element={<Agents />} />
-          <Route path="/agent/:id" element={<AgentDetail />} />
-          <Route path="/project/:id" element={<ProjectDetail />} />
-        </Routes>
+        <LocationWrapper />
         <Footer />
       </div>
     </Router>
+  );
+}
+
+function LocationWrapper() {
+  const location = useLocation();
+
+  return (
+    <Suspense fallback={<div className="loading-app">Loading...</div>}>
+      <Routes key={location.pathname + location.search}>
+        <Route
+          path="/"
+          element={
+            <>
+              <Hero />
+              <Properties />
+              <Services />
+              <TopBuilders />
+              <AgentsSection />
+              <About />
+              <Projects />
+              <Contact />
+            </>
+          }
+        />
+        <Route path="/properties" element={<PropertiesPage />} />
+        <Route path="/property/:id" element={<PropertyDetail />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/agents" element={<Agents />} />
+        <Route path="/agent/:id" element={<AgentDetail />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
+      </Routes>
+    </Suspense>
   );
 }
 
