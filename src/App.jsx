@@ -37,12 +37,12 @@ function App() {
 
 function AppContent() {
   const location = useLocation();
-  
+
   return (
     <div className="app">
       <TopBar />
       <Navbar />
-      <Routes key={location.pathname + location.search}>
+      <Routes key={location.key}>
         <Route
           path="/"
           element={
