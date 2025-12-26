@@ -28,49 +28,55 @@ import ProjectDetail from "./components/ProjectDetail";
 import "./App.css";
 
 function App() {
-  const location = useLocation();
-
   return (
     <Router>
-      <div className="app">
-        <TopBar />
-        <Navbar />
-        <Routes key={location.pathname + location.search}>
-          <Route
-            path="/"
-            element={
-              <>
-                <Hero />
-                <Properties />
-                <Services />
-                <TopBuilders />
-                <AgentsSection />
-                <About />
-                <Projects />
-                <Contact />
-              </>
-            }
-          />
-          <Route path="/properties" element={<PropertiesPage />} />
-          <Route path="/property/:id" element={<PropertyDetail />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/admin" element={<AdminLogin />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route
-            path="/admin/dashboard"
-            element={
-              <ProtectedRoute>
-                <AdminDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/agents" element={<Agents />} />
-          <Route path="/agent/:id" element={<AgentDetail />} />
-          <Route path="/project/:id" element={<ProjectDetail />} />
-        </Routes>
-        <Footer />
-      </div>
+      <AppContent />
     </Router>
+  );
+}
+
+function AppContent() {
+  const location = useLocation();
+  
+  return (
+    <div className="app">
+      <TopBar />
+      <Navbar />
+      <Routes key={location.pathname + location.search}>
+        <Route
+          path="/"
+          element={
+            <>
+              <Hero />
+              <Properties />
+              <Services />
+              <TopBuilders />
+              <AgentsSection />
+              <About />
+              <Projects />
+              <Contact />
+            </>
+          }
+        />
+        <Route path="/properties" element={<PropertiesPage />} />
+        <Route path="/property/:id" element={<PropertyDetail />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/agents" element={<Agents />} />
+        <Route path="/agent/:id" element={<AgentDetail />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
+      </Routes>
+      <Footer />
+    </div>
   );
 }
 
