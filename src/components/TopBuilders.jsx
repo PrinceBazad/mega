@@ -44,11 +44,8 @@ const TopBuilders = () => {
   };
 
   const handleViewProjects = (builderId) => {
-    // Scroll to properties section on the same page
-    const element = document.getElementById("properties");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    // Navigate to the properties page filtered by this builder
+    navigate(`/properties?builder=${builderId}`);
   };
 
   if (loading) {
