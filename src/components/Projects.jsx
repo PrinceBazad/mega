@@ -36,7 +36,7 @@ const Projects = () => {
 
   const handleViewAllProjects = () => {
     // Navigate to the dedicated projects page
-    navigate("/projects");
+    window.location.href = "/projects";
   };
 
   const nextProject = () => {

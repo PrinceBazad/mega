@@ -104,7 +104,7 @@ const Properties = () => {
 
   const handleViewAllProperties = () => {
     // Navigate to the dedicated properties page
-    navigate("/properties");
+    window.location.href = "/properties";
   };
 
   const containerVariants = {
