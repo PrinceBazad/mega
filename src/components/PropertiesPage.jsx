@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   FaBed,
@@ -25,6 +25,7 @@ const PropertiesPage = () => {
     status: "",
   });
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const builderId = searchParams.get("builder");
 
   const navigate = useNavigate();
@@ -157,20 +158,20 @@ const PropertiesPage = () => {
 
   // Initialize search filters with URL parameters
   useEffect(() => {
-    const location = searchParams.get("location") || "";
+    const locationParam = searchParams.get("location") || "";
     const propertyType = searchParams.get("type") || "";
     const minPrice = searchParams.get("min_price") || "";
     const maxPrice = searchParams.get("max_price") || "";
     const status = searchParams.get("status") || "";
 
     setSearchFilters({
-      location,
+      location: locationParam,
       propertyType,
       minPrice,
       maxPrice,
       status,
     });
-  }, [searchParams]);
+  }, [searchParams, location]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
