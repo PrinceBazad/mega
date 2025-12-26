@@ -39,10 +39,10 @@ function AppContent() {
   const location = useLocation();
 
   return (
-    <div className="app">
+    <div className="app" key={location.pathname + location.search}>
       <TopBar />
       <Navbar />
-      <Routes key={location.pathname}>
+      <Routes>
         <Route
           path="/"
           element={
@@ -59,7 +59,7 @@ function AppContent() {
           }
         />
         <Route path="/properties" element={<PropertiesPage />} />
-        <Route path="/property/:id" element={<LocationAwarePropertyDetail />} />
+        <Route path="/property/:id" element={<PropertyDetail />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route path="/admin/login" element={<AdminLogin />} />
@@ -72,28 +72,12 @@ function AppContent() {
           }
         />
         <Route path="/agents" element={<Agents />} />
-        <Route path="/agent/:id" element={<LocationAwareAgentDetail />} />
-        <Route path="/project/:id" element={<LocationAwareProjectDetail />} />
+        <Route path="/agent/:id" element={<AgentDetail />} />
+        <Route path="/project/:id" element={<ProjectDetail />} />
       </Routes>
       <Footer />
     </div>
   );
-}
-
-// Wrapper components that force re-render on location change
-function LocationAwarePropertyDetail() {
-  const location = useLocation();
-  return <PropertyDetail key={location.key} />;
-}
-
-function LocationAwareAgentDetail() {
-  const location = useLocation();
-  return <AgentDetail key={location.key} />;
-}
-
-function LocationAwareProjectDetail() {
-  const location = useLocation();
-  return <ProjectDetail key={location.key} />;
 }
 
 export default App;
