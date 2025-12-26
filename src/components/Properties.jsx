@@ -187,6 +187,8 @@ const Properties = () => {
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
+                onClick={() => navigate(`/property/${property.id}`)}
+                style={{ cursor: "pointer" }}
               >
                 <div className="property-image">
                   {property.images && property.images.length > 0 ? (
@@ -205,19 +207,6 @@ const Properties = () => {
                     <p className="property-price">
                       ${property.price.toLocaleString()}
                     </p>
-                  </div>
-
-                  {/* More Details button that appears on hover */}
-                  <div className="property-details-btn">
-                    <button
-                      className="btn-more-details"
-                      onClick={() => {
-                        // For now, keep the navigation to property details page
-                        navigate(`/property/${property.id}`);
-                      }}
-                    >
-                      More Details
-                    </button>
                   </div>
                 </div>
 
