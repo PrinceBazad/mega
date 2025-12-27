@@ -162,7 +162,7 @@ const Hero = () => {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           backgroundAttachment: "fixed",
-          transform: `translateY(${scrollY * 0.5}px)`
+          transform: `translateY(${scrollY * 0.5}px)`,
         }}
       ></div>
 
