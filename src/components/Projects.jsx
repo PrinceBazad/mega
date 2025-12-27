@@ -23,7 +23,9 @@ const Projects = () => {
         const response = await fetch(`${API_BASE_URL}/api/projects`);
         const data = await response.json();
         // Filter to show only favorite projects
-        const favoriteProjects = data.filter(project => project.is_favorite === true);
+        const favoriteProjects = data.filter(
+          (project) => project.is_favorite === true
+        );
         setProjects(favoriteProjects);
         setLoading(false);
       } catch (error) {
@@ -44,7 +46,6 @@ const Projects = () => {
     setCurrentIndex((prevIndex) => {
       // Move by 3 items at a time for smoother navigation
       const newIndex = prevIndex + 3;
-      // If we've reached or passed the end, cycle back to the beginning
       return newIndex >= projects.length ? 0 : newIndex;
     });
   };
@@ -53,13 +54,7 @@ const Projects = () => {
     setCurrentIndex((prevIndex) => {
       // Move by 3 items at a time for smoother navigation
       const newIndex = prevIndex - 3;
-      // If going before first set, go to the last possible set
-      if (newIndex < 0) {
-        // Calculate the index for the last possible set of 3 items
-        const lastPossibleIndex = Math.max(0, projects.length - 3);
-        return lastPossibleIndex;
-      }
-      return newIndex;
+      return newIndex < 0 ? Math.max(0, projects.length - 3) : newIndex;
     });
   };
 
@@ -97,15 +92,16 @@ const Projects = () => {
             <FaArrowLeft />
           </button>
 
-          <div
-            className="projects-grid"
-            key={currentIndex} // Add key to force re-render when index changes
-          >
+          <div className="projects-grid" key={currentIndex}>
             {projects.length > 0 ? (
-              visibleProjects.map((project) => (
-                <div
+              visibleProjects.map((project, index) => (
+                <motion.div
                   key={project.id}
                   className="project-card"
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ y: -10 }}
                   onClick={() => {
                     window.location.href = `/project/${project.id}`;
                   }}
@@ -156,7 +152,7 @@ const Projects = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))
             ) : (
               <div className="no-projects">
@@ -169,9 +165,7 @@ const Projects = () => {
             className="carousel-btn next-btn"
             onClick={nextProject}
             aria-label="Next projects"
-            disabled={
-              projects.length <= 3 || currentIndex + 3 >= projects.length
-            }
+            disabled={projects.length <= 3}
           >
             <FaArrowRight />
           </button>

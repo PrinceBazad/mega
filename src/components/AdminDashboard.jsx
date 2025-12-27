@@ -1305,9 +1305,17 @@ const AdminDashboard = () => {
                 <div className="no-image">No Image</div>
               )}
               <button
-                className={`favorite-btn ${project.is_favorite ? 'active' : ''}`}
-                onClick={() => handleToggleProjectFavorite(project.id, project.is_favorite)}
-                title={project.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
+                className={`favorite-btn ${
+                  project.is_favorite ? "active" : ""
+                }`}
+                onClick={() =>
+                  handleToggleProjectFavorite(project.id, project.is_favorite)
+                }
+                title={
+                  project.is_favorite
+                    ? "Remove from favorites"
+                    : "Add to favorites"
+                }
               >
                 {project.is_favorite ? <FaHeart /> : <FaRegHeart />}
               </button>
@@ -1821,9 +1829,17 @@ const AdminDashboard = () => {
                         </div>
                       )}
                       <button
-                        className={`favorite-btn ${agent.is_favorite ? 'active' : ''}`}
-                        onClick={() => handleToggleAgentFavorite(agent.id, agent.is_favorite)}
-                        title={agent.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
+                        className={`favorite-btn ${
+                          agent.is_favorite ? "active" : ""
+                        }`}
+                        onClick={() =>
+                          handleToggleAgentFavorite(agent.id, agent.is_favorite)
+                        }
+                        title={
+                          agent.is_favorite
+                            ? "Remove from favorites"
+                            : "Add to favorites"
+                        }
                       >
                         {agent.is_favorite ? <FaHeart /> : <FaRegHeart />}
                       </button>

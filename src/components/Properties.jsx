@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import {
   FaMapMarkerAlt,
   FaSearch,
-  FaChevronLeft,
-  FaChevronRight,
+  FaArrowLeft,
+  FaArrowRight,
 } from "react-icons/fa";
 import API_BASE_URL from "../config";
 import "./Properties.css";
@@ -200,8 +200,8 @@ const Properties = () => {
         )}
 
         <div className="properties-scroller">
-          <button className="scroller-btn prev-btn" onClick={prevGroup}>
-            <FaChevronLeft />
+          <button className="carousel-btn prev-btn" onClick={prevGroup}>
+            <FaArrowLeft />
           </button>
 
           <motion.div
@@ -265,8 +265,8 @@ const Properties = () => {
             )}
           </motion.div>
 
-          <button className="scroller-btn next-btn" onClick={nextGroup}>
-            <FaChevronRight />
+          <button className="carousel-btn next-btn" onClick={nextGroup}>
+            <FaArrowRight />
           </button>
         </div>
 

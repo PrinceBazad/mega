@@ -17,7 +17,9 @@ const AgentsSection = () => {
         const response = await fetch(`${API_BASE_URL}/api/agents`);
         const data = await response.json();
         // Filter to show only favorite agents
-        const favoriteAgents = data.filter(agent => agent.is_favorite === true);
+        const favoriteAgents = data.filter(
+          (agent) => agent.is_favorite === true
+        );
         setAgents(favoriteAgents);
         setLoading(false);
       } catch (error) {

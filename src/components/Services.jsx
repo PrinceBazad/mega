@@ -7,6 +7,8 @@ import {
   FaKey,
   FaBuilding,
   FaFileContract,
+  FaArrowLeft,
+  FaArrowRight,
 } from "react-icons/fa";
 import "./Services.css";
 
@@ -108,8 +110,8 @@ const Services = () => {
         </motion.div>
 
         <div className="services-slider">
-          <button className="slider-btn prev" onClick={prevSlide}>
-            &#8249;
+          <button className="carousel-btn prev-btn" onClick={prevSlide}>
+            <FaArrowLeft />
           </button>
 
           <div className="services-wrapper">
@@ -158,8 +160,8 @@ const Services = () => {
             </motion.div>
           </div>
 
-          <button className="slider-btn next" onClick={nextSlide}>
-            &#8250;
+          <button className="carousel-btn next-btn" onClick={nextSlide}>
+            <FaArrowRight />
           </button>
         </div>
 
