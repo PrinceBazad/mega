@@ -30,6 +30,7 @@
   color: #1a202c;
   margin-bottom: 1.5rem;
   position: relative;
+  text-align: center;
 }
 
 .about-text h2 .highlight {
@@ -44,6 +45,9 @@
   line-height: 1.8;
   margin-bottom: 1rem;
   font-size: 1.1rem;
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 1rem;
 }
 
 .about-stats {

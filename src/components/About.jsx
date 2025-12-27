@@ -46,25 +46,25 @@ const About = () => {
   return (
     <section id="about" className="about">
       <div className="about-container">
+        <div className="section-header">
+          <motion.h2
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            {aboutContent.title}
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            {aboutContent.description}
+          </motion.p>
+        </div>
         <div className="about-content">
-          <div className="section-header">
-            <motion.h2
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              {aboutContent.title}
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-            >
-              {aboutContent.description}
-            </motion.p>
-          </div>
           <motion.div
             className="about-stats"
             initial={{ opacity: 0 }}
