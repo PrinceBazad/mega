@@ -28,6 +28,11 @@
   z-index: 2;
 }
 
+.section-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
 .page-header {
   text-align: center;
   margin-bottom: 2.5rem;

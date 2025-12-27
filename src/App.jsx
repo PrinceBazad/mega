@@ -39,7 +39,7 @@ function AppContent() {
   const location = useLocation();
 
   // Check if we're on an admin page
-  const isAdminPage = location.pathname.startsWith('/admin');
+  const isAdminPage = location.pathname.startsWith("/admin");
 
   // Force full re-render when leaving homepage
   const [renderKey, setRenderKey] = React.useState(0);

@@ -47,7 +47,7 @@ const About = () => {
     <section id="about" className="about">
       <div className="about-container">
         <div className="about-content">
-          <div className="about-text">
+          <div className="section-header">
             <motion.h2
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -64,27 +64,27 @@ const About = () => {
             >
               {aboutContent.description}
             </motion.p>
-            <motion.div
-              className="about-stats"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-            >
-              <div className="stat">
-                <h3>500+</h3>
-                <p>Properties Sold</p>
-              </div>
-              <div className="stat">
-                <h3>150+</h3>
-                <p>Happy Clients</p>
-              </div>
-              <div className="stat">
-                <h3>10+</h3>
-                <p>Years Experience</p>
-              </div>
-            </motion.div>
           </div>
+          <motion.div
+            className="about-stats"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+          >
+            <div className="stat">
+              <h3>500+</h3>
+              <p>Properties Sold</p>
+            </div>
+            <div className="stat">
+              <h3>150+</h3>
+              <p>Happy Clients</p>
+            </div>
+            <div className="stat">
+              <h3>10+</h3>
+              <p>Years Experience</p>
+            </div>
+          </motion.div>
           <div className="about-image">
             <motion.div
               className="about-image-content"

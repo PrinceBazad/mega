@@ -158,10 +158,11 @@ const Hero = () => {
         className="hero-overlay"
         style={{
           backgroundImage: `url(${heroContent.backgroundImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          transform: `translateY(${scrollY * 0.5}px)`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "fixed",
+          transform: `translateY(${scrollY * 0.5}px)`
         }}
       ></div>
 
