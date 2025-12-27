@@ -131,15 +131,16 @@
 }
 
 .navbar-toggle {
-  display: none;
+  display: none; /* Hidden by default, shown on mobile */
   background: none;
   border: none;
-  font-size: 20px; /* Smaller size */
+  font-size: 20px;
   color: #1a202c;
   cursor: pointer;
-  padding: 0.4rem; /* Smaller padding */
+  padding: 0.4rem;
   border-radius: 4px;
   transition: background-color 0.3s ease;
+  z-index: 1001; /* Ensure it appears above mobile menu */
 }
 
 .navbar-toggle:hover {
@@ -149,14 +150,19 @@
   display: none;
   flex-direction: column;
   background: white;
-  padding: 0.8rem 1.5rem; /* Smaller padding */
+  padding: 0.8rem 1.5rem;
   border-top: 1px solid #e2e8f0;
   box-shadow: 0 8px 20px -2px rgba(0, 0, 0, 0.1);
   position: absolute;
   top: 100%;
   left: 0;
   right: 0;
-  z-index: 1000;
+  z-index: 999; /* Lower than toggle button */
+}
+
+/* Smooth transition for mobile menu */
+.mobile-menu {
+  transition: all 0.3s ease;
 }
 
 .mobile-nav-link {
@@ -220,6 +226,10 @@
 }
 
 @media (max-width: 768px) {
+  .navbar-menu {
+    display: none !important;
+  }
+
   .desktop {
     display: none !important;
   }
@@ -237,7 +247,7 @@
   }
 
   .navbar {
-    top: 35px; /* Adjusted for mobile TopBar height */
+    top: 35px;
   }
 
   .mobile-menu {
@@ -245,7 +255,7 @@
   }
 
   .mobile-nav-link {
-    font-size: 1rem; /* Consistent with desktop */
+    font-size: 1rem;
     padding: 0.6rem 0;
   }
 
@@ -253,8 +263,30 @@
     padding: 0.7rem 1rem;
     font-size: 1rem;
   }
+
+  /* Show toggle button on mobile */
+  .navbar-toggle {
+    display: block;
+  }
 }
 
+@media (max-width: 480px) {
+  .mobile-menu {
+    padding: 0.6rem;
+  }
+
+  .mobile-nav-link {
+    font-size: 0.95rem;
+    padding: 0.5rem 0;
+  }
+
+  .mobile-action-btn {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Responsive adjustments for very small screens */
 @media (max-width: 480px) {
   .mobile-menu {
     padding: 0.6rem;
