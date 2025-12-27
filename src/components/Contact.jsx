@@ -44,21 +44,21 @@ const Contact = () => {
     };
 
     fetchContactContent();
-    
+
     // Listen for home content updates
     const handleHomeContentUpdate = (event) => {
-      if (event.detail.section === 'contact') {
-        setContactContent(prev => ({
+      if (event.detail.section === "contact") {
+        setContactContent((prev) => ({
           ...prev,
-          ...event.detail.content
+          ...event.detail.content,
         }));
       }
     };
-    
-    window.addEventListener('homeContentUpdated', handleHomeContentUpdate);
-    
+
+    window.addEventListener("homeContentUpdated", handleHomeContentUpdate);
+
     return () => {
-      window.removeEventListener('homeContentUpdated', handleHomeContentUpdate);
+      window.removeEventListener("homeContentUpdated", handleHomeContentUpdate);
     };
   }, []);
 

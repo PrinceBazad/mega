@@ -38,6 +38,9 @@ function App() {
 function AppContent() {
   const location = useLocation();
 
+  // Check if we're on an admin page
+  const isAdminPage = location.pathname.startsWith('/admin');
+
   // Force full re-render when leaving homepage
   const [renderKey, setRenderKey] = React.useState(0);
 
@@ -48,8 +51,8 @@ function AppContent() {
 
   return (
     <div className="app" key={renderKey}>
-      <TopBar />
-      <Navbar />
+      {!isAdminPage && <TopBar />}
+      {!isAdminPage && <Navbar />}
       <Routes>
         <Route
           path="/"
@@ -83,7 +86,7 @@ function AppContent() {
         <Route path="/agent/:id" element={<AgentDetail />} />
         <Route path="/project/:id" element={<ProjectDetail />} />
       </Routes>
-      <Footer />
+      {!isAdminPage && <Footer />}
     </div>
   );
 }

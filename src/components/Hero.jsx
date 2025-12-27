@@ -76,6 +76,11 @@ const Hero = () => {
     };
   }, [floatingAnim]);
 
+  // Effect to handle background image changes
+  useEffect(() => {
+    // When the backgroundImage changes, the style will be updated in the JSX
+  }, [heroContent.backgroundImage]);
+
   const handleSearch = (e) => {
     e.preventDefault();
     console.log("Searching with:", searchData);
@@ -153,6 +158,9 @@ const Hero = () => {
         className="hero-overlay"
         style={{
           backgroundImage: `url(${heroContent.backgroundImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
           transform: `translateY(${scrollY * 0.5}px)`,
         }}
       ></div>
