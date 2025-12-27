@@ -15,6 +15,10 @@
       center/cover fixed;
 }
 
+.app.admin-page {
+  padding-top: 0;
+}
+
 /* Global Styles */
 * {
   margin: 0;
