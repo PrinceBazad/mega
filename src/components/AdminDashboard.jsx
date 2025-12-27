@@ -1330,6 +1330,13 @@ const AdminDashboard = () => {
             [section]: { ...prev[section], ...editForm },
           }));
           setEditingSection(null);
+
+          // Trigger a refresh of homepage components by dispatching an event
+          window.dispatchEvent(
+            new CustomEvent("homeContentUpdated", {
+              detail: { section, content: editForm },
+            })
+          );
         }
       } catch (error) {
         console.error(`Error updating ${section} content:`, error);

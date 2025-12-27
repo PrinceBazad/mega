@@ -8,6 +8,7 @@ import {
   FaDollarSign,
   FaChevronDown,
 } from "react-icons/fa";
+import API_BASE_URL from "../config";
 import "./Hero.css";
 
 const Hero = () => {
@@ -17,13 +18,34 @@ const Hero = () => {
     priceRange: "",
   });
 
+  const [heroContent, setHeroContent] = useState({
+    title: "Find Your Dream Property",
+    subtitle: "Discover the perfect place to call home with MegaReality",
+    backgroundImage:
+      "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+  });
+
   const [scrollY, setScrollY] = useState(0);
   const floatingAnim = useAnimation();
   const navigate = useNavigate();
 
-  // Handle scroll effect for parallax
+  // Fetch hero content from API and handle scroll effect
   useEffect(() => {
+    const fetchHeroContent = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
+        if (response.ok) {
+          const data = await response.json();
+          setHeroContent(data.hero);
+        }
+      } catch (error) {
+        console.error("Error fetching hero content:", error);
+      }
+    };
+
     const handleScroll = () => setScrollY(window.scrollY);
+
+    fetchHeroContent();
     window.addEventListener("scroll", handleScroll);
 
     // Floating animation for stats
@@ -36,7 +58,22 @@ const Hero = () => {
       },
     });
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    // Listen for home content updates
+    const handleHomeContentUpdate = (event) => {
+      if (event.detail.section === "hero") {
+        setHeroContent((prev) => ({
+          ...prev,
+          ...event.detail.content,
+        }));
+      }
+    };
+
+    window.addEventListener("homeContentUpdated", handleHomeContentUpdate);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("homeContentUpdated", handleHomeContentUpdate);
+    };
   }, [floatingAnim]);
 
   const handleSearch = (e) => {
@@ -115,6 +152,7 @@ const Hero = () => {
       <div
         className="hero-overlay"
         style={{
+          backgroundImage: `url(${heroContent.backgroundImage})`,
           transform: `translateY(${scrollY * 0.5}px)`,
         }}
       ></div>
@@ -132,7 +170,7 @@ const Hero = () => {
             transition={{ delay: 0.2, duration: 0.8 }}
             className="hero-title"
           >
-            Find Your Dream <span className="highlight">Home</span>
+            {heroContent.title}
           </motion.h1>
 
           <motion.p
@@ -140,8 +178,7 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            Discover the perfect property that matches your lifestyle and budget
-            with our expert agents
+            {heroContent.subtitle}
           </motion.p>
 
           <motion.div

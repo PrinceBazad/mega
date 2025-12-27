@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   FaPhone,
@@ -11,6 +11,12 @@ import API_BASE_URL from "../config";
 import "./Contact.css";
 
 const Contact = () => {
+  const [contactContent, setContactContent] = useState({
+    phone: "+91 98765 43210",
+    email: "info@megareality.com",
+    address: "123 Real Estate Avenue, Gurugram, Haryana 122001",
+  });
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -22,6 +28,39 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState("");
+
+  // Fetch contact content from API
+  useEffect(() => {
+    const fetchContactContent = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
+        if (response.ok) {
+          const data = await response.json();
+          setContactContent(data.contact);
+        }
+      } catch (error) {
+        console.error("Error fetching contact content:", error);
+      }
+    };
+
+    fetchContactContent();
+    
+    // Listen for home content updates
+    const handleHomeContentUpdate = (event) => {
+      if (event.detail.section === 'contact') {
+        setContactContent(prev => ({
+          ...prev,
+          ...event.detail.content
+        }));
+      }
+    };
+    
+    window.addEventListener('homeContentUpdated', handleHomeContentUpdate);
+    
+    return () => {
+      window.removeEventListener('homeContentUpdated', handleHomeContentUpdate);
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -85,19 +124,19 @@ const Contact = () => {
     {
       icon: <FaPhone />,
       title: "Phone",
-      info: "+1 (555) 123-4567",
-      link: "tel:+15551234567",
+      info: contactContent.phone,
+      link: `tel:${contactContent.phone}`,
     },
     {
       icon: <FaEnvelope />,
       title: "Email",
-      info: "info@megareality.com",
-      link: "mailto:info@megareality.com",
+      info: contactContent.email,
+      link: `mailto:${contactContent.email}`,
     },
     {
       icon: <FaMapMarkerAlt />,
       title: "Address",
-      info: "123 Real Estate Ave, City, ST 12345",
+      info: contactContent.address,
       link: null,
     },
     {
