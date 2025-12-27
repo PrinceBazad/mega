@@ -299,6 +299,25 @@ builders = [
     }
 ]
 
+# Home Content Data
+home_content = {
+    'hero': {
+        'title': 'Find Your Dream Property',
+        'subtitle': 'Discover the perfect place to call home with MegaReality',
+        'backgroundImage': 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80',
+    },
+    'about': {
+        'title': 'About MegaReality',
+        'description': 'We are a leading real estate company dedicated to helping you find your perfect property. With years of experience and a commitment to excellence, we make your property dreams come true.',
+        'image': 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80',
+    },
+    'contact': {
+        'phone': '+91 98765 43210',
+        'email': 'info@megareality.com',
+        'address': '123 Real Estate Avenue, Gurugram, Haryana 122001',
+    },
+}
+
 # Routes
 @app.route('/api/health', methods=['GET'])
 def health_check():
@@ -1090,6 +1109,39 @@ def toggle_project_favorite(project_id):
     notifications.append(new_notification)
     
     return jsonify(project)
+
+# Home Content Management Routes
+@app.route('/api/admin/home-content', methods=['GET'])
+def get_home_content():
+    # In a real app, this would require authentication
+    return jsonify(home_content)
+
+@app.route('/api/admin/home-content/<section>', methods=['PUT'])
+def update_home_content(section):
+    # In a real app, this would require authentication
+    global home_content
+    
+    if section not in home_content:
+        return jsonify({'message': 'Invalid section'}), 400
+    
+    data = request.get_json()
+    
+    # Update the specific section
+    home_content[section].update(data)
+    
+    # Add notification for content update
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'content',
+        'message': f'Homepage {section} content updated',
+        'admin_id': 1,  # Default admin for demo
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
+    return jsonify(home_content)
 
 # Notification Routes
 @app.route('/api/admin/notifications', methods=['GET'])

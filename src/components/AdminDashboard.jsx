@@ -93,6 +93,28 @@ const AdminDashboard = () => {
     description: "",
   });
 
+  // Home content management state
+  const [homeContent, setHomeContent] = useState({
+    hero: {
+      title: "Find Your Dream Property",
+      subtitle: "Discover the perfect place to call home with MegaReality",
+      backgroundImage:
+        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+    },
+    about: {
+      title: "About MegaReality",
+      description:
+        "We are a leading real estate company dedicated to helping you find your perfect property. With years of experience and a commitment to excellence, we make your property dreams come true.",
+      image:
+        "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80",
+    },
+    contact: {
+      phone: "+91 98765 43210",
+      email: "info@megareality.com",
+      address: "123 Real Estate Avenue, Gurugram, Haryana 122001",
+    },
+  });
+
   const navigate = useNavigate();
 
   // Check if user is authenticated
@@ -165,6 +187,14 @@ const AdminDashboard = () => {
         if (response.ok) {
           const data = await response.json();
           setBuilders(data);
+        }
+      } else if (activeTab === "home") {
+        const response = await fetch(`${API_BASE_URL}/api/admin/home-content`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setHomeContent(data);
         }
       }
     } catch (error) {
@@ -1269,6 +1299,279 @@ const AdminDashboard = () => {
     </div>
   );
 
+  const HomeContentManagement = () => {
+    const [editingSection, setEditingSection] = useState(null);
+    const [editForm, setEditForm] = useState({});
+
+    const handleEditSection = (section, data) => {
+      setEditingSection(section);
+      setEditForm({ ...data });
+    };
+
+    const handleSaveContent = async (section) => {
+      try {
+        const token = localStorage.getItem("adminToken");
+        const response = await fetch(
+          `${API_BASE_URL}/api/admin/home-content/${section}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(editForm),
+          }
+        );
+
+        if (response.ok) {
+          // Update local state
+          setHomeContent((prev) => ({
+            ...prev,
+            [section]: { ...prev[section], ...editForm },
+          }));
+          setEditingSection(null);
+        }
+      } catch (error) {
+        console.error(`Error updating ${section} content:`, error);
+      }
+    };
+
+    return (
+      <div className="dashboard-content">
+        <div className="content-header">
+          <h2>Homepage Content Management</h2>
+        </div>
+
+        <div className="home-content-sections">
+          {/* Hero Section */}
+          <div className="content-section">
+            <div className="section-header">
+              <h3>Hero Section</h3>
+              <button
+                className="btn-edit"
+                onClick={() => handleEditSection("hero", homeContent.hero)}
+              >
+                <FaEdit /> Edit
+              </button>
+            </div>
+            {editingSection === "hero" ? (
+              <div className="edit-form">
+                <div className="form-group">
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    value={editForm.title || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, title: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Subtitle</label>
+                  <textarea
+                    value={editForm.subtitle || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, subtitle: e.target.value })
+                    }
+                    rows="3"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Background Image URL</label>
+                  <input
+                    type="text"
+                    value={editForm.backgroundImage || ""}
+                    onChange={(e) =>
+                      setEditForm({
+                        ...editForm,
+                        backgroundImage: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="form-actions">
+                  <button
+                    className="btn-cancel"
+                    onClick={() => setEditingSection(null)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="btn-submit"
+                    onClick={() => handleSaveContent("hero")}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="section-preview">
+                <p>
+                  <strong>Title:</strong> {homeContent.hero.title}
+                </p>
+                <p>
+                  <strong>Subtitle:</strong> {homeContent.hero.subtitle}
+                </p>
+                <p>
+                  <strong>Background Image:</strong>{" "}
+                  {homeContent.hero.backgroundImage}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* About Section */}
+          <div className="content-section">
+            <div className="section-header">
+              <h3>About Section</h3>
+              <button
+                className="btn-edit"
+                onClick={() => handleEditSection("about", homeContent.about)}
+              >
+                <FaEdit /> Edit
+              </button>
+            </div>
+            {editingSection === "about" ? (
+              <div className="edit-form">
+                <div className="form-group">
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    value={editForm.title || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, title: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Description</label>
+                  <textarea
+                    value={editForm.description || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, description: e.target.value })
+                    }
+                    rows="4"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Image URL</label>
+                  <input
+                    type="text"
+                    value={editForm.image || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, image: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="form-actions">
+                  <button
+                    className="btn-cancel"
+                    onClick={() => setEditingSection(null)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="btn-submit"
+                    onClick={() => handleSaveContent("about")}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="section-preview">
+                <p>
+                  <strong>Title:</strong> {homeContent.about.title}
+                </p>
+                <p>
+                  <strong>Description:</strong> {homeContent.about.description}
+                </p>
+                <p>
+                  <strong>Image:</strong> {homeContent.about.image}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Contact Section */}
+          <div className="content-section">
+            <div className="section-header">
+              <h3>Contact Section</h3>
+              <button
+                className="btn-edit"
+                onClick={() =>
+                  handleEditSection("contact", homeContent.contact)
+                }
+              >
+                <FaEdit /> Edit
+              </button>
+            </div>
+            {editingSection === "contact" ? (
+              <div className="edit-form">
+                <div className="form-group">
+                  <label>Phone</label>
+                  <input
+                    type="text"
+                    value={editForm.phone || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, phone: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Email</label>
+                  <input
+                    type="text"
+                    value={editForm.email || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, email: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Address</label>
+                  <textarea
+                    value={editForm.address || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, address: e.target.value })
+                    }
+                    rows="2"
+                  />
+                </div>
+                <div className="form-actions">
+                  <button
+                    className="btn-cancel"
+                    onClick={() => setEditingSection(null)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="btn-submit"
+                    onClick={() => handleSaveContent("contact")}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="section-preview">
+                <p>
+                  <strong>Phone:</strong> {homeContent.contact.phone}
+                </p>
+                <p>
+                  <strong>Email:</strong> {homeContent.contact.email}
+                </p>
+                <p>
+                  <strong>Address:</strong> {homeContent.contact.address}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const ProjectManagement = () => (
     <div className="dashboard-content">
       <div className="content-header">
@@ -1373,10 +1676,16 @@ const AdminDashboard = () => {
 
           <nav className="sidebar-nav">
             <button
+              className={activeTab === "home" ? "active" : ""}
+              onClick={() => setActiveTab("home")}
+            >
+              <FaHome /> Home
+            </button>
+            <button
               className={activeTab === "properties" ? "active" : ""}
               onClick={() => setActiveTab("properties")}
             >
-              <FaHome /> Properties
+              <FaBuilding /> Properties
             </button>
             <button
               className={activeTab === "inquiries" ? "active" : ""}
@@ -1416,6 +1725,7 @@ const AdminDashboard = () => {
 
         {/* Main Content */}
         <div className="dashboard-main">
+          {activeTab === "home" && <HomeContentManagement />}
           {activeTab === "properties" && <PropertyManagement />}
           {activeTab === "inquiries" && <InquiryManagement />}
           {activeTab === "admins" && <AdminManagement />}
