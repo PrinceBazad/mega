@@ -1,7 +1,7 @@
 .notification-container {
   position: relative;
   display: inline-block;
-  z-index: 1001;
+  z-index: 9999;
 }
 
 .notification-icon {
@@ -60,7 +60,7 @@
   background: white;
   border-radius: 8px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-  z-index: 1002;
+  z-index: 10000;
   overflow: hidden;
 }
 

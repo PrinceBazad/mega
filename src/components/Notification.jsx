@@ -9,12 +9,12 @@ const Notification = ({ token }) => {
 
   const fetchNotifications = async () => {
     if (!token) return;
-    
+
     try {
       const response = await fetch(`${API_BASE_URL}/api/admin/notifications`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -23,13 +23,13 @@ const Notification = ({ token }) => {
         setNotifications(data);
       }
     } catch (error) {
-      console.error('Error fetching notifications:', error);
+      console.error("Error fetching notifications:", error);
     }
   };
 
   useEffect(() => {
     fetchNotifications();
-    
+
     // Set up periodic updates (every 10 seconds for more frequent updates)
     const interval = setInterval(fetchNotifications, 10000);
     return () => clearInterval(interval);

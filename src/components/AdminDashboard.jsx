@@ -1650,25 +1650,37 @@ const AdminDashboard = () => {
 
               <div className="agents-list">
                 {agents.map((agent) => (
-                  <div key={agent.id} className="agent-item">
-                    <div className="agent-info">
-                      <h4>{agent.name}</h4>
-                      <p>{agent.position}</p>
-                      <p>{agent.email}</p>
-                      <p>{agent.phone}</p>
+                  <div key={agent.id} className="agent-card">
+                    <div className="agent-image-wrapper">
+                      {agent.image ? (
+                        <img
+                          src={agent.image}
+                          alt={agent.name}
+                          className="agent-image"
+                        />
+                      ) : (
+                        <div className="agent-placeholder">
+                          <FaUserFriends />
+                        </div>
+                      )}
                     </div>
-                    <div className="agent-actions">
+                    <div className="agent-card-content">
+                      <h4 className="agent-name">{agent.name}</h4>
+                    </div>
+                    <div className="agent-card-actions">
                       <button
-                        className="btn-edit"
+                        className="btn-edit-small"
                         onClick={() => handleEditAgent(agent)}
+                        title="Edit"
                       >
-                        <FaEdit /> Edit
+                        <FaEdit />
                       </button>
                       <button
-                        className="btn-delete"
+                        className="btn-delete-small"
                         onClick={() => handleDeleteAgent(agent.id)}
+                        title="Delete"
                       >
-                        <FaTrash /> Delete
+                        <FaTrash />
                       </button>
                     </div>
                   </div>
