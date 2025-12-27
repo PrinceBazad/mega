@@ -164,22 +164,6 @@ const Services = () => {
             <FaArrowRight />
           </button>
         </div>
-
-        <div className="slider-dots">
-          {services.map((_, index) => (
-            <motion.span
-              key={index}
-              className={`dot ${index === currentIndex ? "active" : ""}`}
-              onClick={() => setCurrentIndex(index)}
-              whileHover={{ scale: 1.3 }}
-              whileTap={{ scale: 0.9 }}
-              animate={{
-                scale: index === currentIndex ? 1.3 : 1,
-                backgroundColor: index === currentIndex ? "#667eea" : "#ccc",
-              }}
-            />
-          ))}
-        </div>
       </div>
     </section>
   );

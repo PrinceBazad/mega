@@ -270,18 +270,6 @@ const Properties = () => {
           </button>
         </div>
 
-        <div className="scroller-indicators">
-          {propertyGroups.map((_, index) => (
-            <button
-              key={index}
-              className={`indicator ${
-                index === currentGroupIndex ? "active" : ""
-              }`}
-              onClick={() => setCurrentGroupIndex(index)}
-            />
-          ))}
-        </div>
-
         <motion.div
           className="view-all-container"
           initial={{ opacity: 0 }}
