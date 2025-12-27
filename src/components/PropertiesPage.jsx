@@ -374,7 +374,7 @@ const PropertiesPage = () => {
                   <div className="property-overlay">
                     <h3>{property.title}</h3>
                     <p className="property-price">
-                      ${property.price.toLocaleString()}
+                      ₹{property.price.toLocaleString()}
                     </p>
                   </div>
                 </div>

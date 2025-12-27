@@ -267,7 +267,7 @@ const PropertyDetail = () => {
                 <span>{property.location}</span>
               </div>
               <div className="property-price">
-                ${property.price?.toLocaleString()}
+                ₹{property.price?.toLocaleString()}
               </div>
             </motion.div>
 
@@ -448,7 +448,7 @@ const PropertyDetail = () => {
                     <div className="property-header">
                       <h4>{similarProperty.title}</h4>
                       <p className="property-price">
-                        ${similarProperty.price.toLocaleString()}
+                        ₹{similarProperty.price.toLocaleString()}
                       </p>
                     </div>
 

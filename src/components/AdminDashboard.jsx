@@ -698,7 +698,7 @@ const AdminDashboard = () => {
                 </p>
               )}
               <p className="property-price">
-                ${property.price.toLocaleString()}
+                ₹{property.price.toLocaleString()}
               </p>
               <div className="property-actions">
                 <button
@@ -760,7 +760,7 @@ const AdminDashboard = () => {
 
               <div className="form-row">
                 <div className="form-group">
-                  <label>Price ($) *</label>
+                  <label>Price (₹) *</label>
                   <input
                     type="number"
                     name="price"
@@ -1194,7 +1194,13 @@ const AdminDashboard = () => {
         {/* Sidebar */}
         <div className="dashboard-sidebar">
           <div className="sidebar-header">
-            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <h2>Admin Panel</h2>
               <Notification token={token} />
             </div>
