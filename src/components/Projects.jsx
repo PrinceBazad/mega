@@ -22,8 +22,9 @@ const Projects = () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/projects`);
         const data = await response.json();
-        // Fetch all projects for carousel functionality
-        setProjects(data);
+        // Filter to show only favorite projects
+        const favoriteProjects = data.filter(project => project.is_favorite === true);
+        setProjects(favoriteProjects);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching projects:", error);

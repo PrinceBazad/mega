@@ -191,7 +191,8 @@
 .favorite-btn:hover {
   background: linear-gradient(135deg, #fff 0%, #fff 100%);
   transform: scale(1.2) rotate(10deg);
-  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4), 0 0 0 8px rgba(255, 107, 107, 0.1);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4),
+    0 0 0 8px rgba(255, 107, 107, 0.1);
   border-color: #ff6b6b;
 }
 
@@ -205,15 +206,26 @@
 .favorite-btn.active:hover {
   color: #ff1744;
   transform: scale(1.2) rotate(-10deg);
-  box-shadow: 0 6px 20px rgba(255, 56, 56, 0.5), 0 0 0 8px rgba(255, 56, 56, 0.15);
+  box-shadow: 0 6px 20px rgba(255, 56, 56, 0.5),
+    0 0 0 8px rgba(255, 56, 56, 0.15);
 }
 
 @keyframes heartbeat {
-  0% { transform: scale(1); }
-  25% { transform: scale(1.3); }
-  50% { transform: scale(1.1); }
-  75% { transform: scale(1.25); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(1.3);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  75% {
+    transform: scale(1.25);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .property-info {

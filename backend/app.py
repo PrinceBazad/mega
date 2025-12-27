@@ -163,7 +163,8 @@ agents = [
         'experience': '8 years',
         'properties_sold': 120,
         'image': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
-        'bio': 'Specialized in luxury properties and commercial real estate with extensive knowledge of local market trends.'
+        'bio': 'Specialized in luxury properties and commercial real estate with extensive knowledge of local market trends.',
+        'is_favorite': False
     },
     {
         'id': 2,
@@ -174,7 +175,8 @@ agents = [
         'experience': '6 years',
         'properties_sold': 95,
         'image': 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop',
-        'bio': 'Focuses on residential properties with expertise in first-time home buyers and family housing.'
+        'bio': 'Focuses on residential properties with expertise in first-time home buyers and family housing.',
+        'is_favorite': False
     },
     {
         'id': 3,
@@ -185,7 +187,8 @@ agents = [
         'experience': '10 years',
         'properties_sold': 150,
         'image': 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop',
-        'bio': 'Expert in commercial properties, office spaces, and retail locations with strong negotiation skills.'
+        'bio': 'Expert in commercial properties, office spaces, and retail locations with strong negotiation skills.',
+        'is_favorite': False
     },
     {
         'id': 4,
@@ -196,7 +199,8 @@ agents = [
         'experience': '7 years',
         'properties_sold': 110,
         'image': 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop',
-        'bio': 'Helps clients with property investment strategies and portfolio management for maximum ROI.'
+        'bio': 'Helps clients with property investment strategies and portfolio management for maximum ROI.',
+        'is_favorite': False
     }
 ]
 
@@ -214,6 +218,7 @@ projects = [
         'builder_name': 'DLF Limited',
         'images': ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80'],
         'tag': 'latest',
+        'is_favorite': False,
         'created_at': datetime.now().isoformat()
     },
     {
@@ -228,6 +233,7 @@ projects = [
         'builder_name': 'Amrapali Group',
         'images': ['https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80'],
         'tag': 'working',
+        'is_favorite': False,
         'created_at': datetime.now().isoformat()
     },
     {
@@ -242,6 +248,7 @@ projects = [
         'builder_name': 'Godrej Properties',
         'images': ['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80'],
         'tag': 'available',
+        'is_favorite': False,
         'created_at': datetime.now().isoformat()
     }
 ]
@@ -700,7 +707,8 @@ def create_agent():
         'experience': data.get('experience', ''),
         'properties_sold': data.get('properties_sold', 0),
         'image': data.get('image', ''),
-        'bio': data.get('bio', '')
+        'bio': data.get('bio', ''),
+        'is_favorite': data.get('is_favorite', False)
     }
     
     agents.append(new_agent)
@@ -777,6 +785,33 @@ def delete_agent(agent_id):
         notifications.append(new_notification)
     
     return jsonify({'message': 'Agent deleted successfully'})
+
+@app.route('/api/admin/agents/<int:agent_id>/favorite', methods=['PUT'])
+def toggle_agent_favorite(agent_id):
+    # In a real app, this would require authentication
+    agent = next((a for a in agents if a['id'] == agent_id), None)
+    if not agent:
+        return jsonify({'message': 'Agent not found'}), 404
+    
+    data = request.get_json()
+    new_favorite_status = data.get('is_favorite', False)
+    
+    agent['is_favorite'] = new_favorite_status
+    
+    # Add notification for favorite status change
+    status_text = 'added to' if new_favorite_status else 'removed from'
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'agent',
+        'message': f'Agent {status_text} favorites: {agent["name"]}',
+        'admin_id': 1,  # Default admin for demo
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
+    return jsonify(agent)
 
 # Builder Routes
 @app.route('/api/builders', methods=['GET'])
@@ -940,6 +975,7 @@ def create_project():
         'builder_name': builder_name,
         'images': data.get('images', []),
         'tag': data.get('tag', 'available'),
+        'is_favorite': data.get('is_favorite', False),
         'created_at': datetime.now().isoformat()
     }
     
@@ -1027,6 +1063,33 @@ def delete_project(project_id):
         notifications.append(new_notification)
     
     return jsonify({'message': 'Project deleted successfully'})
+
+@app.route('/api/admin/projects/<int:project_id>/favorite', methods=['PUT'])
+def toggle_project_favorite(project_id):
+    # In a real app, this would require authentication
+    project = next((p for p in projects if p['id'] == project_id), None)
+    if not project:
+        return jsonify({'message': 'Project not found'}), 404
+    
+    data = request.get_json()
+    new_favorite_status = data.get('is_favorite', False)
+    
+    project['is_favorite'] = new_favorite_status
+    
+    # Add notification for favorite status change
+    status_text = 'added to' if new_favorite_status else 'removed from'
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'project',
+        'message': f'Project {status_text} favorites: {project["title"]}',
+        'admin_id': 1,  # Default admin for demo
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
+    return jsonify(project)
 
 # Notification Routes
 @app.route('/api/admin/notifications', methods=['GET'])

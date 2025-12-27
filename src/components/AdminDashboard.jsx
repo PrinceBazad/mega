@@ -206,6 +206,64 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleToggleAgentFavorite = async (agentId, currentStatus) => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      const response = await fetch(
+        `${API_BASE_URL}/api/admin/agents/${agentId}/favorite`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ is_favorite: !currentStatus }),
+        }
+      );
+
+      if (response.ok) {
+        setAgents((prev) =>
+          prev.map((agent) =>
+            agent.id === agentId
+              ? { ...agent, is_favorite: !currentStatus }
+              : agent
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error toggling agent favorite:", error);
+    }
+  };
+
+  const handleToggleProjectFavorite = async (projectId, currentStatus) => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      const response = await fetch(
+        `${API_BASE_URL}/api/admin/projects/${projectId}/favorite`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ is_favorite: !currentStatus }),
+        }
+      );
+
+      if (response.ok) {
+        setProjects((prev) =>
+          prev.map((project) =>
+            project.id === projectId
+              ? { ...project, is_favorite: !currentStatus }
+              : project
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error toggling project favorite:", error);
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -721,9 +779,17 @@ const AdminDashboard = () => {
                 <div className="no-image">No Image</div>
               )}
               <button
-                className={`favorite-btn ${property.is_favorite ? 'active' : ''}`}
-                onClick={() => handleToggleFavorite(property.id, property.is_favorite)}
-                title={property.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
+                className={`favorite-btn ${
+                  property.is_favorite ? "active" : ""
+                }`}
+                onClick={() =>
+                  handleToggleFavorite(property.id, property.is_favorite)
+                }
+                title={
+                  property.is_favorite
+                    ? "Remove from favorites"
+                    : "Add to favorites"
+                }
               >
                 {property.is_favorite ? <FaHeart /> : <FaRegHeart />}
               </button>
@@ -1037,9 +1103,13 @@ const AdminDashboard = () => {
                   <td>{new Date(inquiry.created_at).toLocaleDateString()}</td>
                   <td>
                     <select
-                      className={`status-select status-${inquiry.status || "pending"}`}
+                      className={`status-select status-${
+                        inquiry.status || "pending"
+                      }`}
                       value={inquiry.status || "pending"}
-                      onChange={(e) => handleStatusChange(inquiry.id, e.target.value)}
+                      onChange={(e) =>
+                        handleStatusChange(inquiry.id, e.target.value)
+                      }
                     >
                       <option value="pending">Pending</option>
                       <option value="solved">Solved</option>
@@ -1234,6 +1304,13 @@ const AdminDashboard = () => {
               ) : (
                 <div className="no-image">No Image</div>
               )}
+              <button
+                className={`favorite-btn ${project.is_favorite ? 'active' : ''}`}
+                onClick={() => handleToggleProjectFavorite(project.id, project.is_favorite)}
+                title={project.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
+              >
+                {project.is_favorite ? <FaHeart /> : <FaRegHeart />}
+              </button>
             </div>
             <div className="property-info">
               <h3>{project.title}</h3>
@@ -1743,6 +1820,13 @@ const AdminDashboard = () => {
                           <FaUserFriends />
                         </div>
                       )}
+                      <button
+                        className={`favorite-btn ${agent.is_favorite ? 'active' : ''}`}
+                        onClick={() => handleToggleAgentFavorite(agent.id, agent.is_favorite)}
+                        title={agent.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
+                      >
+                        {agent.is_favorite ? <FaHeart /> : <FaRegHeart />}
+                      </button>
                     </div>
                     <div className="agent-card-content">
                       <h4 className="agent-name">{agent.name}</h4>
