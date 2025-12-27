@@ -12,6 +12,8 @@ import {
   FaUserFriends,
   FaBuilding,
 } from "react-icons/fa";
+import Notification from "./Notification";
+import "./Notification.css";
 import API_BASE_URL from "../config";
 import "./AdminDashboard.css";
 const AdminDashboard = () => {
@@ -19,6 +21,7 @@ const AdminDashboard = () => {
   const [properties, setProperties] = useState([]);
   const [inquiries, setInquiries] = useState([]);
   const [admins, setAdmins] = useState([]);
+  const [token, setToken] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [showAddAdminForm, setShowAddAdminForm] = useState(false);
@@ -95,6 +98,8 @@ const AdminDashboard = () => {
     const token = localStorage.getItem("adminToken");
     if (!token) {
       navigate("/admin/login");
+    } else {
+      setToken(token);
     }
   }, [navigate]);
 
@@ -1189,7 +1194,10 @@ const AdminDashboard = () => {
         {/* Sidebar */}
         <div className="dashboard-sidebar">
           <div className="sidebar-header">
-            <h2>Admin Panel</h2>
+            <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+              <h2>Admin Panel</h2>
+              <Notification token={token} />
+            </div>
           </div>
 
           <nav className="sidebar-nav">

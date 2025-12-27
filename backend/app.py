@@ -37,6 +37,9 @@ admins = [
     }
 ]
 
+# Notifications data
+notifications = []
+
 # Sample properties data with builder association
 properties = [
     {
@@ -340,6 +343,18 @@ def register_admin():
     
     admins.append(new_admin)
     
+    # Add notification for admin creation
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'admin',
+        'message': f'New admin added: {data["name"]}',
+        'admin_id': new_admin['id'],
+        'admin_name': new_admin['name'],
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
     # Return admin info without password hash
     admin_info = {
         'id': new_admin['id'],
@@ -389,6 +404,20 @@ def update_admin(admin_id):
     if 'password' in data and data['password']:
         admin['password_hash'] = hashlib.sha256(data['password'].encode()).hexdigest()
     
+    original_name = admin['name']
+    
+    # Add notification for admin update
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'admin',
+        'message': f'Admin updated: {original_name}',
+        'admin_id': admin['id'],
+        'admin_name': admin['name'],
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
     # Return updated admin info
     admin_info = {
         'id': admin['id'],
@@ -412,8 +441,24 @@ def delete_admin(admin_id):
     if not admin:
         return jsonify({'message': 'Admin not found'}), 404
     
+    deleted_admin = next((a for a in admins if a['id'] == admin_id), None)
+    
     # Remove admin
     admins = [a for a in admins if a['id'] != admin_id]
+    
+    # Add notification for admin deletion
+    if deleted_admin:
+        new_notification = {
+            'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+            'type': 'admin',
+            'message': f'Admin deleted: {deleted_admin["name"]}',
+            'admin_id': deleted_admin['id'],
+            'admin_name': deleted_admin['name'],
+            'created_at': datetime.now().isoformat(),
+            'read': False
+        }
+        notifications.append(new_notification)
+    
     return jsonify({'message': 'Admin deleted successfully'})
 
 # Property Routes
@@ -490,6 +535,19 @@ def create_property():
     }
     
     properties.append(new_property)
+    
+    # Add notification for property creation
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'property',
+        'message': f'New property added: {data["title"]}',
+        'admin_id': 1,  # Default admin for demo
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
     return jsonify(new_property), 201
 
 @app.route('/api/admin/properties/<int:property_id>', methods=['PUT'])
@@ -509,6 +567,7 @@ def update_property(property_id):
         if builder:
             builder_name = builder['name']
     
+    original_title = property['title']
     property['title'] = data.get('title', property['title'])
     property['description'] = data.get('description', property['description'])
     property['price'] = data.get('price', property['price'])
@@ -522,6 +581,18 @@ def update_property(property_id):
     property['builder_name'] = builder_name
     property['images'] = data.get('images', property['images'])
     
+    # Add notification for property update
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'property',
+        'message': f'Property updated: {original_title}',
+        'admin_id': 1,  # Default admin for demo
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
     return jsonify(property)
 
 @app.route('/api/admin/properties/<int:property_id>', methods=['DELETE'])
@@ -532,7 +603,22 @@ def delete_property(property_id):
     if not property:
         return jsonify({'message': 'Property not found'}), 404
     
+    deleted_property = next((p for p in properties if p['id'] == property_id), None)
     properties = [p for p in properties if p['id'] != property_id]
+    
+    # Add notification for property deletion
+    if deleted_property:
+        new_notification = {
+            'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+            'type': 'property',
+            'message': f'Property deleted: {deleted_property["title"]}',
+            'admin_id': 1,  # Default admin for demo
+            'admin_name': 'Admin User',
+            'created_at': datetime.now().isoformat(),
+            'read': False
+        }
+        notifications.append(new_notification)
+    
     return jsonify({'message': 'Property deleted successfully'})
 
 # Agent Routes
@@ -580,6 +666,19 @@ def create_agent():
     }
     
     agents.append(new_agent)
+    
+    # Add notification for agent creation
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'agent',
+        'message': f'New agent added: {data["name"]}',
+        'admin_id': 1,  # Default admin for demo
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
     return jsonify(new_agent), 201
 
 @app.route('/api/admin/agents/<int:agent_id>', methods=['PUT'])
@@ -591,6 +690,7 @@ def update_agent(agent_id):
     
     data = request.get_json()
     
+    original_name = agent['name']
     agent['name'] = data.get('name', agent['name'])
     agent['email'] = data.get('email', agent['email'])
     agent['phone'] = data.get('phone', agent['phone'])
@@ -599,6 +699,18 @@ def update_agent(agent_id):
     agent['properties_sold'] = data.get('properties_sold', agent['properties_sold'])
     agent['image'] = data.get('image', agent['image'])
     agent['bio'] = data.get('bio', agent['bio'])
+    
+    # Add notification for agent update
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'agent',
+        'message': f'Agent updated: {original_name}',
+        'admin_id': 1,  # Default admin for demo
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
     
     return jsonify(agent)
 
@@ -610,7 +722,22 @@ def delete_agent(agent_id):
     if not agent:
         return jsonify({'message': 'Agent not found'}), 404
     
+    deleted_agent = next((a for a in agents if a['id'] == agent_id), None)
     agents = [a for a in agents if a['id'] != agent_id]
+    
+    # Add notification for agent deletion
+    if deleted_agent:
+        new_notification = {
+            'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+            'type': 'agent',
+            'message': f'Agent deleted: {deleted_agent["name"]}',
+            'admin_id': 1,  # Default admin for demo
+            'admin_name': 'Admin User',
+            'created_at': datetime.now().isoformat(),
+            'read': False
+        }
+        notifications.append(new_notification)
+    
     return jsonify({'message': 'Agent deleted successfully'})
 
 # Builder Routes
@@ -645,6 +772,19 @@ def create_builder():
     }
     
     builders.append(new_builder)
+    
+    # Add notification for builder creation
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'builder',
+        'message': f'New builder added: {data["name"]}',
+        'admin_id': 1,  # Default admin for demo
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
     return jsonify(new_builder), 201
 
 @app.route('/api/admin/builders/<int:builder_id>', methods=['PUT'])
@@ -656,10 +796,23 @@ def update_builder(builder_id):
     
     data = request.get_json()
     
+    original_name = builder['name']
     builder['name'] = data.get('name', builder['name'])
     builder['projects_count'] = data.get('projects_count', builder['projects_count'])
     builder['image'] = data.get('image', builder['image'])
     builder['description'] = data.get('description', builder['description'])
+    
+    # Add notification for builder update
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'builder',
+        'message': f'Builder updated: {original_name}',
+        'admin_id': 1,  # Default admin for demo
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
     
     return jsonify(builder)
 
@@ -671,7 +824,22 @@ def delete_builder(builder_id):
     if not builder:
         return jsonify({'message': 'Builder not found'}), 404
     
+    deleted_builder = next((b for b in builders if b['id'] == builder_id), None)
     builders = [b for b in builders if b['id'] != builder_id]
+    
+    # Add notification for builder deletion
+    if deleted_builder:
+        new_notification = {
+            'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+            'type': 'builder',
+            'message': f'Builder deleted: {deleted_builder["name"]}',
+            'admin_id': 1,  # Default admin for demo
+            'admin_name': 'Admin User',
+            'created_at': datetime.now().isoformat(),
+            'read': False
+        }
+        notifications.append(new_notification)
+    
     return jsonify({'message': 'Builder deleted successfully'})
 
 # Project Routes
@@ -738,6 +906,19 @@ def create_project():
     }
     
     projects.append(new_project)
+    
+    # Add notification for project creation
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'project',
+        'message': f'New project added: {data["title"]}',
+        'admin_id': 1,  # Default admin for demo
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
     return jsonify(new_project), 201
 
 @app.route('/api/admin/projects/<int:project_id>', methods=['PUT'])
@@ -757,6 +938,7 @@ def update_project(project_id):
         if builder:
             builder_name = builder['name']
     
+    original_title = project['title']
     project['title'] = data.get('title', project['title'])
     project['description'] = data.get('description', project['description'])
     project['location'] = data.get('location', project['location'])
@@ -768,6 +950,18 @@ def update_project(project_id):
     project['images'] = data.get('images', project['images'])
     project['tag'] = data.get('tag', project['tag'])
     
+    # Add notification for project update
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'project',
+        'message': f'Project updated: {original_title}',
+        'admin_id': 1,  # Default admin for demo
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
     return jsonify(project)
 
 @app.route('/api/admin/projects/<int:project_id>', methods=['DELETE'])
@@ -778,8 +972,49 @@ def delete_project(project_id):
     if not project:
         return jsonify({'message': 'Project not found'}), 404
     
+    deleted_project = next((p for p in projects if p['id'] == project_id), None)
     projects = [p for p in projects if p['id'] != project_id]
+    
+    # Add notification for project deletion
+    if deleted_project:
+        new_notification = {
+            'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+            'type': 'project',
+            'message': f'Project deleted: {deleted_project["title"]}',
+            'admin_id': 1,  # Default admin for demo
+            'admin_name': 'Admin User',
+            'created_at': datetime.now().isoformat(),
+            'read': False
+        }
+        notifications.append(new_notification)
+    
     return jsonify({'message': 'Project deleted successfully'})
+
+# Notification Routes
+@app.route('/api/admin/notifications', methods=['GET'])
+def get_notifications():
+    # In a real app, this would require authentication
+    # Sort notifications by creation date (newest first)
+    sorted_notifications = sorted(notifications, key=lambda x: x['created_at'], reverse=True)
+    return jsonify(sorted_notifications)
+
+@app.route('/api/admin/notifications/<int:notification_id>/read', methods=['PUT'])
+def mark_notification_as_read(notification_id):
+    # In a real app, this would require authentication
+    notification = next((n for n in notifications if n['id'] == notification_id), None)
+    if not notification:
+        return jsonify({'message': 'Notification not found'}), 404
+    
+    notification['read'] = True
+    return jsonify({'message': 'Notification marked as read'})
+
+@app.route('/api/admin/notifications/read-all', methods=['PUT'])
+def mark_all_notifications_as_read():
+    # In a real app, this would require authentication
+    for notification in notifications:
+        notification['read'] = True
+    return jsonify({'message': 'All notifications marked as read'})
+
 
 # Inquiry Routes
 @app.route('/api/inquiries', methods=['POST'])
@@ -797,6 +1032,18 @@ def create_inquiry():
     }
     
     inquiries.append(new_inquiry)
+    # Add notification for new inquiry
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'inquiry',
+        'message': f'New inquiry from {data["user_name"]}',
+        'admin_id': 1,  # Default admin for demo
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
     return jsonify({
         'id': new_inquiry['id'],
         'message': 'Inquiry submitted successfully'
