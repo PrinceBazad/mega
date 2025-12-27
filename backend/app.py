@@ -1028,6 +1028,7 @@ def create_inquiry():
         'phone': data.get('phone', ''),
         'property_id': data.get('property_id'),
         'message': data.get('message', ''),
+        'status': 'pending',
         'created_at': datetime.now().isoformat()
     }
     
@@ -1053,6 +1054,35 @@ def create_inquiry():
 def get_inquiries():
     # In a real app, this would require authentication
     return jsonify(inquiries)
+
+@app.route('/api/admin/inquiries/<int:inquiry_id>/status', methods=['PUT'])
+def update_inquiry_status(inquiry_id):
+    # In a real app, this would require authentication
+    inquiry = next((i for i in inquiries if i['id'] == inquiry_id), None)
+    if not inquiry:
+        return jsonify({'message': 'Inquiry not found'}), 404
+    
+    data = request.get_json()
+    new_status = data.get('status', 'pending')
+    
+    if new_status not in ['pending', 'solved']:
+        return jsonify({'message': 'Invalid status'}), 400
+    
+    inquiry['status'] = new_status
+    
+    # Add notification for status change
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'inquiry',
+        'message': f'Inquiry #{inquiry_id} status changed to {new_status}',
+        'admin_id': 1,
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
+    return jsonify(inquiry)
 
 if __name__ == '__main__':
     # Use the PORT environment variable for deployment platforms like Heroku, Railway, etc.

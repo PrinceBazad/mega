@@ -937,42 +937,83 @@ const AdminDashboard = () => {
     </div>
   );
 
-  const InquiryManagement = () => (
-    <div className="dashboard-content">
-      <div className="content-header">
-        <h2>Inquiry Management</h2>
-      </div>
+  const InquiryManagement = () => {
+    const handleStatusChange = async (inquiryId, newStatus) => {
+      try {
+        const token = localStorage.getItem("adminToken");
+        const response = await fetch(
+          `${API_BASE_URL}/api/admin/inquiries/${inquiryId}/status`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ status: newStatus }),
+          }
+        );
 
-      <div className="inquiries-table">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Property ID</th>
-              <th>Message</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {inquiries.map((inquiry) => (
-              <tr key={inquiry.id}>
-                <td>{inquiry.id}</td>
-                <td>{inquiry.user_name}</td>
-                <td>{inquiry.email}</td>
-                <td>{inquiry.phone || "N/A"}</td>
-                <td>{inquiry.property_id || "N/A"}</td>
-                <td>{inquiry.message}</td>
-                <td>{new Date(inquiry.created_at).toLocaleDateString()}</td>
+        if (response.ok) {
+          // Update local state
+          setInquiries((prev) =>
+            prev.map((inq) =>
+              inq.id === inquiryId ? { ...inq, status: newStatus } : inq
+            )
+          );
+        }
+      } catch (error) {
+        console.error("Error updating inquiry status:", error);
+      }
+    };
+
+    return (
+      <div className="dashboard-content">
+        <div className="content-header">
+          <h2>Inquiry Management</h2>
+        </div>
+
+        <div className="inquiries-table">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Property ID</th>
+                <th>Message</th>
+                <th>Date</th>
+                <th>Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {inquiries.map((inquiry) => (
+                <tr key={inquiry.id}>
+                  <td>{inquiry.id}</td>
+                  <td>{inquiry.user_name}</td>
+                  <td>{inquiry.email}</td>
+                  <td>{inquiry.phone || "N/A"}</td>
+                  <td>{inquiry.property_id || "N/A"}</td>
+                  <td>{inquiry.message}</td>
+                  <td>{new Date(inquiry.created_at).toLocaleDateString()}</td>
+                  <td>
+                    <select
+                      className={`status-select status-${inquiry.status || "pending"}`}
+                      value={inquiry.status || "pending"}
+                      onChange={(e) => handleStatusChange(inquiry.id, e.target.value)}
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="solved">Solved</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const AdminManagement = () => (
     <div className="dashboard-content">
