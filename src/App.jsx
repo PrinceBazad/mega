@@ -50,7 +50,7 @@ function AppContent() {
   }, [location.pathname]);
 
   return (
-    <div className={`app ${isAdminPage ? 'admin-page' : ''}`} key={renderKey}>
+    <div className={`app ${isAdminPage ? "admin-page" : ""}`} key={renderKey}>
       {!isAdminPage && <TopBar />}
       {!isAdminPage && <Navbar />}
       <Routes>

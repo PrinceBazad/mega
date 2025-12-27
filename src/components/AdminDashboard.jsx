@@ -2305,23 +2305,36 @@ const AdminDashboard = () => {
               <div className="builders-list">
                 {builders.map((builder) => (
                   <div key={builder.id} className="builder-item">
-                    <div className="builder-info">
-                      <h4>{builder.name}</h4>
-                      <p>{builder.projects_count} Projects</p>
-                      <p>{builder.description}</p>
+                    <div className="builder-image-wrapper">
+                      {builder.image ? (
+                        <img
+                          src={builder.image}
+                          alt={builder.name}
+                          className="builder-image"
+                        />
+                      ) : (
+                        <div className="builder-placeholder">
+                          <FaHome />
+                        </div>
+                      )}
                     </div>
-                    <div className="builder-actions">
+                    <div className="builder-card-content">
+                      <h4 className="builder-name">{builder.name}</h4>
+                    </div>
+                    <div className="builder-card-actions">
                       <button
-                        className="btn-edit"
+                        className="btn-edit-small"
                         onClick={() => handleEditBuilder(builder)}
+                        title="Edit"
                       >
-                        <FaEdit /> Edit
+                        <FaEdit />
                       </button>
                       <button
-                        className="btn-delete"
+                        className="btn-delete-small"
                         onClick={() => handleDeleteBuilder(builder.id)}
+                        title="Delete"
                       >
-                        <FaTrash /> Delete
+                        <FaTrash />
                       </button>
                     </div>
                   </div>
