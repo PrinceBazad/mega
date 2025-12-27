@@ -55,6 +55,7 @@ properties = [
         'area_sqft': 4500,
         'builder_id': 1,
         'builder_name': 'DLF Limited',
+        'is_favorite': False,
         'images': ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80'],
         'created_at': datetime.now().isoformat()
     },
@@ -71,6 +72,7 @@ properties = [
         'area_sqft': 1200,
         'builder_id': 2,
         'builder_name': 'Amrapali Group',
+        'is_favorite': False,
         'images': ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80'],
         'created_at': datetime.now().isoformat()
     },
@@ -87,6 +89,7 @@ properties = [
         'area_sqft': 2100,
         'builder_id': 1,
         'builder_name': 'DLF Limited',
+        'is_favorite': False,
         'images': ['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80'],
         'created_at': datetime.now().isoformat()
     },
@@ -103,6 +106,7 @@ properties = [
         'area_sqft': 3500,
         'builder_id': 3,
         'builder_name': 'Godrej Properties',
+        'is_favorite': False,
         'images': ['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80'],
         'created_at': datetime.now().isoformat()
     },
@@ -119,6 +123,7 @@ properties = [
         'area_sqft': 3800,
         'builder_id': 5,
         'builder_name': 'Oberoi Realty',
+        'is_favorite': False,
         'images': ['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80'],
         'created_at': datetime.now().isoformat()
     },
@@ -135,6 +140,7 @@ properties = [
         'area_sqft': 1100,
         'builder_id': 6,
         'builder_name': 'Tata Housing',
+        'is_favorite': False,
         'images': ['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80'],
         'created_at': datetime.now().isoformat()
     }
@@ -530,6 +536,7 @@ def create_property():
         'area_sqft': data.get('area_sqft', 0),
         'builder_id': builder_id,
         'builder_name': builder_name,
+        'is_favorite': data.get('is_favorite', False),
         'images': data.get('images', []),
         'created_at': datetime.now().isoformat()
     }
@@ -620,6 +627,33 @@ def delete_property(property_id):
         notifications.append(new_notification)
     
     return jsonify({'message': 'Property deleted successfully'})
+
+@app.route('/api/admin/properties/<int:property_id>/favorite', methods=['PUT'])
+def toggle_property_favorite(property_id):
+    # In a real app, this would require authentication
+    property = next((p for p in properties if p['id'] == property_id), None)
+    if not property:
+        return jsonify({'message': 'Property not found'}), 404
+    
+    data = request.get_json()
+    new_favorite_status = data.get('is_favorite', False)
+    
+    property['is_favorite'] = new_favorite_status
+    
+    # Add notification for favorite status change
+    status_text = 'added to' if new_favorite_status else 'removed from'
+    new_notification = {
+        'id': max([n['id'] for n in notifications]) + 1 if notifications else 1,
+        'type': 'property',
+        'message': f'Property {status_text} favorites: {property["title"]}',
+        'admin_id': 1,  # Default admin for demo
+        'admin_name': 'Admin User',
+        'created_at': datetime.now().isoformat(),
+        'read': False
+    }
+    notifications.append(new_notification)
+    
+    return jsonify(property)
 
 # Agent Routes
 @app.route('/api/agents', methods=['GET'])

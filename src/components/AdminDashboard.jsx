@@ -11,6 +11,8 @@ import {
   FaEye,
   FaUserFriends,
   FaBuilding,
+  FaHeart,
+  FaRegHeart,
 } from "react-icons/fa";
 import Notification from "./Notification";
 import "./Notification.css";
@@ -172,6 +174,36 @@ const AdminDashboard = () => {
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
     navigate("/admin/login");
+  };
+
+  const handleToggleFavorite = async (propertyId, currentStatus) => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      const response = await fetch(
+        `${API_BASE_URL}/api/admin/properties/${propertyId}/favorite`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ is_favorite: !currentStatus }),
+        }
+      );
+
+      if (response.ok) {
+        // Update local state
+        setProperties((prev) =>
+          prev.map((prop) =>
+            prop.id === propertyId
+              ? { ...prop, is_favorite: !currentStatus }
+              : prop
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -688,6 +720,13 @@ const AdminDashboard = () => {
               ) : (
                 <div className="no-image">No Image</div>
               )}
+              <button
+                className={`favorite-btn ${property.is_favorite ? 'active' : ''}`}
+                onClick={() => handleToggleFavorite(property.id, property.is_favorite)}
+                title={property.is_favorite ? 'Remove from favorites' : 'Add to favorites'}
+              >
+                {property.is_favorite ? <FaHeart /> : <FaRegHeart />}
+              </button>
             </div>
             <div className="property-info">
               <h3>{property.title}</h3>

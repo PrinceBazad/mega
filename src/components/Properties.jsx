@@ -23,7 +23,8 @@ const Properties = () => {
   const applyLocationFilter = (location) => {
     if (!location || !properties.length) return; // Handle undefined/null location and empty properties
 
-    let filtered = [...properties];
+    // First filter by favorites only
+    let filtered = properties.filter(prop => prop.is_favorite === true);
 
     // Apply location filter based on selected location
     if (location === "gurugram") {
