@@ -114,7 +114,7 @@ const AutoScrollSection = () => {
       <div
         className="auto-scroll-page"
         style={{
-          backgroundImage: `url(${pages[currentIndex]?.backgroundImage})`,
+          backgroundImage: pages[currentIndex]?.backgroundImage ? `url(${pages[currentIndex]?.backgroundImage})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

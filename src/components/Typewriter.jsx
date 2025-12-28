@@ -19,7 +19,11 @@ const Typewriter = () => {
         const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
         if (response.ok) {
           const data = await response.json();
-          if (data.hero && data.hero.title) {
+          // First, try to get specific typewriter content
+          if (data.typewriter && data.typewriter.messages) {
+            setMessages(data.typewriter.messages);
+          } else if (data.hero && data.hero.title) {
+            // Fallback to hero content if specific typewriter content is not available
             setMessages([
               data.hero.title,
               data.hero.subtitle || "Discover the perfect place to call home",
@@ -35,7 +39,11 @@ const Typewriter = () => {
 
     // Listen for home content updates
     const handleHomeContentUpdate = (event) => {
-      if (event.detail.section === "hero") {
+      if (event.detail.section === "typewriter") {
+        // Update with specific typewriter content
+        setMessages(event.detail.content.messages || messages);
+      } else if (event.detail.section === "hero") {
+        // Fallback to hero content if typewriter content is not available
         setMessages([
           event.detail.content.title || "Find Your Dream Property",
           event.detail.content.subtitle ||
