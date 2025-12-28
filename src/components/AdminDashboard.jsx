@@ -250,14 +250,18 @@ const AdminDashboard = () => {
           const updatedData = {
             hero: {
               title: "Find Your Dream Property",
-              subtitle: "Discover the perfect place to call home with MegaReality",
-              backgroundImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+              subtitle:
+                "Discover the perfect place to call home with MegaReality",
+              backgroundImage:
+                "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
               ...data.hero,
             },
             about: {
               title: "About MegaReality",
-              description: "We are a leading real estate company dedicated to helping you find your perfect property. With years of experience and a commitment to excellence, we make your property dreams come true.",
-              image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80",
+              description:
+                "We are a leading real estate company dedicated to helping you find your perfect property. With years of experience and a commitment to excellence, we make your property dreams come true.",
+              image:
+                "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80",
               ...data.about,
             },
             contact: {
@@ -268,47 +272,61 @@ const AdminDashboard = () => {
             },
             properties: {
               title: "Featured Properties",
-              description: "Discover our handpicked selection of premium properties",
+              description:
+                "Discover our handpicked selection of premium properties",
               ...data.properties,
             },
             agents: {
               title: "Our Expert Agents",
-              description: "Meet our team of experienced real estate professionals",
+              description:
+                "Meet our team of experienced real estate professionals",
               ...data.agents,
             },
             services: {
               title: "Our Services",
-              description: "Comprehensive real estate solutions tailored to your needs",
+              description:
+                "Comprehensive real estate solutions tailored to your needs",
               ...data.services,
             },
             autoscroll: {
               title: "Auto-Scroll Section",
-              description: "Dynamic content that auto-scrolls to showcase our offerings",
+              description:
+                "Dynamic content that auto-scrolls to showcase our offerings",
               pages: [
                 {
-                  backgroundImage: "https://images.unsplash.com/photo-1560448204-e02f33c33ddc?w=1920&q=80",
+                  backgroundImage:
+                    "https://images.unsplash.com/photo-1560448204-e02f33c33ddc?w=1920&q=80",
                   title: "Premium Properties",
-                  description: "Discover our collection of premium properties in the best locations",
+                  description:
+                    "Discover our collection of premium properties in the best locations",
                 },
                 {
-                  backgroundImage: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1920&q=80",
+                  backgroundImage:
+                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1920&q=80",
                   title: "Luxury Living",
-                  description: "Experience luxury living with our exclusive property collection",
+                  description:
+                    "Experience luxury living with our exclusive property collection",
                 },
                 {
-                  backgroundImage: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=1920&q=80",
+                  backgroundImage:
+                    "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=1920&q=80",
                   title: "Modern Designs",
-                  description: "Modern architectural designs for contemporary living",
+                  description:
+                    "Modern architectural designs for contemporary living",
                 },
                 {
-                  backgroundImage: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80",
+                  backgroundImage:
+                    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80",
                   title: "Affordable Options",
-                  description: "Find affordable options without compromising on quality",
+                  description:
+                    "Find affordable options without compromising on quality",
                 },
                 {
-                  backgroundImage: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&q=80",
+                  backgroundImage:
+                    "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&q=80",
                   title: "Investment Opportunities",
-                  description: "Great investment opportunities with high returns",
+                  description:
+                    "Great investment opportunities with high returns",
                 },
               ],
               ...data.autoscroll,
@@ -1611,7 +1629,8 @@ const AdminDashboard = () => {
                   <strong>Title:</strong> {homeContent.about?.title || ""}
                 </p>
                 <p>
-                  <strong>Description:</strong> {homeContent.about?.description || ""}
+                  <strong>Description:</strong>{" "}
+                  {homeContent.about?.description || ""}
                 </p>
                 <p>
                   <strong>Image:</strong> {homeContent.about?.image || ""}
@@ -1812,7 +1831,8 @@ const AdminDashboard = () => {
                   <strong>Title:</strong> {homeContent.agents?.title || ""}
                 </p>
                 <p>
-                  <strong>Description:</strong> {homeContent.agents?.description || ""}
+                  <strong>Description:</strong>{" "}
+                  {homeContent.agents?.description || ""}
                 </p>
               </div>
             )}
@@ -2054,14 +2074,21 @@ const AdminDashboard = () => {
                 <div className="form-group">
                   <label>Messages (Enter each message on a new line)</label>
                   <textarea
-                    value={editForm.messages ? editForm.messages.join('\n') : ''}
+                    value={
+                      editForm.messages ? editForm.messages.join("\n") : ""
+                    }
                     onChange={(e) => {
-                      const messages = e.target.value.split('\n').filter(msg => msg.trim() !== '');
+                      const messages = e.target.value
+                        .split("\n")
+                        .filter((msg) => msg.trim() !== "");
                       setEditForm({ ...editForm, messages });
                     }}
                     rows="6"
                   />
-                  <small>Each line will be a separate message in the typewriter animation</small>
+                  <small>
+                    Each line will be a separate message in the typewriter
+                    animation
+                  </small>
                 </div>
                 <div className="form-actions">
                   <button
@@ -2084,11 +2111,13 @@ const AdminDashboard = () => {
                   <strong>Messages:</strong>
                 </p>
                 <ul>
-                  {(homeContent.typewriter?.messages || []).map((msg, index) => (
-                    <li key={index}>
-                      {index + 1}. {msg}
-                    </li>
-                  ))}
+                  {(homeContent.typewriter?.messages || []).map(
+                    (msg, index) => (
+                      <li key={index}>
+                        {index + 1}. {msg}
+                      </li>
+                    )
+                  )}
                 </ul>
               </div>
             )}

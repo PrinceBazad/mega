@@ -25,7 +25,7 @@ const Navbar = () => {
   const scrollToSection = (sectionId) => {
     setMobileMenuOpen(false);
     // Check if we're on the homepage
-    if (window.location.pathname === '/') {
+    if (window.location.pathname === "/") {
       // For homepage, scroll to sections
       const element = document.getElementById(sectionId);
       if (element) {
