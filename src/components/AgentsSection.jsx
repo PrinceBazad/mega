@@ -22,11 +22,18 @@ const AgentsSection = () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/agents`);
         const data = await response.json();
-        // Filter to show only favorite agents
+        // Show only favorite agents on homepage, but ensure the section is visible
+        // If there are no favorite agents, show all agents as fallback
         const favoriteAgents = data.filter(
           (agent) => agent.is_favorite === true
         );
-        setAgents(favoriteAgents);
+        
+        if (favoriteAgents.length > 0) {
+          setAgents(favoriteAgents);
+        } else {
+          // If no favorites, show a limited number of all agents
+          setAgents(data.slice(0, 3));
+        }
         setLoading(false);
       } catch (error) {
         console.error("Error fetching agents:", error);
@@ -87,7 +94,7 @@ const AgentsSection = () => {
     setCurrentIndex((prevIndex) => {
       // Move by 3 items at a time for smoother navigation
       const newIndex = prevIndex - 3;
-      return newIndex < 0 ? Math.max(0, agents.length - 3) : newIndex;
+      return Math.max(0, newIndex);
     });
   };
 
@@ -105,10 +112,28 @@ const AgentsSection = () => {
   }
 
   if (agents.length === 0) {
-    return null;
+    return (
+      <section id="agents" className="agents-section">
+        <div className="agents-container">
+          <motion.div
+            className="section-header"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2>{sectionContent.title}</h2>
+            <p>{sectionContent.description}</p>
+          </motion.div>
+          <div className="no-agents-message">
+            <p>No agents available at the moment.</p>
+          </div>
+        </div>
+      </section>
+    );
   }
 
-  // Show 3 agents at a time
+  // Show 3 agents at a time, or fewer if there aren't enough
   const visibleAgents = agents.slice(currentIndex, currentIndex + 3);
 
   return (
@@ -130,7 +155,7 @@ const AgentsSection = () => {
             className="carousel-btn prev-btn"
             onClick={prevAgent}
             aria-label="Previous agents"
-            disabled={agents.length <= 3}
+            disabled={currentIndex === 0}
           >
             <FaArrowLeft />
           </button>
@@ -164,7 +189,7 @@ const AgentsSection = () => {
             className="carousel-btn next-btn"
             onClick={nextAgent}
             aria-label="Next agents"
-            disabled={agents.length <= 3}
+            disabled={currentIndex + 3 >= agents.length}
           >
             <FaArrowRight />
           </button>

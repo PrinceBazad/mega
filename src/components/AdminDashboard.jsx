@@ -11,8 +11,6 @@ import {
   FaEye,
   FaUserFriends,
   FaBuilding,
-  FaHeart,
-  FaRegHeart,
 } from "react-icons/fa";
 import Notification from "./Notification";
 import "./Notification.css";
@@ -959,7 +957,15 @@ const AdminDashboard = () => {
                     : "Add to favorites"
                 }
               >
-                {property.is_favorite ? <FaHeart /> : <FaRegHeart />}
+                {property.is_favorite ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#ff3838" stroke="#ff3838" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e0e0e0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                  </svg>
+                )}
               </button>
             </div>
             <div className="property-info">
@@ -2175,7 +2181,15 @@ const AdminDashboard = () => {
                     : "Add to favorites"
                 }
               >
-                {project.is_favorite ? <FaHeart /> : <FaRegHeart />}
+                {project.is_favorite ? (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="#ff3838" stroke="#ff3838" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                  </svg>
+                ) : (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e0e0e0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                  </svg>
+                )}
               </button>
             </div>
             <div className="property-info">
@@ -2706,7 +2720,15 @@ const AdminDashboard = () => {
                             : "Add to favorites"
                         }
                       >
-                        {agent.is_favorite ? <FaHeart /> : <FaRegHeart />}
+                        {agent.is_favorite ? (
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="#ff3838" stroke="#ff3838" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                          </svg>
+                        ) : (
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#e0e0e0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                          </svg>
+                        )}
                       </button>
                     </div>
                     <div className="agent-card-content">

@@ -181,8 +181,6 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 1.4rem;
-  color: #e0e0e0; /* Subtle gray when not active */
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 0 rgba(255, 107, 107, 0);
   z-index: 10;
@@ -194,11 +192,9 @@
   background: linear-gradient(135deg, #fff 0%, #fff 100%);
   transform: scale(1.2);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  color: #ff6b6b; /* Show red color on hover */
 }
 
 .favorite-btn.active {
-  color: #ff3838;
   background: linear-gradient(135deg, #fff 0%, #ffe5e5 100%);
   border-color: #ff6b6b;
   animation: heartbeat 1.2s ease-in-out;
@@ -206,7 +202,6 @@
 }
 
 .favorite-btn.active:hover {
-  color: #d32f2f;
   transform: scale(1.25);
   box-shadow: 0 6px 15px rgba(255, 56, 56, 0.4);
 }
