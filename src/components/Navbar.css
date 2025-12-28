@@ -28,7 +28,7 @@
 
 @media (max-width: 768px) {
   .navbar {
-    top: 35px; /* Adjusted for mobile TopBar height */
+    top: 35px; /* Align with TopBar height to eliminate gap */
     height: 50px; /* Smaller height for mobile */
   }
 
@@ -247,7 +247,7 @@
   }
 
   .navbar {
-    top: 35px;
+    top: 35px; /* Align with TopBar height */
   }
 
   .mobile-menu {
