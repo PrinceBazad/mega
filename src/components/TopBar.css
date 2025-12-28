@@ -114,24 +114,30 @@
 @media (max-width: 768px) {
   .top-bar {
     padding: 0.2rem 1rem;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.5rem;
+    /* Keep in row layout on all screen sizes */
+    flex-direction: row;
+    justify-content: space-between;
   }
 
   .typewriter-container {
-    width: 100%;
-    justify-content: center;
-    margin-right: 0;
-    order: -1; /* Put it first in the layout */
-    padding: 0.2rem 0;
+    flex: 1;
+    justify-content: flex-start;
+    margin-right: 1rem;
+    /* Reduce text size for smaller screens */
+    max-width: 60%;
   }
 
   .typewriter-text {
-    font-size: 0.8rem;
-    text-align: center;
+    font-size: 0.75rem;
+    text-align: left;
     max-width: 100%;
-    padding: 0 1rem;
+    padding: 0;
+    /* Adjust for smaller screens */
+    min-width: auto;
+  }
+
+  .location-selector {
+    flex-shrink: 0;
   }
 
   .location-button {
@@ -150,5 +156,26 @@
   .location-option {
     padding: 0.5rem 0.6rem;
     font-size: 0.75rem;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+  .top-bar {
+    padding: 0.2rem 0.5rem;
+  }
+  
+  .typewriter-container {
+    max-width: 55%;
+    margin-right: 0.5rem;
+  }
+  
+  .typewriter-text {
+    font-size: 0.7rem;
+  }
+  
+  .location-button {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
   }
 }

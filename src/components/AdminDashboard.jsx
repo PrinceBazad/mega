@@ -2035,6 +2035,64 @@ const AdminDashboard = () => {
               </div>
             )}
           </div>
+
+          {/* Typewriter Section */}
+          <div className="content-section">
+            <div className="section-header">
+              <h3>Typewriter Section</h3>
+              <button
+                className="btn-edit"
+                onClick={() =>
+                  handleEditSection("typewriter", homeContent.typewriter)
+                }
+              >
+                <FaEdit /> Edit
+              </button>
+            </div>
+            {editingSection === "typewriter" ? (
+              <div className="edit-form">
+                <div className="form-group">
+                  <label>Messages (Enter each message on a new line)</label>
+                  <textarea
+                    value={editForm.messages ? editForm.messages.join('\n') : ''}
+                    onChange={(e) => {
+                      const messages = e.target.value.split('\n').filter(msg => msg.trim() !== '');
+                      setEditForm({ ...editForm, messages });
+                    }}
+                    rows="6"
+                  />
+                  <small>Each line will be a separate message in the typewriter animation</small>
+                </div>
+                <div className="form-actions">
+                  <button
+                    className="btn-cancel"
+                    onClick={() => setEditingSection(null)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="btn-submit"
+                    onClick={() => handleSaveContent("typewriter")}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="section-preview">
+                <p>
+                  <strong>Messages:</strong>
+                </p>
+                <ul>
+                  {(homeContent.typewriter?.messages || []).map((msg, index) => (
+                    <li key={index}>
+                      {index + 1}. {msg}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     );
