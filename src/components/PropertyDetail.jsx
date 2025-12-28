@@ -9,8 +9,6 @@ import {
   FaMapMarkerAlt,
   FaChevronLeft,
   FaChevronRight,
-  FaShareAlt,
-  FaHeart,
   FaWhatsapp,
   FaFacebook,
   FaTwitter,
@@ -26,7 +24,7 @@ const PropertyDetail = () => {
   const [error, setError] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [similarProperties, setSimilarProperties] = useState([]);
-  const [liked, setLiked] = useState(false);
+
 
   // Contact form state
   const [contactForm, setContactForm] = useState({
@@ -250,17 +248,7 @@ const PropertyDetail = () => {
             >
               <div className="header-top">
                 <h1>{property.title}</h1>
-                <div className="property-actions">
-                  <button
-                    className={`like-button ${liked ? "liked" : ""}`}
-                    onClick={() => setLiked(!liked)}
-                  >
-                    <FaHeart />
-                  </button>
-                  <button className="share-button">
-                    <FaShareAlt />
-                  </button>
-                </div>
+
               </div>
               <div className="property-location">
                 <FaMapMarkerAlt />
