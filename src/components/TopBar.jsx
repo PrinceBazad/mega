@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Typewriter from "./Typewriter";
 import "./TopBar.css";
 
 const TopBar = () => {
@@ -28,6 +29,9 @@ const TopBar = () => {
 
   return (
     <div className="top-bar">
+      <div className="typewriter-container">
+        <Typewriter />
+      </div>
       <div className="location-selector">
         <button
           className="location-button"

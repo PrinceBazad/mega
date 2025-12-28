@@ -25,6 +25,7 @@ import TopBuilders from "./components/TopBuilders";
 import AgentsSection from "./components/AgentsSection";
 import AgentDetail from "./components/AgentDetail";
 import ProjectDetail from "./components/ProjectDetail";
+import AutoScrollSection from "./components/AutoScrollSection";
 import "./App.css";
 
 function App() {
@@ -66,6 +67,7 @@ function AppContent() {
               <About />
               <Projects />
               <Contact />
+              <AutoScrollSection />
             </div>
           }
         />
