@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { FaChevronLeft, FaChevronRight, FaPlay, FaPause } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa"; // Removed FaPlay, FaPause since we're removing the toggle
 import API_BASE_URL from "../config";
 import "./AutoScrollSection.css";
 
@@ -40,7 +40,7 @@ const AutoScrollSection = () => {
   ]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoScrolling, setIsAutoScrolling] = useState(true);
+  const [isAutoScrolling, setIsAutoScrolling] = useState(true); // Always true now
   const [isHovered, setIsHovered] = useState(false);
   const intervalRef = useRef(null);
 
@@ -76,7 +76,7 @@ const AutoScrollSection = () => {
     };
   }, []);
 
-  // Auto-scroll functionality
+  // Auto-scroll functionality - always on now
   useEffect(() => {
     if (isAutoScrolling && !isHovered) {
       intervalRef.current = setInterval(() => {
@@ -103,9 +103,7 @@ const AutoScrollSection = () => {
     setCurrentIndex(index);
   };
 
-  const toggleAutoScroll = () => {
-    setIsAutoScrolling(!isAutoScrolling);
-  };
+  // Removed toggleAutoScroll function since it's not needed anymore
 
   return (
     <section
@@ -138,38 +136,12 @@ const AutoScrollSection = () => {
           <FaChevronLeft />
         </button>
 
-        <div className="pagination">
-          {pages.map((_, index) => (
-            <button
-              key={index}
-              className={`pagination-dot ${
-                index === currentIndex ? "active" : ""
-              }`}
-              onClick={() => goToSlide(index)}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
-
         <button
           className="nav-button next-button"
           onClick={goToNext}
           aria-label="Next slide"
         >
           <FaChevronRight />
-        </button>
-      </div>
-
-      {/* Auto-scroll toggle */}
-      <div className="auto-scroll-toggle">
-        <button
-          className="auto-scroll-button"
-          onClick={toggleAutoScroll}
-          aria-label={
-            isAutoScrolling ? "Pause auto-scroll" : "Start auto-scroll"
-          }
-        >
-          {isAutoScrolling ? <FaPause /> : <FaPlay />}
         </button>
       </div>
     </section>
