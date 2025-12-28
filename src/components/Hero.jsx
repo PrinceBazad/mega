@@ -5,7 +5,7 @@ import {
   FaSearch,
   FaMapMarkerAlt,
   FaHome,
-  FaDollarSign,
+  FaRupeeSign,
   FaChevronDown,
 } from "react-icons/fa";
 import API_BASE_URL from "../config";
@@ -98,12 +98,17 @@ const Hero = () => {
 
     // Parse price range
     if (searchData.priceRange) {
-      const [min, max] = searchData.priceRange.split("-");
-      if (min && min !== "0") {
-        params.append("min_price", min);
-      }
-      if (max && max !== "+") {
-        params.append("max_price", max);
+      if (searchData.priceRange === "50000000+") {
+        // For "5 Cr+" case
+        params.append("min_price", "50000000");
+      } else {
+        const [min, max] = searchData.priceRange.split("-");
+        if (min && min !== "0") {
+          params.append("min_price", min);
+        }
+        if (max && max !== "+") {
+          params.append("max_price", max);
+        }
       }
     }
 
@@ -271,7 +276,7 @@ const Hero = () => {
             </div>
 
             <div className="search-input-group">
-              <FaDollarSign className="input-icon" />
+              <FaRupeeSign className="input-icon" />
               <select
                 value={searchData.priceRange}
                 onChange={(e) =>
@@ -279,11 +284,11 @@ const Hero = () => {
                 }
               >
                 <option value="">Price Range</option>
-                <option value="0-100000">$0 - $100,000</option>
-                <option value="100000-300000">$100,000 - $300,000</option>
-                <option value="300000-500000">$300,000 - $500,000</option>
-                <option value="500000-1000000">$500,000 - $1M</option>
-                <option value="1000000+">$1M+</option>
+                <option value="0-5000000">₹0 - ₹50 Lakhs</option>
+                <option value="5000000-10000000">₹50 Lakhs - ₹1 Cr</option>
+                <option value="10000000-20000000">₹1 Cr - ₹2 Cr</option>
+                <option value="20000000-50000000">₹2 Cr - ₹5 Cr</option>
+                <option value="50000000+">₹5 Cr+</option>
               </select>
             </div>
 

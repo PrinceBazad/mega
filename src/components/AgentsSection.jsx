@@ -27,7 +27,7 @@ const AgentsSection = () => {
         const favoriteAgents = data.filter(
           (agent) => agent.is_favorite === true
         );
-        
+
         if (favoriteAgents.length > 0) {
           setAgents(favoriteAgents);
         } else {

@@ -296,7 +296,7 @@ const PropertiesPage = () => {
 
           <div className="filter-row">
             <div className="filter-group">
-              <label htmlFor="minPrice">Min Price ($)</label>
+              <label htmlFor="minPrice">Min Price (₹)</label>
               <input
                 type="number"
                 id="minPrice"
@@ -308,7 +308,7 @@ const PropertiesPage = () => {
             </div>
 
             <div className="filter-group">
-              <label htmlFor="maxPrice">Max Price ($)</label>
+              <label htmlFor="maxPrice">Max Price (₹)</label>
               <input
                 type="number"
                 id="maxPrice"
