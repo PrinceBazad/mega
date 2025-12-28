@@ -48,7 +48,18 @@ function AppContent() {
   React.useEffect(() => {
     // Reset the render key when navigating to ensure re-render
     setRenderKey((prev) => prev + 1);
-  }, [location.pathname]);
+    
+    // Handle hash scrolling after component renders
+    if (location.hash) {
+      const hash = location.hash.substring(1); // Remove # symbol
+      setTimeout(() => {
+        const element = document.getElementById(hash);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  }, [location.pathname, location.hash]);
 
   return (
     <div className={`app ${isAdminPage ? "admin-page" : ""}`} key={renderKey}>

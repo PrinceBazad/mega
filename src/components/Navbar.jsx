@@ -24,9 +24,27 @@ const Navbar = () => {
 
   const scrollToSection = (sectionId) => {
     setMobileMenuOpen(false);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    // Check if we're on the homepage
+    if (window.location.pathname === '/') {
+      // For homepage, scroll to sections
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      } else {
+        // If element doesn't exist yet, wait and try again
+        setTimeout(() => {
+          const element = document.getElementById(sectionId);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          } else {
+            // If still not found, navigate to the section
+            window.location.href = `/#${sectionId}`;
+          }
+        }, 300);
+      }
+    } else {
+      // If not on homepage, navigate to homepage and then scroll
+      window.location.href = `/#${sectionId}`;
     }
   };
 
