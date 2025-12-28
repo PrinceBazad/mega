@@ -53,7 +53,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.4) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
   z-index: 1;
 }
 
@@ -114,19 +118,19 @@
   .auto-scroll-section {
     height: 350px;
   }
-  
+
   .auto-scroll-content h2 {
     font-size: 2rem;
   }
-  
+
   .auto-scroll-content p {
     font-size: 1rem;
   }
-  
+
   .auto-scroll-controls {
     padding: 0 1.5rem;
   }
-  
+
   .nav-button {
     width: 50px;
     height: 50px;
@@ -138,19 +142,19 @@
   .auto-scroll-section {
     height: 300px;
   }
-  
+
   .auto-scroll-content h2 {
     font-size: 1.5rem;
   }
-  
+
   .auto-scroll-content p {
     font-size: 0.9rem;
   }
-  
+
   .auto-scroll-controls {
     padding: 0 1rem;
   }
-  
+
   .nav-button {
     width: 45px;
     height: 45px;

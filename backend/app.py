@@ -316,6 +316,52 @@ home_content = {
         'email': 'info@megareality.com',
         'address': '123 Real Estate Avenue, Gurugram, Haryana 122001',
     },
+    'properties': {
+        'title': 'Featured Properties',
+        'description': 'Discover our handpicked selection of premium properties',
+    },
+    'agents': {
+        'title': 'Our Expert Agents',
+        'description': 'Meet our team of experienced real estate professionals',
+    },
+    'services': {
+        'title': 'Our Services',
+        'description': 'Comprehensive real estate solutions tailored to your needs',
+    },
+    'autoscroll': {
+        'title': 'Auto-Scroll Section',
+        'description': 'Dynamic content that auto-scrolls to showcase our offerings',
+        'pages': [
+            {
+                'backgroundImage': 'https://images.unsplash.com/photo-1560448204-e02f33c33ddc?w=1920&q=80',
+                'title': 'Premium Properties',
+                'description': 'Discover our collection of premium properties in the best locations',
+            },
+            {
+                'backgroundImage': 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1920&q=80',
+                'title': 'Luxury Living',
+                'description': 'Experience luxury living with our exclusive property collection',
+            },
+            {
+                'backgroundImage': 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=1920&q=80',
+                'title': 'Modern Designs',
+                'description': 'Modern architectural designs for contemporary living',
+            },
+            {
+                'backgroundImage': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80',
+                'title': 'Affordable Options',
+                'description': 'Find affordable options without compromising on quality',
+            },
+            {
+                'backgroundImage': 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&q=80',
+                'title': 'Investment Opportunities',
+                'description': 'Great investment opportunities with high returns',
+            },
+        ],
+    },
+    'typewriter': {
+        'messages': ['Find Your Dream Property', 'Discover the perfect place to call home'],
+    },
 }
 
 # Routes
@@ -1121,13 +1167,19 @@ def update_home_content(section):
     # In a real app, this would require authentication
     global home_content
     
+    # Check if the section exists in the home_content
     if section not in home_content:
-        return jsonify({'message': 'Invalid section'}), 400
+        # If the section doesn't exist, create it
+        home_content[section] = {}
     
     data = request.get_json()
     
     # Update the specific section
-    home_content[section].update(data)
+    if isinstance(home_content[section], dict) and isinstance(data, dict):
+        home_content[section].update(data)
+    else:
+        # If the data types don't match, replace entirely
+        home_content[section] = data
     
     # Add notification for content update
     new_notification = {

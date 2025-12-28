@@ -9,6 +9,12 @@ const AgentsSection = () => {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [sectionContent, setSectionContent] = useState({
+    title: "Meet Our Agents",
+    description:
+      "Connect with our real estate professionals who are here to guide you",
+  });
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,6 +35,44 @@ const AgentsSection = () => {
     };
 
     fetchAgents();
+  }, []);
+
+  // Fetch section content from admin panel
+  useEffect(() => {
+    const fetchHomeContent = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.agents) {
+            setSectionContent({
+              title: data.agents.title,
+              description: data.agents.description,
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching agents section content:", error);
+      }
+    };
+
+    fetchHomeContent();
+
+    // Listen for home content updates
+    const handleHomeContentUpdate = (event) => {
+      if (event.detail.section === "agents") {
+        setSectionContent({
+          title: event.detail.content.title,
+          description: event.detail.content.description,
+        });
+      }
+    };
+
+    window.addEventListener("homeContentUpdated", handleHomeContentUpdate);
+
+    return () => {
+      window.removeEventListener("homeContentUpdated", handleHomeContentUpdate);
+    };
   }, []);
 
   const nextAgent = () => {
@@ -77,12 +121,8 @@ const AgentsSection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2>
-            Meet Our <span className="highlight">Agents</span>
-          </h2>
-          <p>
-            Connect with our real estate professionals who are here to guide you
-          </p>
+          <h2>{sectionContent.title}</h2>
+          <p>{sectionContent.description}</p>
         </motion.div>
 
         <div className="agents-carousel">

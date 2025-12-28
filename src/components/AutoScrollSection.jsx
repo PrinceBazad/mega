@@ -51,7 +51,11 @@ const AutoScrollSection = () => {
         const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
         if (response.ok) {
           const data = await response.json();
-          if (data.autoScrollSection && data.autoScrollSection.pages) {
+          // First, try to get specific autoscroll content
+          if (data.autoscroll && data.autoscroll.pages) {
+            setPages(data.autoscroll.pages);
+          } else if (data.autoScrollSection && data.autoScrollSection.pages) {
+            // Fallback to old structure if needed
             setPages(data.autoScrollSection.pages);
           }
         }
@@ -64,7 +68,11 @@ const AutoScrollSection = () => {
 
     // Listen for home content updates
     const handleHomeContentUpdate = (event) => {
-      if (event.detail.section === "autoScrollSection") {
+      if (event.detail.section === "autoscroll") {
+        // Update with specific autoscroll content
+        setPages(event.detail.content.pages || pages);
+      } else if (event.detail.section === "autoScrollSection") {
+        // Fallback to old section name
         setPages(event.detail.content.pages || pages);
       }
     };
@@ -114,7 +122,9 @@ const AutoScrollSection = () => {
       <div
         className="auto-scroll-page"
         style={{
-          backgroundImage: pages[currentIndex]?.backgroundImage ? `url(${pages[currentIndex]?.backgroundImage})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          backgroundImage: pages[currentIndex]?.backgroundImage
+            ? `url(${pages[currentIndex]?.backgroundImage})`
+            : "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

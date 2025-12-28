@@ -8,10 +8,49 @@ import {
   FaEnvelope,
   FaMapMarkerAlt,
 } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import API_BASE_URL from "../config";
 import "./Footer.css";
 
 const Footer = () => {
+  const [contactInfo, setContactInfo] = useState({
+    phone: "+1 (555) 123-4567",
+    email: "info@megareality.com",
+    address: "123 Real Estate Ave, City, ST 12345",
+  });
+
   const currentYear = new Date().getFullYear();
+
+  useEffect(() => {
+    const fetchHomeContent = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.contact) {
+            setContactInfo(data.contact);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching footer contact info:", error);
+      }
+    };
+
+    fetchHomeContent();
+
+    // Listen for home content updates
+    const handleHomeContentUpdate = (event) => {
+      if (event.detail.section === "contact") {
+        setContactInfo(event.detail.content);
+      }
+    };
+
+    window.addEventListener("homeContentUpdated", handleHomeContentUpdate);
+
+    return () => {
+      window.removeEventListener("homeContentUpdated", handleHomeContentUpdate);
+    };
+  }, []);
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
@@ -112,15 +151,17 @@ const Footer = () => {
             <ul className="footer-contact">
               <li>
                 <FaMapMarkerAlt />
-                <span>123 Real Estate Ave, City, ST 12345</span>
+                <span>{contactInfo.address}</span>
               </li>
               <li>
                 <FaPhone />
-                <a href="tel:+15551234567">+1 (555) 123-4567</a>
+                <a href={`tel:${contactInfo.phone.replace(/[\s\-\(\)]/g, "")}`}>
+                  {contactInfo.phone}
+                </a>
               </li>
               <li>
                 <FaEnvelope />
-                <a href="mailto:info@megareality.com">info@megareality.com</a>
+                <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
               </li>
             </ul>
           </motion.div>

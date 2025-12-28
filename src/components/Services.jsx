@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   FaHome,
@@ -10,9 +10,15 @@ import {
   FaArrowLeft,
   FaArrowRight,
 } from "react-icons/fa";
+import API_BASE_URL from "../config";
 import "./Services.css";
 
 const Services = () => {
+  const [sectionContent, setSectionContent] = useState({
+    title: "Our Services",
+    description: "Comprehensive real estate solutions tailored to your needs",
+  });
+
   const [services] = useState([
     {
       id: 1,
@@ -60,6 +66,44 @@ const Services = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Fetch section content from admin panel
+  useEffect(() => {
+    const fetchHomeContent = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.services) {
+            setSectionContent({
+              title: data.services.title,
+              description: data.services.description,
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching services section content:", error);
+      }
+    };
+
+    fetchHomeContent();
+
+    // Listen for home content updates
+    const handleHomeContentUpdate = (event) => {
+      if (event.detail.section === "services") {
+        setSectionContent({
+          title: event.detail.content.title,
+          description: event.detail.content.description,
+        });
+      }
+    };
+
+    window.addEventListener("homeContentUpdated", handleHomeContentUpdate);
+
+    return () => {
+      window.removeEventListener("homeContentUpdated", handleHomeContentUpdate);
+    };
+  }, []);
+
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % services.length);
   };
@@ -103,10 +147,8 @@ const Services = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2>
-            Our <span className="highlight">Services</span>
-          </h2>
-          <p>Comprehensive real estate solutions tailored to your needs</p>
+          <h2>{sectionContent.title}</h2>
+          <p>{sectionContent.description}</p>
         </motion.div>
 
         <div className="services-slider">

@@ -16,6 +16,10 @@ const Properties = () => {
   const [loading, setLoading] = useState(true);
   const [locationChanging, setLocationChanging] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState("gurugram");
+  const [sectionContent, setSectionContent] = useState({
+    title: "Featured Properties",
+    description: "Explore our handpicked selection of premium properties",
+  });
 
   const navigate = useNavigate();
 
@@ -108,6 +112,44 @@ const Properties = () => {
     }
   }, [properties, selectedLocation, applyLocationFilter]);
 
+  // Fetch section content from admin panel
+  useEffect(() => {
+    const fetchHomeContent = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
+        if (response.ok) {
+          const data = await response.json();
+          if (data.properties) {
+            setSectionContent({
+              title: data.properties.title,
+              description: data.properties.description,
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching properties section content:", error);
+      }
+    };
+
+    fetchHomeContent();
+
+    // Listen for home content updates
+    const handleHomeContentUpdate = (event) => {
+      if (event.detail.section === "properties") {
+        setSectionContent({
+          title: event.detail.content.title,
+          description: event.detail.content.description,
+        });
+      }
+    };
+
+    window.addEventListener("homeContentUpdated", handleHomeContentUpdate);
+
+    return () => {
+      window.removeEventListener("homeContentUpdated", handleHomeContentUpdate);
+    };
+  }, []);
+
   const handleViewAllProperties = () => {
     // Navigate to the dedicated properties page
     window.location.href = "/properties";
@@ -181,12 +223,12 @@ const Properties = () => {
           transition={{ duration: 0.6 }}
         >
           <h2>
-            Featured Properties in{" "}
+            {sectionContent.title} in{" "}
             {selectedLocation &&
               selectedLocation.charAt(0).toUpperCase() +
                 selectedLocation.slice(1)}
           </h2>
-          <p>Explore our handpicked selection of premium properties</p>
+          <p>{sectionContent.description}</p>
         </motion.div>
 
         {/* Loading indicator when location is changing */}

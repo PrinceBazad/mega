@@ -113,6 +113,58 @@ const AdminDashboard = () => {
       email: "info@megareality.com",
       address: "123 Real Estate Avenue, Gurugram, Haryana 122001",
     },
+    properties: {
+      title: "Featured Properties",
+      description: "Discover our handpicked selection of premium properties",
+    },
+    agents: {
+      title: "Our Expert Agents",
+      description: "Meet our team of experienced real estate professionals",
+    },
+    services: {
+      title: "Our Services",
+      description: "Comprehensive real estate solutions tailored to your needs",
+    },
+    autoscroll: {
+      title: "Auto-Scroll Section",
+      description:
+        "Dynamic content that auto-scrolls to showcase our offerings",
+      pages: [
+        {
+          backgroundImage:
+            "https://images.unsplash.com/photo-1560448204-e02f33c33ddc?w=1920&q=80",
+          title: "Premium Properties",
+          description:
+            "Discover our collection of premium properties in the best locations",
+        },
+        {
+          backgroundImage:
+            "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1920&q=80",
+          title: "Luxury Living",
+          description:
+            "Experience luxury living with our exclusive property collection",
+        },
+        {
+          backgroundImage:
+            "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=1920&q=80",
+          title: "Modern Designs",
+          description: "Modern architectural designs for contemporary living",
+        },
+        {
+          backgroundImage:
+            "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80",
+          title: "Affordable Options",
+          description:
+            "Find affordable options without compromising on quality",
+        },
+        {
+          backgroundImage:
+            "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&q=80",
+          title: "Investment Opportunities",
+          description: "Great investment opportunities with high returns",
+        },
+      ],
+    },
   });
 
   const navigate = useNavigate();
@@ -1571,6 +1623,347 @@ const AdminDashboard = () => {
                 <p>
                   <strong>Address:</strong> {homeContent.contact.address}
                 </p>
+              </div>
+            )}
+          </div>
+
+          {/* Properties Section */}
+          <div className="content-section">
+            <div className="section-header">
+              <h3>Properties Section</h3>
+              <button
+                className="btn-edit"
+                onClick={() =>
+                  handleEditSection("properties", homeContent.properties)
+                }
+              >
+                <FaEdit /> Edit
+              </button>
+            </div>
+            {editingSection === "properties" ? (
+              <div className="edit-form">
+                <div className="form-group">
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    value={editForm.title || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, title: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Description</label>
+                  <textarea
+                    value={editForm.description || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, description: e.target.value })
+                    }
+                    rows="3"
+                  />
+                </div>
+                <div className="form-actions">
+                  <button
+                    className="btn-cancel"
+                    onClick={() => setEditingSection(null)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="btn-submit"
+                    onClick={() => handleSaveContent("properties")}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="section-preview">
+                <p>
+                  <strong>Title:</strong> {homeContent.properties.title}
+                </p>
+                <p>
+                  <strong>Description:</strong>{" "}
+                  {homeContent.properties.description}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Agents Section */}
+          <div className="content-section">
+            <div className="section-header">
+              <h3>Agents Section</h3>
+              <button
+                className="btn-edit"
+                onClick={() => handleEditSection("agents", homeContent.agents)}
+              >
+                <FaEdit /> Edit
+              </button>
+            </div>
+            {editingSection === "agents" ? (
+              <div className="edit-form">
+                <div className="form-group">
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    value={editForm.title || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, title: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Description</label>
+                  <textarea
+                    value={editForm.description || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, description: e.target.value })
+                    }
+                    rows="3"
+                  />
+                </div>
+                <div className="form-actions">
+                  <button
+                    className="btn-cancel"
+                    onClick={() => setEditingSection(null)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="btn-submit"
+                    onClick={() => handleSaveContent("agents")}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="section-preview">
+                <p>
+                  <strong>Title:</strong> {homeContent.agents.title}
+                </p>
+                <p>
+                  <strong>Description:</strong> {homeContent.agents.description}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Services Section */}
+          <div className="content-section">
+            <div className="section-header">
+              <h3>Services Section</h3>
+              <button
+                className="btn-edit"
+                onClick={() =>
+                  handleEditSection("services", homeContent.services)
+                }
+              >
+                <FaEdit /> Edit
+              </button>
+            </div>
+            {editingSection === "services" ? (
+              <div className="edit-form">
+                <div className="form-group">
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    value={editForm.title || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, title: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Description</label>
+                  <textarea
+                    value={editForm.description || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, description: e.target.value })
+                    }
+                    rows="3"
+                  />
+                </div>
+                <div className="form-actions">
+                  <button
+                    className="btn-cancel"
+                    onClick={() => setEditingSection(null)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="btn-submit"
+                    onClick={() => handleSaveContent("services")}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="section-preview">
+                <p>
+                  <strong>Title:</strong> {homeContent.services.title}
+                </p>
+                <p>
+                  <strong>Description:</strong>{" "}
+                  {homeContent.services.description}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Auto-Scroll Section */}
+          <div className="content-section">
+            <div className="section-header">
+              <h3>Auto-Scroll Section</h3>
+              <button
+                className="btn-edit"
+                onClick={() =>
+                  handleEditSection("autoscroll", homeContent.autoscroll)
+                }
+              >
+                <FaEdit /> Edit
+              </button>
+            </div>
+            {editingSection === "autoscroll" ? (
+              <div className="edit-form">
+                <div className="form-group">
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    value={editForm.title || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, title: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Description</label>
+                  <textarea
+                    value={editForm.description || ""}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, description: e.target.value })
+                    }
+                    rows="3"
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Number of Pages</label>
+                  <input
+                    type="number"
+                    value={editForm.pages ? editForm.pages.length : 5}
+                    onChange={(e) => {
+                      const numPages = parseInt(e.target.value) || 5;
+                      // Create new pages array with the specified number of pages
+                      const newPages = [];
+                      for (let i = 0; i < numPages; i++) {
+                        if (editForm.pages && editForm.pages[i]) {
+                          newPages.push(editForm.pages[i]);
+                        } else {
+                          newPages.push({
+                            backgroundImage:
+                              "https://via.placeholder.com/800x600",
+                            title: `Page ${i + 1} Title`,
+                            description: `Description for page ${i + 1}`,
+                          });
+                        }
+                      }
+                      setEditForm({ ...editForm, pages: newPages });
+                    }}
+                    min="1"
+                    max="10"
+                  />
+                </div>
+                {editForm.pages &&
+                  editForm.pages.map((page, index) => (
+                    <div key={index} className="page-edit-section">
+                      <h4>Page {index + 1}</h4>
+                      <div className="form-group">
+                        <label>Background Image URL</label>
+                        <input
+                          type="text"
+                          value={page.backgroundImage || ""}
+                          onChange={(e) => {
+                            const updatedPages = [...editForm.pages];
+                            updatedPages[index] = {
+                              ...updatedPages[index],
+                              backgroundImage: e.target.value,
+                            };
+                            setEditForm({ ...editForm, pages: updatedPages });
+                          }}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Title</label>
+                        <input
+                          type="text"
+                          value={page.title || ""}
+                          onChange={(e) => {
+                            const updatedPages = [...editForm.pages];
+                            updatedPages[index] = {
+                              ...updatedPages[index],
+                              title: e.target.value,
+                            };
+                            setEditForm({ ...editForm, pages: updatedPages });
+                          }}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Description</label>
+                        <textarea
+                          value={page.description || ""}
+                          onChange={(e) => {
+                            const updatedPages = [...editForm.pages];
+                            updatedPages[index] = {
+                              ...updatedPages[index],
+                              description: e.target.value,
+                            };
+                            setEditForm({ ...editForm, pages: updatedPages });
+                          }}
+                          rows="2"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                <div className="form-actions">
+                  <button
+                    className="btn-cancel"
+                    onClick={() => setEditingSection(null)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="btn-submit"
+                    onClick={() => handleSaveContent("autoscroll")}
+                  >
+                    Save
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="section-preview">
+                <p>
+                  <strong>Title:</strong> {homeContent.autoscroll.title}
+                </p>
+                <p>
+                  <strong>Description:</strong>{" "}
+                  {homeContent.autoscroll.description}
+                </p>
+                <p>
+                  <strong>Number of Pages:</strong>{" "}
+                  {homeContent.autoscroll.pages.length}
+                </p>
+                <div className="pages-preview">
+                  {homeContent.autoscroll.pages.map((page, index) => (
+                    <div key={index} className="page-preview">
+                      <p>
+                        <strong>Page {index + 1}:</strong> {page.title}
+                      </p>
+                      <p>{page.description}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
