@@ -246,7 +246,75 @@ const AdminDashboard = () => {
         });
         if (response.ok) {
           const data = await response.json();
-          setHomeContent(data);
+          // Ensure all required sections exist with default values
+          const updatedData = {
+            hero: {
+              title: "Find Your Dream Property",
+              subtitle: "Discover the perfect place to call home with MegaReality",
+              backgroundImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+              ...data.hero,
+            },
+            about: {
+              title: "About MegaReality",
+              description: "We are a leading real estate company dedicated to helping you find your perfect property. With years of experience and a commitment to excellence, we make your property dreams come true.",
+              image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80",
+              ...data.about,
+            },
+            contact: {
+              phone: "+91 98765 43210",
+              email: "info@megareality.com",
+              address: "123 Real Estate Avenue, Gurugram, Haryana 122001",
+              ...data.contact,
+            },
+            properties: {
+              title: "Featured Properties",
+              description: "Discover our handpicked selection of premium properties",
+              ...data.properties,
+            },
+            agents: {
+              title: "Our Expert Agents",
+              description: "Meet our team of experienced real estate professionals",
+              ...data.agents,
+            },
+            services: {
+              title: "Our Services",
+              description: "Comprehensive real estate solutions tailored to your needs",
+              ...data.services,
+            },
+            autoscroll: {
+              title: "Auto-Scroll Section",
+              description: "Dynamic content that auto-scrolls to showcase our offerings",
+              pages: [
+                {
+                  backgroundImage: "https://images.unsplash.com/photo-1560448204-e02f33c33ddc?w=1920&q=80",
+                  title: "Premium Properties",
+                  description: "Discover our collection of premium properties in the best locations",
+                },
+                {
+                  backgroundImage: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1920&q=80",
+                  title: "Luxury Living",
+                  description: "Experience luxury living with our exclusive property collection",
+                },
+                {
+                  backgroundImage: "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=1920&q=80",
+                  title: "Modern Designs",
+                  description: "Modern architectural designs for contemporary living",
+                },
+                {
+                  backgroundImage: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80",
+                  title: "Affordable Options",
+                  description: "Find affordable options without compromising on quality",
+                },
+                {
+                  backgroundImage: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&q=80",
+                  title: "Investment Opportunities",
+                  description: "Great investment opportunities with high returns",
+                },
+              ],
+              ...data.autoscroll,
+            },
+          };
+          setHomeContent(updatedData);
         }
       }
     } catch (error) {
@@ -1466,14 +1534,14 @@ const AdminDashboard = () => {
             ) : (
               <div className="section-preview">
                 <p>
-                  <strong>Title:</strong> {homeContent.hero.title}
+                  <strong>Title:</strong> {homeContent.hero?.title || ""}
                 </p>
                 <p>
-                  <strong>Subtitle:</strong> {homeContent.hero.subtitle}
+                  <strong>Subtitle:</strong> {homeContent.hero?.subtitle || ""}
                 </p>
                 <p>
                   <strong>Background Image:</strong>{" "}
-                  {homeContent.hero.backgroundImage}
+                  {homeContent.hero?.backgroundImage || ""}
                 </p>
               </div>
             )}
@@ -1540,13 +1608,13 @@ const AdminDashboard = () => {
             ) : (
               <div className="section-preview">
                 <p>
-                  <strong>Title:</strong> {homeContent.about.title}
+                  <strong>Title:</strong> {homeContent.about?.title || ""}
                 </p>
                 <p>
-                  <strong>Description:</strong> {homeContent.about.description}
+                  <strong>Description:</strong> {homeContent.about?.description || ""}
                 </p>
                 <p>
-                  <strong>Image:</strong> {homeContent.about.image}
+                  <strong>Image:</strong> {homeContent.about?.image || ""}
                 </p>
               </div>
             )}
@@ -1615,13 +1683,13 @@ const AdminDashboard = () => {
             ) : (
               <div className="section-preview">
                 <p>
-                  <strong>Phone:</strong> {homeContent.contact.phone}
+                  <strong>Phone:</strong> {homeContent.contact?.phone || ""}
                 </p>
                 <p>
-                  <strong>Email:</strong> {homeContent.contact.email}
+                  <strong>Email:</strong> {homeContent.contact?.email || ""}
                 </p>
                 <p>
-                  <strong>Address:</strong> {homeContent.contact.address}
+                  <strong>Address:</strong> {homeContent.contact?.address || ""}
                 </p>
               </div>
             )}
@@ -1680,11 +1748,11 @@ const AdminDashboard = () => {
             ) : (
               <div className="section-preview">
                 <p>
-                  <strong>Title:</strong> {homeContent.properties.title}
+                  <strong>Title:</strong> {homeContent.properties?.title || ""}
                 </p>
                 <p>
                   <strong>Description:</strong>{" "}
-                  {homeContent.properties.description}
+                  {homeContent.properties?.description || ""}
                 </p>
               </div>
             )}
@@ -1741,10 +1809,10 @@ const AdminDashboard = () => {
             ) : (
               <div className="section-preview">
                 <p>
-                  <strong>Title:</strong> {homeContent.agents.title}
+                  <strong>Title:</strong> {homeContent.agents?.title || ""}
                 </p>
                 <p>
-                  <strong>Description:</strong> {homeContent.agents.description}
+                  <strong>Description:</strong> {homeContent.agents?.description || ""}
                 </p>
               </div>
             )}
@@ -1803,11 +1871,11 @@ const AdminDashboard = () => {
             ) : (
               <div className="section-preview">
                 <p>
-                  <strong>Title:</strong> {homeContent.services.title}
+                  <strong>Title:</strong> {homeContent.services?.title || ""}
                 </p>
                 <p>
                   <strong>Description:</strong>{" "}
-                  {homeContent.services.description}
+                  {homeContent.services?.description || ""}
                 </p>
               </div>
             )}
@@ -1944,23 +2012,23 @@ const AdminDashboard = () => {
             ) : (
               <div className="section-preview">
                 <p>
-                  <strong>Title:</strong> {homeContent.autoscroll.title}
+                  <strong>Title:</strong> {homeContent.autoscroll?.title || ""}
                 </p>
                 <p>
                   <strong>Description:</strong>{" "}
-                  {homeContent.autoscroll.description}
+                  {homeContent.autoscroll?.description || ""}
                 </p>
                 <p>
                   <strong>Number of Pages:</strong>{" "}
-                  {homeContent.autoscroll.pages.length}
+                  {homeContent.autoscroll?.pages?.length || 0}
                 </p>
                 <div className="pages-preview">
-                  {homeContent.autoscroll.pages.map((page, index) => (
+                  {(homeContent.autoscroll?.pages || []).map((page, index) => (
                     <div key={index} className="page-preview">
                       <p>
-                        <strong>Page {index + 1}:</strong> {page.title}
+                        <strong>Page {index + 1}:</strong> {page?.title || ""}
                       </p>
-                      <p>{page.description}</p>
+                      <p>{page?.description || ""}</p>
                     </div>
                   ))}
                 </div>
