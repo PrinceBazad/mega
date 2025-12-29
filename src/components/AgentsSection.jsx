@@ -4,6 +4,7 @@ import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import API_BASE_URL from "../config";
 import "./AgentsSection.css";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 
 const AgentsSection = () => {
   const [agents, setAgents] = useState([]);
@@ -44,6 +45,71 @@ const AgentsSection = () => {
     fetchAgents();
   }, []);
 
+  // Listen for agent changes
+  useEffect(() => {
+    const handleAgentsChanged = () => {
+      // Re-fetch agents when changes occur
+      const fetchAgents = async () => {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/agents`);
+          const data = await response.json();
+          // Show only favorite agents on homepage, but ensure the section is visible
+          // If there are no favorite agents, show all agents as fallback
+          const favoriteAgents = data.filter(
+            (agent) => agent.is_favorite === true
+          );
+
+          if (favoriteAgents.length > 0) {
+            setAgents(favoriteAgents);
+          } else {
+            // If no favorites, show a limited number of all agents
+            setAgents(data.slice(0, 3));
+          }
+        } catch (error) {
+          console.error("Error fetching agents:", error);
+        }
+      };
+
+      fetchAgents();
+    };
+
+    const handleFavoritesChanged = (data) => {
+      if (data.entityType === 'agent') {
+        // Re-fetch agents to get updated favorite status
+        const fetchAgents = async () => {
+          try {
+            const response = await fetch(`${API_BASE_URL}/api/agents`);
+            const data = await response.json();
+            // Show only favorite agents on homepage, but ensure the section is visible
+            // If there are no favorite agents, show all agents as fallback
+            const favoriteAgents = data.filter(
+              (agent) => agent.is_favorite === true
+            );
+
+            if (favoriteAgents.length > 0) {
+              setAgents(favoriteAgents);
+            } else {
+              // If no favorites, show a limited number of all agents
+              setAgents(data.slice(0, 3));
+            }
+          } catch (error) {
+            console.error("Error fetching agents:", error);
+          }
+        };
+
+        fetchAgents();
+      }
+    };
+
+    eventBus.on(EVENT_TYPES.AGENTS_CHANGED, handleAgentsChanged);
+    eventBus.on(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+
+    return () => {
+      eventBus.off(EVENT_TYPES.AGENTS_CHANGED, handleAgentsChanged);
+      eventBus.off(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+    };
+  }, []);
+
   // Fetch section content from admin panel
   useEffect(() => {
     const fetchHomeContent = async () => {
@@ -75,10 +141,21 @@ const AgentsSection = () => {
       }
     };
 
+    const handleHomeContentChanged = (data) => {
+      if (data.section === 'agents') {
+        setSectionContent({
+          title: data.content.title,
+          description: data.content.description,
+        });
+      }
+    };
+
     window.addEventListener("homeContentUpdated", handleHomeContentUpdate);
+    eventBus.on(EVENT_TYPES.HOME_CONTENT_CHANGED, handleHomeContentChanged);
 
     return () => {
       window.removeEventListener("homeContentUpdated", handleHomeContentUpdate);
+      eventBus.off(EVENT_TYPES.HOME_CONTENT_CHANGED, handleHomeContentChanged);
     };
   }, []);
 
