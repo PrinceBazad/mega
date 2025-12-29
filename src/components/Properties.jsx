@@ -87,7 +87,11 @@ const Properties = () => {
         const response = await fetch(`${API_BASE_URL}/api/properties`);
         const data = await response.json();
         setProperties(data);
-        setFilteredProperties(data);
+        
+        // Apply favorite filtering immediately
+        const favoriteProperties = data.filter((prop) => prop.is_favorite === true);
+        setFilteredProperties(favoriteProperties);
+        
         setLoading(false);
 
         // Apply location filter after initial load if needed
@@ -160,7 +164,11 @@ const Properties = () => {
           const response = await fetch(`${API_BASE_URL}/api/properties`);
           const data = await response.json();
           setProperties(data);
-          setFilteredProperties(data);
+          
+          // Apply favorite filtering
+          const favoriteProperties = data.filter((prop) => prop.is_favorite === true);
+          setFilteredProperties(favoriteProperties);
+          
         } catch (error) {
           console.error("Error fetching properties:", error);
         }
@@ -177,7 +185,11 @@ const Properties = () => {
             const response = await fetch(`${API_BASE_URL}/api/properties`);
             const data = await response.json();
             setProperties(data);
-            setFilteredProperties(data);
+            
+            // Apply favorite filtering
+            const favoriteProperties = data.filter((prop) => prop.is_favorite === true);
+            setFilteredProperties(favoriteProperties);
+            
           } catch (error) {
             console.error("Error fetching properties:", error);
           }
