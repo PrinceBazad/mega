@@ -999,15 +999,21 @@ def update_property(property_id):
     cursor.execute("SELECT * FROM properties WHERE id = ?", (property_id,))
     updated_property = cursor.fetchone()
     
+    conn.close()
+    
+    if not updated_property:
+        return jsonify({'message': 'Property not found after update'}), 404
+    
     # Get builder name for updated property
     updated_builder_name = ""
     if updated_property['builder_id']:
+        conn = get_db_connection()
+        cursor = conn.cursor()
         cursor.execute("SELECT name FROM builders WHERE id = ?", (updated_property['builder_id'],))
         builder = cursor.fetchone()
         if builder:
             updated_builder_name = builder['name']
-    
-    conn.close()
+        conn.close()
     
     prop_dict = dict(updated_property)
     # Convert images from JSON string to list
