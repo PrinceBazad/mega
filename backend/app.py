@@ -978,6 +978,9 @@ def update_property(property_id):
         images_json = json.dumps(data['images'])
         update_fields.append("images = ?")
         params.append(images_json)
+    if 'is_favorite' in data:
+        update_fields.append("is_favorite = ?")
+        params.append(data['is_favorite'])
     
     if update_fields:
         update_query = f"UPDATE properties SET {', '.join(update_fields)} WHERE id = ?"
@@ -995,6 +998,15 @@ def update_property(property_id):
     # Get updated property
     cursor.execute("SELECT * FROM properties WHERE id = ?", (property_id,))
     updated_property = cursor.fetchone()
+    
+    # Get builder name for updated property
+    updated_builder_name = ""
+    if updated_property['builder_id']:
+        cursor.execute("SELECT name FROM builders WHERE id = ?", (updated_property['builder_id'],))
+        builder = cursor.fetchone()
+        if builder:
+            updated_builder_name = builder['name']
+    
     conn.close()
     
     prop_dict = dict(updated_property)
@@ -1004,7 +1016,7 @@ def update_property(property_id):
     except:
         prop_dict['images'] = []
     
-    prop_dict['builder_name'] = builder_name
+    prop_dict['builder_name'] = updated_builder_name
     
     return jsonify(prop_dict)
 
@@ -1741,6 +1753,15 @@ def update_project(project_id):
     # Get updated project
     cursor.execute("SELECT * FROM projects WHERE id = ?", (project_id,))
     updated_project = cursor.fetchone()
+    
+    # Get builder name for updated project
+    updated_builder_name = ""
+    if updated_project['builder_id']:
+        cursor.execute("SELECT name FROM builders WHERE id = ?", (updated_project['builder_id'],))
+        builder = cursor.fetchone()
+        if builder:
+            updated_builder_name = builder['name']
+    
     conn.close()
     
     proj_dict = dict(updated_project)
@@ -1750,7 +1771,7 @@ def update_project(project_id):
     except:
         proj_dict['images'] = []
     
-    proj_dict['builder_name'] = builder_name
+    proj_dict['builder_name'] = updated_builder_name
     
     return jsonify(proj_dict)
 

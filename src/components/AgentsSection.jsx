@@ -74,7 +74,7 @@ const AgentsSection = () => {
     };
 
     const handleFavoritesChanged = (data) => {
-      if (data.entityType === 'agent') {
+      if (data.entityType === "agent") {
         // Re-fetch agents to get updated favorite status
         const fetchAgents = async () => {
           try {
@@ -142,7 +142,7 @@ const AgentsSection = () => {
     };
 
     const handleHomeContentChanged = (data) => {
-      if (data.section === 'agents') {
+      if (data.section === "agents") {
         setSectionContent({
           title: data.content.title,
           description: data.content.description,
