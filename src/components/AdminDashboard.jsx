@@ -83,6 +83,13 @@ const AdminDashboard = () => {
     builder_id: "",
     images: [""],
     tag: "available",
+    type: "",
+    area: "",
+    price_range: "",
+    address: "",
+    city: "",
+    state: "",
+    pincode: "",
   });
 
   // Builder management state
@@ -1082,6 +1089,13 @@ const AdminDashboard = () => {
           : null,
         images: imageInputs.filter((url) => url.trim() !== ""),
         tag: projectForm.tag,
+        type: projectForm.type,
+        area: projectForm.area,
+        price_range: projectForm.price_range,
+        address: projectForm.address,
+        city: projectForm.city,
+        state: projectForm.state,
+        pincode: projectForm.pincode,
       };
 
       const token = localStorage.getItem("adminToken");
@@ -1110,6 +1124,13 @@ const AdminDashboard = () => {
           builder_id: "",
           images: [""],
           tag: "available",
+          type: "",
+          area: "",
+          price_range: "",
+          address: "",
+          city: "",
+          state: "",
+          pincode: "",
         });
         // Reset image inputs
         setImageInputs([""]);
@@ -1134,6 +1155,13 @@ const AdminDashboard = () => {
       builder_id: project.builder_id?.toString() || "",
       images: project.images || [""],
       tag: project.tag,
+      type: project.type || "",
+      area: project.area || "",
+      price_range: project.price_range || "",
+      address: project.address || "",
+      city: project.city || "",
+      state: project.state || "",
+      pincode: project.pincode || "",
     });
     setImageInputs(project.images || [""]);
     setShowAddProjectForm(true);
@@ -2477,6 +2505,13 @@ const AdminDashboard = () => {
               builder_id: "",
               images: [""],
               tag: "available",
+              type: "",
+              area: "",
+              price_range: "",
+              address: "",
+              city: "",
+              state: "",
+              pincode: "",
             });
             setShowAddProjectForm(true);
           }}
@@ -2791,6 +2826,115 @@ const AdminDashboard = () => {
                           </option>
                         ))}
                       </select>
+                    </div>
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>Project Type</label>
+                      <input
+                        type="text"
+                        value={projectForm.type}
+                        onChange={(e) =>
+                          setProjectForm({
+                            ...projectForm,
+                            type: e.target.value,
+                          })
+                        }
+                        placeholder="e.g., Residential, Commercial"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Area</label>
+                      <input
+                        type="text"
+                        value={projectForm.area}
+                        onChange={(e) =>
+                          setProjectForm({
+                            ...projectForm,
+                            area: e.target.value,
+                          })
+                        }
+                        placeholder="e.g., 50 acres"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Price Range</label>
+                    <input
+                      type="text"
+                      value={projectForm.price_range}
+                      onChange={(e) =>
+                        setProjectForm({
+                          ...projectForm,
+                          price_range: e.target.value,
+                        })
+                      }
+                      placeholder="e.g., ₹80L - ₹2Cr"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label>Address</label>
+                    <input
+                      type="text"
+                      value={projectForm.address}
+                      onChange={(e) =>
+                        setProjectForm({
+                          ...projectForm,
+                          address: e.target.value,
+                        })
+                      }
+                      placeholder="Full address"
+                    />
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label>City</label>
+                      <input
+                        type="text"
+                        value={projectForm.city}
+                        onChange={(e) =>
+                          setProjectForm({
+                            ...projectForm,
+                            city: e.target.value,
+                          })
+                        }
+                        placeholder="City"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>State</label>
+                      <input
+                        type="text"
+                        value={projectForm.state}
+                        onChange={(e) =>
+                          setProjectForm({
+                            ...projectForm,
+                            state: e.target.value,
+                          })
+                        }
+                        placeholder="State"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label>Pincode</label>
+                      <input
+                        type="text"
+                        value={projectForm.pincode}
+                        onChange={(e) =>
+                          setProjectForm({
+                            ...projectForm,
+                            pincode: e.target.value,
+                          })
+                        }
+                        placeholder="Pincode"
+                      />
                     </div>
                   </div>
 

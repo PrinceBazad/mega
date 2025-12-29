@@ -219,7 +219,14 @@ projects = [
         'images': ['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80'],
         'tag': 'latest',
         'is_favorite': False,
-        'created_at': datetime.now().isoformat()
+        'created_at': datetime.now().isoformat(),
+        'type': 'Residential',
+        'area': '50 acres',
+        'price_range': '₹80L - ₹2Cr',
+        'address': 'Sector 23, Golf Course Road',
+        'city': 'Gurugram',
+        'state': 'Haryana',
+        'pincode': '122002'
     },
     {
         'id': 2,
@@ -234,7 +241,14 @@ projects = [
         'images': ['https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80'],
         'tag': 'working',
         'is_favorite': False,
-        'created_at': datetime.now().isoformat()
+        'created_at': datetime.now().isoformat(),
+        'type': 'Apartment',
+        'area': '35 acres',
+        'price_range': '₹60L - ₹1.5Cr',
+        'address': 'Sector 45, Udyog Vihar',
+        'city': 'Gurugram',
+        'state': 'Haryana',
+        'pincode': '122016'
     },
     {
         'id': 3,
@@ -249,7 +263,14 @@ projects = [
         'images': ['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80'],
         'tag': 'available',
         'is_favorite': False,
-        'created_at': datetime.now().isoformat()
+        'created_at': datetime.now().isoformat(),
+        'type': 'Villa',
+        'area': '100 acres',
+        'price_range': '₹1.5Cr - ₹5Cr',
+        'address': 'Lodhi Road',
+        'city': 'New Delhi',
+        'state': 'Delhi',
+        'pincode': '110003'
     }
 ]
 
@@ -1041,7 +1062,14 @@ def create_project():
         'images': data.get('images', []),
         'tag': data.get('tag', 'available'),
         'is_favorite': data.get('is_favorite', False),
-        'created_at': datetime.now().isoformat()
+        'created_at': datetime.now().isoformat(),
+        'type': data.get('type', ''),
+        'area': data.get('area', ''),
+        'price_range': data.get('price_range', ''),
+        'address': data.get('address', ''),
+        'city': data.get('city', ''),
+        'state': data.get('state', ''),
+        'pincode': data.get('pincode', '')
     }
     
     projects.append(new_project)
@@ -1088,6 +1116,13 @@ def update_project(project_id):
     project['builder_name'] = builder_name
     project['images'] = data.get('images', project['images'])
     project['tag'] = data.get('tag', project['tag'])
+    project['type'] = data.get('type', project['type'])
+    project['area'] = data.get('area', project['area'])
+    project['price_range'] = data.get('price_range', project['price_range'])
+    project['address'] = data.get('address', project['address'])
+    project['city'] = data.get('city', project['city'])
+    project['state'] = data.get('state', project['state'])
+    project['pincode'] = data.get('pincode', project['pincode'])
     
     # Add notification for project update
     new_notification = {

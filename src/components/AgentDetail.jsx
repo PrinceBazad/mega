@@ -122,8 +122,6 @@ const AgentDetail = () => {
               )}
             </div>
           </div>
-
-
         </div>
       </div>
     </motion.div>
