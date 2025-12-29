@@ -47,7 +47,9 @@ const AdminDashboard = () => {
     password: "",
     role: "admin",
   });
-  const [imageInputs, setImageInputs] = useState([""]);
+  const [imageInputs, setImageInputs] = useState([""]); // For URL inputs
+  const [imageUploadMethod, setImageUploadMethod] = useState("url"); // 'url' or 'file'
+  const [fileInputs, setFileInputs] = useState([null]); // For file inputs
 
   // Agent management state
   const [agents, setAgents] = useState([]);
@@ -63,6 +65,9 @@ const AdminDashboard = () => {
     image: "",
     bio: "",
   });
+  const [agentImageInputs, setAgentImageInputs] = useState([""]);
+  const [agentImageUploadMethod, setAgentImageUploadMethod] = useState("url");
+  const [agentFileInputs, setAgentFileInputs] = useState([null]);
 
   // Project management state
   const [projects, setProjects] = useState([]);
@@ -90,6 +95,10 @@ const AdminDashboard = () => {
     image: "",
     description: "",
   });
+  const [builderImageInputs, setBuilderImageInputs] = useState([""]);
+  const [builderImageUploadMethod, setBuilderImageUploadMethod] =
+    useState("url");
+  const [builderFileInputs, setBuilderFileInputs] = useState([null]);
 
   // Home content management state
   const [homeContent, setHomeContent] = useState({
@@ -456,18 +465,250 @@ const AdminDashboard = () => {
     }));
   };
 
-  const addImageInput = () => {
-    setImageInputs([...imageInputs, ""]);
-  };
-
-  const removeImageInput = (index) => {
-    if (imageInputs.length > 1) {
-      const newImages = imageInputs.filter((_, i) => i !== index);
+  const handleFileInputChange = (index, file) => {
+    const newFiles = [...fileInputs];
+    newFiles[index] = file;
+    setFileInputs(newFiles);
+    // Convert file to URL for preview
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      const newImages = [...imageInputs];
+      newImages[index] = imageUrl;
       setImageInputs(newImages);
       setFormData((prev) => ({
         ...prev,
         images: newImages,
       }));
+    }
+  };
+
+  const handleImageUploadMethodChange = (method) => {
+    setImageUploadMethod(method);
+    // Reset the other method's inputs when switching
+    if (method === "url") {
+      // Clear file inputs and create empty URL inputs
+      setFileInputs([null]);
+      setImageInputs([""]);
+      setFormData((prev) => ({
+        ...prev,
+        images: [""],
+      }));
+    } else {
+      // Clear URL inputs and create empty file inputs
+      setImageInputs([""]);
+      setFileInputs([null]);
+      setFormData((prev) => ({
+        ...prev,
+        images: [""],
+      }));
+    }
+  };
+
+  const addImageInput = () => {
+    if (imageUploadMethod === "url") {
+      setImageInputs([...imageInputs, ""]);
+      setFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, ""],
+      }));
+    } else {
+      setFileInputs([...fileInputs, null]);
+      // Add an empty URL for preview placeholder
+      setImageInputs([...imageInputs, ""]);
+      setFormData((prev) => ({
+        ...prev,
+        images: [...prev.images, ""],
+      }));
+    }
+  };
+
+  const removeImageInput = (index) => {
+    if (imageInputs.length > 1) {
+      if (imageUploadMethod === "url") {
+        const newImages = imageInputs.filter((_, i) => i !== index);
+        setImageInputs(newImages);
+        setFormData((prev) => ({
+          ...prev,
+          images: newImages,
+        }));
+      } else {
+        const newFiles = fileInputs.filter((_, i) => i !== index);
+        setFileInputs(newFiles);
+        const newImageUrls = imageInputs.filter((_, i) => i !== index);
+        setImageInputs(newImageUrls);
+        setFormData((prev) => ({
+          ...prev,
+          images: newImageUrls,
+        }));
+      }
+    }
+  };
+
+  // Agent image functions
+  const handleAgentImageInputChange = (index, value) => {
+    const newImages = [...agentImageInputs];
+    newImages[index] = value;
+    setAgentImageInputs(newImages);
+    setAgentForm((prev) => ({
+      ...prev,
+      image: newImages[0] || "",
+    }));
+  };
+
+  const handleAgentFileInputChange = (index, file) => {
+    const newFiles = [...agentFileInputs];
+    newFiles[index] = file;
+    setAgentFileInputs(newFiles);
+    // Convert file to URL for preview
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setAgentForm((prev) => ({
+        ...prev,
+        image: imageUrl,
+      }));
+    }
+  };
+
+  const handleAgentImageUploadMethodChange = (method) => {
+    setAgentImageUploadMethod(method);
+    // Reset the other method's inputs when switching
+    if (method === "url") {
+      setAgentFileInputs([null]);
+      setAgentImageInputs([""]);
+      setAgentForm((prev) => ({
+        ...prev,
+        image: "",
+      }));
+    } else {
+      setAgentImageInputs([""]);
+      setAgentFileInputs([null]);
+      setAgentForm((prev) => ({
+        ...prev,
+        image: "",
+      }));
+    }
+  };
+
+  const addAgentImageInput = () => {
+    if (agentImageUploadMethod === "url") {
+      setAgentImageInputs([...agentImageInputs, ""]);
+      setAgentForm((prev) => ({
+        ...prev,
+        image: agentImageInputs[0] || "",
+      }));
+    } else {
+      setAgentFileInputs([...agentFileInputs, null]);
+      setAgentImageInputs([...agentImageInputs, ""]);
+      setAgentForm((prev) => ({
+        ...prev,
+        image: agentImageInputs[0] || "",
+      }));
+    }
+  };
+
+  const removeAgentImageInput = (index) => {
+    if (agentImageInputs.length > 1) {
+      if (agentImageUploadMethod === "url") {
+        const newImages = agentImageInputs.filter((_, i) => i !== index);
+        setAgentImageInputs(newImages);
+        setAgentForm((prev) => ({
+          ...prev,
+          image: newImages[0] || "",
+        }));
+      } else {
+        const newFiles = agentFileInputs.filter((_, i) => i !== index);
+        setAgentFileInputs(newFiles);
+        const newImageUrls = agentImageInputs.filter((_, i) => i !== index);
+        setAgentImageInputs(newImageUrls);
+        setAgentForm((prev) => ({
+          ...prev,
+          image: newImageUrls[0] || "",
+        }));
+      }
+    }
+  };
+
+  // Builder image functions
+  const handleBuilderImageInputChange = (index, value) => {
+    const newImages = [...builderImageInputs];
+    newImages[index] = value;
+    setBuilderImageInputs(newImages);
+    setBuilderForm((prev) => ({
+      ...prev,
+      image: newImages[0] || "",
+    }));
+  };
+
+  const handleBuilderFileInputChange = (index, file) => {
+    const newFiles = [...builderFileInputs];
+    newFiles[index] = file;
+    setBuilderFileInputs(newFiles);
+    // Convert file to URL for preview
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setBuilderForm((prev) => ({
+        ...prev,
+        image: imageUrl,
+      }));
+    }
+  };
+
+  const handleBuilderImageUploadMethodChange = (method) => {
+    setBuilderImageUploadMethod(method);
+    // Reset the other method's inputs when switching
+    if (method === "url") {
+      setBuilderFileInputs([null]);
+      setBuilderImageInputs([""]);
+      setBuilderForm((prev) => ({
+        ...prev,
+        image: "",
+      }));
+    } else {
+      setBuilderImageInputs([""]);
+      setBuilderFileInputs([null]);
+      setBuilderForm((prev) => ({
+        ...prev,
+        image: "",
+      }));
+    }
+  };
+
+  const addBuilderImageInput = () => {
+    if (builderImageUploadMethod === "url") {
+      setBuilderImageInputs([...builderImageInputs, ""]);
+      setBuilderForm((prev) => ({
+        ...prev,
+        image: builderImageInputs[0] || "",
+      }));
+    } else {
+      setBuilderFileInputs([...builderFileInputs, null]);
+      setBuilderImageInputs([...builderImageInputs, ""]);
+      setBuilderForm((prev) => ({
+        ...prev,
+        image: builderImageInputs[0] || "",
+      }));
+    }
+  };
+
+  const removeBuilderImageInput = (index) => {
+    if (builderImageInputs.length > 1) {
+      if (builderImageUploadMethod === "url") {
+        const newImages = builderImageInputs.filter((_, i) => i !== index);
+        setBuilderImageInputs(newImages);
+        setBuilderForm((prev) => ({
+          ...prev,
+          image: newImages[0] || "",
+        }));
+      } else {
+        const newFiles = builderFileInputs.filter((_, i) => i !== index);
+        setBuilderFileInputs(newFiles);
+        const newImageUrls = builderImageInputs.filter((_, i) => i !== index);
+        setBuilderImageInputs(newImageUrls);
+        setBuilderForm((prev) => ({
+          ...prev,
+          image: newImageUrls[0] || "",
+        }));
+      }
     }
   };
 
@@ -681,12 +922,19 @@ const AdminDashboard = () => {
 
       const method = editingAgent ? "PUT" : "POST";
 
+      // Create the payload with the image from the appropriate source
+      const payload = {
+        ...agentForm,
+        image: agentForm.image,
+        properties_sold: parseInt(agentForm.properties_sold) || 0,
+      };
+
       const response = await fetch(url, {
         method: method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(agentForm),
+        body: JSON.stringify(payload),
       });
 
       if (response.ok) {
@@ -703,6 +951,8 @@ const AdminDashboard = () => {
           image: "",
           bio: "",
         });
+        // Reset image inputs
+        setAgentImageInputs([""]);
       } else {
         console.error("Failed to save agent");
       }
@@ -724,6 +974,7 @@ const AdminDashboard = () => {
       image: agent.image,
       bio: agent.bio,
     });
+    setAgentImageInputs([agent.image || ""]);
     setShowAddAgentForm(true);
   };
 
@@ -760,12 +1011,19 @@ const AdminDashboard = () => {
 
       const method = editingBuilder ? "PUT" : "POST";
 
+      // Create the payload with the image from the appropriate source
+      const payload = {
+        ...builderForm,
+        image: builderForm.image,
+        projects_count: parseInt(builderForm.projects_count) || 0,
+      };
+
       const response = await fetch(url, {
         method: method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(builderForm),
+        body: JSON.stringify(payload),
       });
 
       if (response.ok) {
@@ -778,6 +1036,8 @@ const AdminDashboard = () => {
           image: "",
           description: "",
         });
+        // Reset image inputs
+        setBuilderImageInputs([""]);
       } else {
         console.error("Failed to save builder");
       }
@@ -795,6 +1055,7 @@ const AdminDashboard = () => {
       image: builder.image,
       description: builder.description,
     });
+    setBuilderImageInputs([builder.image || ""]);
     setShowAddBuilderForm(true);
   };
 
@@ -819,7 +1080,7 @@ const AdminDashboard = () => {
         builder_id: projectForm.builder_id
           ? parseInt(projectForm.builder_id)
           : null,
-        images: projectForm.images.filter((url) => url.trim() !== ""),
+        images: imageInputs.filter((url) => url.trim() !== ""),
         tag: projectForm.tag,
       };
 
@@ -850,6 +1111,8 @@ const AdminDashboard = () => {
           images: [""],
           tag: "available",
         });
+        // Reset image inputs
+        setImageInputs([""]);
       } else {
         console.error("Failed to save project");
       }
@@ -872,6 +1135,7 @@ const AdminDashboard = () => {
       images: project.images || [""],
       tag: project.tag,
     });
+    setImageInputs(project.images || [""]);
     setShowAddProjectForm(true);
   };
 
@@ -1159,20 +1423,64 @@ const AdminDashboard = () => {
                 </select>
               </div>
 
-              {/* Image URLs Section */}
+              {/* Image Upload Method Selection */}
               <div className="form-group">
-                <label>Image URLs</label>
+                <label>Image Upload Method</label>
+                <div className="image-upload-method">
+                  <button
+                    type="button"
+                    className={`method-btn ${
+                      imageUploadMethod === "url" ? "active" : ""
+                    }`}
+                    onClick={() => handleImageUploadMethodChange("url")}
+                  >
+                    URL
+                  </button>
+                  <button
+                    type="button"
+                    className={`method-btn ${
+                      imageUploadMethod === "file" ? "active" : ""
+                    }`}
+                    onClick={() => handleImageUploadMethodChange("file")}
+                  >
+                    Upload File
+                  </button>
+                </div>
+              </div>
+
+              {/* Image URLs or File Uploads Section */}
+              <div className="form-group">
+                <label>
+                  {imageUploadMethod === "url" ? "Image URLs" : "Upload Images"}
+                </label>
                 <div className="image-inputs">
                   {imageInputs.map((url, index) => (
                     <div key={index} className="image-input-group">
-                      <input
-                        type="url"
-                        placeholder="Enter image URL"
-                        value={url}
-                        onChange={(e) =>
-                          handleImageInputChange(index, e.target.value)
-                        }
-                      />
+                      {imageUploadMethod === "url" ? (
+                        <input
+                          type="url"
+                          placeholder="Enter image URL"
+                          value={url}
+                          onChange={(e) =>
+                            handleImageInputChange(index, e.target.value)
+                          }
+                        />
+                      ) : (
+                        <div className="file-upload-wrapper">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) =>
+                              handleFileInputChange(index, e.target.files[0])
+                            }
+                          />
+                          {url && (
+                            <div className="file-preview">
+                              <img src={url} alt={`Preview ${index + 1}`} />
+                            </div>
+                          )}
+                        </div>
+                      )}
                       {imageInputs.length > 1 && (
                         <button
                           type="button"
@@ -1189,7 +1497,7 @@ const AdminDashboard = () => {
                     className="btn-add-image"
                     onClick={addImageInput}
                   >
-                    + Add Image URL
+                    + Add {imageUploadMethod === "url" ? "Image URL" : "Image"}
                   </button>
                 </div>
               </div>
@@ -2486,38 +2794,74 @@ const AdminDashboard = () => {
                     </div>
                   </div>
 
-                  {/* Image URLs Section */}
+                  {/* Image Upload Method Selection */}
                   <div className="form-group">
-                    <label>Image URLs</label>
+                    <label>Image Upload Method</label>
+                    <div className="image-upload-method">
+                      <button
+                        type="button"
+                        className={`method-btn ${
+                          imageUploadMethod === "url" ? "active" : ""
+                        }`}
+                        onClick={() => handleImageUploadMethodChange("url")}
+                      >
+                        URL
+                      </button>
+                      <button
+                        type="button"
+                        className={`method-btn ${
+                          imageUploadMethod === "file" ? "active" : ""
+                        }`}
+                        onClick={() => handleImageUploadMethodChange("file")}
+                      >
+                        Upload File
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Image URLs or File Uploads Section */}
+                  <div className="form-group">
+                    <label>
+                      {imageUploadMethod === "url"
+                        ? "Image URLs"
+                        : "Upload Images"}
+                    </label>
                     <div className="image-inputs">
-                      {projectForm.images.map((url, index) => (
+                      {imageInputs.map((url, index) => (
                         <div key={index} className="image-input-group">
-                          <input
-                            type="url"
-                            placeholder="Enter image URL"
-                            value={url}
-                            onChange={(e) => {
-                              const newImages = [...projectForm.images];
-                              newImages[index] = e.target.value;
-                              setProjectForm({
-                                ...projectForm,
-                                images: newImages,
-                              });
-                            }}
-                          />
-                          {projectForm.images.length > 1 && (
+                          {imageUploadMethod === "url" ? (
+                            <input
+                              type="url"
+                              placeholder="Enter image URL"
+                              value={url}
+                              onChange={(e) =>
+                                handleImageInputChange(index, e.target.value)
+                              }
+                            />
+                          ) : (
+                            <div className="file-upload-wrapper">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) =>
+                                  handleFileInputChange(
+                                    index,
+                                    e.target.files[0]
+                                  )
+                                }
+                              />
+                              {url && (
+                                <div className="file-preview">
+                                  <img src={url} alt={`Preview ${index + 1}`} />
+                                </div>
+                              )}
+                            </div>
+                          )}
+                          {imageInputs.length > 1 && (
                             <button
                               type="button"
                               className="btn-remove-image"
-                              onClick={() => {
-                                const newImages = projectForm.images.filter(
-                                  (_, i) => i !== index
-                                );
-                                setProjectForm({
-                                  ...projectForm,
-                                  images: newImages,
-                                });
-                              }}
+                              onClick={() => removeImageInput(index)}
                             >
                               Remove
                             </button>
@@ -2527,17 +2871,30 @@ const AdminDashboard = () => {
                       <button
                         type="button"
                         className="btn-add-image"
-                        onClick={() => {
-                          setProjectForm({
-                            ...projectForm,
-                            images: [...projectForm.images, ""],
-                          });
-                        }}
+                        onClick={addImageInput}
                       >
-                        + Add Image URL
+                        + Add{" "}
+                        {imageUploadMethod === "url" ? "Image URL" : "Image"}
                       </button>
                     </div>
                   </div>
+
+                  {imageInputs.some((url) => url.trim() !== "") && (
+                    <div className="image-preview">
+                      <h4>Image Preview</h4>
+                      <div className="preview-images">
+                        {imageInputs
+                          .filter((url) => url.trim() !== "")
+                          .map((url, index) => (
+                            <img
+                              key={index}
+                              src={url}
+                              alt={`Preview ${index + 1}`}
+                            />
+                          ))}
+                      </div>
+                    </div>
+                  )}
 
                   <div className="form-actions">
                     <button
@@ -2685,18 +3042,67 @@ const AdminDashboard = () => {
                           />
                         </div>
                       </div>
+                      {/* Image Upload Method Selection */}
                       <div className="form-group">
-                        <label>Image URL</label>
-                        <input
-                          type="text"
-                          value={agentForm.image}
-                          onChange={(e) =>
-                            setAgentForm({
-                              ...agentForm,
-                              image: e.target.value,
-                            })
-                          }
-                        />
+                        <label>Image Upload Method</label>
+                        <div className="image-upload-method">
+                          <button
+                            type="button"
+                            className={`method-btn ${
+                              agentImageUploadMethod === "url" ? "active" : ""
+                            }`}
+                            onClick={() =>
+                              handleAgentImageUploadMethodChange("url")
+                            }
+                          >
+                            URL
+                          </button>
+                          <button
+                            type="button"
+                            className={`method-btn ${
+                              agentImageUploadMethod === "file" ? "active" : ""
+                            }`}
+                            onClick={() =>
+                              handleAgentImageUploadMethodChange("file")
+                            }
+                          >
+                            Upload File
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Image URL or File Upload Section */}
+                      <div className="form-group">
+                        <label>
+                          {agentImageUploadMethod === "url"
+                            ? "Image URL"
+                            : "Upload Image"}
+                        </label>
+                        {agentImageUploadMethod === "url" ? (
+                          <input
+                            type="url"
+                            placeholder="Enter image URL"
+                            value={agentForm.image}
+                            onChange={(e) =>
+                              handleAgentImageInputChange(0, e.target.value)
+                            }
+                          />
+                        ) : (
+                          <div className="file-upload-wrapper">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) =>
+                                handleAgentFileInputChange(0, e.target.files[0])
+                              }
+                            />
+                            {agentForm.image && (
+                              <div className="file-preview">
+                                <img src={agentForm.image} alt="Preview" />
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                       <div className="form-group">
                         <label>Bio</label>
@@ -2879,18 +3285,74 @@ const AdminDashboard = () => {
                             }
                           />
                         </div>
+                        {/* Image Upload Method Selection */}
                         <div className="form-group">
-                          <label>Image URL</label>
-                          <input
-                            type="text"
-                            value={builderForm.image}
-                            onChange={(e) =>
-                              setBuilderForm({
-                                ...builderForm,
-                                image: e.target.value,
-                              })
-                            }
-                          />
+                          <label>Image Upload Method</label>
+                          <div className="image-upload-method">
+                            <button
+                              type="button"
+                              className={`method-btn ${
+                                builderImageUploadMethod === "url"
+                                  ? "active"
+                                  : ""
+                              }`}
+                              onClick={() =>
+                                handleBuilderImageUploadMethodChange("url")
+                              }
+                            >
+                              URL
+                            </button>
+                            <button
+                              type="button"
+                              className={`method-btn ${
+                                builderImageUploadMethod === "file"
+                                  ? "active"
+                                  : ""
+                              }`}
+                              onClick={() =>
+                                handleBuilderImageUploadMethodChange("file")
+                              }
+                            >
+                              Upload File
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Image URL or File Upload Section */}
+                        <div className="form-group">
+                          <label>
+                            {builderImageUploadMethod === "url"
+                              ? "Image URL"
+                              : "Upload Image"}
+                          </label>
+                          {builderImageUploadMethod === "url" ? (
+                            <input
+                              type="url"
+                              placeholder="Enter image URL"
+                              value={builderForm.image}
+                              onChange={(e) =>
+                                handleBuilderImageInputChange(0, e.target.value)
+                              }
+                            />
+                          ) : (
+                            <div className="file-upload-wrapper">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) =>
+                                  handleBuilderFileInputChange(
+                                    0,
+                                    e.target.files[0]
+                                  )
+                                }
+                              />
+                              {builderForm.image && (
+                                <div className="file-preview">
+                                  <img src={builderForm.image} alt="Preview" />
+                                </div>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
                       <div className="form-group">

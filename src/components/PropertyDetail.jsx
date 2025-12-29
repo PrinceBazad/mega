@@ -25,7 +25,6 @@ const PropertyDetail = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [similarProperties, setSimilarProperties] = useState([]);
 
-
   // Contact form state
   const [contactForm, setContactForm] = useState({
     name: "",
@@ -248,7 +247,6 @@ const PropertyDetail = () => {
             >
               <div className="header-top">
                 <h1>{property.title}</h1>
-
               </div>
               <div className="property-location">
                 <FaMapMarkerAlt />

@@ -1013,6 +1013,52 @@
   }
 }
 
+/* Image Upload Method Selection */
+.image-upload-method {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.method-btn {
+  padding: 8px 15px;
+  border: 2px solid #ddd;
+  background: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.method-btn:hover {
+  border-color: #667eea;
+  background: #f8f9fa;
+}
+
+.method-btn.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.file-upload-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.file-preview {
+  margin-top: 10px;
+}
+
+.file-preview img {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
 /* Additional styles for Auto-Scroll Section editing */
 .page-edit-section {
   padding: 15px;
