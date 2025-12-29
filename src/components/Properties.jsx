@@ -26,24 +26,35 @@ const Properties = () => {
 
   // Apply location filter function
   const applyLocationFilter = (location) => {
-    if (!location || !properties.length) return; // Handle undefined/null location and empty properties
+    if (!properties.length) return; // Handle empty properties
 
-    // First filter by favorites only
-    let filtered = properties.filter((prop) => prop.is_favorite === true);
-
-    // Apply location filter based on selected location
-    if (location === "gurugram") {
-      filtered = filtered.filter(
-        (prop) =>
-          prop.location.toLowerCase().includes("gurugram") ||
-          prop.location.toLowerCase().includes("gurgaon")
-      );
-    } else if (location === "delhi") {
-      filtered = filtered.filter(
-        (prop) =>
-          prop.location.toLowerCase().includes("delhi") ||
-          prop.location.toLowerCase().includes("new delhi")
-      );
+    let filtered;
+    
+    // On homepage, show all favorites regardless of location
+    // For other pages, we can apply location filtering
+    if (window.location.pathname === "/") {
+      // On homepage, show all favorite properties
+      filtered = properties.filter((prop) => prop.is_favorite === true);
+    } else {
+      // On other pages, filter by favorites first
+      filtered = properties.filter((prop) => prop.is_favorite === true);
+      
+      // Apply location filter based on selected location if location is specified
+      if (location && location !== "") {
+        if (location === "gurugram") {
+          filtered = filtered.filter(
+            (prop) =>
+              prop.location.toLowerCase().includes("gurugram") ||
+              prop.location.toLowerCase().includes("gurgaon")
+          );
+        } else if (location === "delhi") {
+          filtered = filtered.filter(
+            (prop) =>
+              prop.location.toLowerCase().includes("delhi") ||
+              prop.location.toLowerCase().includes("new delhi")
+          );
+        }
+      }
     }
 
     setFilteredProperties(filtered);
