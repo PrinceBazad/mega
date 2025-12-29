@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FaMapMarkerAlt, FaSearch } from "react-icons/fa";
 import API_BASE_URL from "../config";
 import "./ProjectsPage.css";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState([]);
@@ -61,6 +62,51 @@ const ProjectsPage = () => {
 
     setFilteredProjects(filtered);
   }, [searchFilters, projects]);
+
+  // Listen for project changes
+  useEffect(() => {
+    const handleProjectsChanged = () => {
+      // Re-fetch projects when changes occur
+      const fetchProjects = async () => {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/projects`);
+          const data = await response.json();
+          setProjects(data);
+          setFilteredProjects(data);
+        } catch (error) {
+          console.error("Error fetching projects:", error);
+        }
+      };
+
+      fetchProjects();
+    };
+
+    const handleFavoritesChanged = (data) => {
+      if (data.entityType === "project") {
+        // Re-fetch projects to get updated favorite status
+        const fetchProjects = async () => {
+          try {
+            const response = await fetch(`${API_BASE_URL}/api/projects`);
+            const data = await response.json();
+            setProjects(data);
+            setFilteredProjects(data);
+          } catch (error) {
+            console.error("Error fetching projects:", error);
+          }
+        };
+
+        fetchProjects();
+      }
+    };
+
+    eventBus.on(EVENT_TYPES.PROJECTS_CHANGED, handleProjectsChanged);
+    eventBus.on(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+
+    return () => {
+      eventBus.off(EVENT_TYPES.PROJECTS_CHANGED, handleProjectsChanged);
+      eventBus.off(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+    };
+  }, []);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;

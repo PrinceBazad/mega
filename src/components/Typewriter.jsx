@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import API_BASE_URL from "../config";
 import "./Typewriter.css";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 
 const Typewriter = () => {
   const [currentText, setCurrentText] = useState("");
@@ -52,10 +53,25 @@ const Typewriter = () => {
       }
     };
 
+    const handleHomeContentChanged = (data) => {
+      if (data.section === "typewriter") {
+        // Update with specific typewriter content
+        setMessages(data.content.messages || messages);
+      } else if (data.section === "hero") {
+        // Fallback to hero content if typewriter content is not available
+        setMessages([
+          data.content.title || "Find Your Dream Property",
+          data.content.subtitle || "Discover the perfect place to call home",
+        ]);
+      }
+    };
+
     window.addEventListener("homeContentUpdated", handleHomeContentUpdate);
+    eventBus.on(EVENT_TYPES.HOME_CONTENT_CHANGED, handleHomeContentChanged);
 
     return () => {
       window.removeEventListener("homeContentUpdated", handleHomeContentUpdate);
+      eventBus.off(EVENT_TYPES.HOME_CONTENT_CHANGED, handleHomeContentChanged);
     };
   }, []);
 

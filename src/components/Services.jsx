@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa";
 import API_BASE_URL from "../config";
 import "./Services.css";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 
 const Services = () => {
   const [sectionContent, setSectionContent] = useState({
@@ -97,10 +98,21 @@ const Services = () => {
       }
     };
 
+    const handleHomeContentChanged = (data) => {
+      if (data.section === "services") {
+        setSectionContent({
+          title: data.content.title,
+          description: data.content.description,
+        });
+      }
+    };
+
     window.addEventListener("homeContentUpdated", handleHomeContentUpdate);
+    eventBus.on(EVENT_TYPES.HOME_CONTENT_CHANGED, handleHomeContentChanged);
 
     return () => {
       window.removeEventListener("homeContentUpdated", handleHomeContentUpdate);
+      eventBus.off(EVENT_TYPES.HOME_CONTENT_CHANGED, handleHomeContentChanged);
     };
   }, []);
 

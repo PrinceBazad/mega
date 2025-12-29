@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Agents.css";
 import API_BASE_URL from "../config";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 
 const Agents = () => {
   const [agents, setAgents] = useState([]);
@@ -11,6 +12,29 @@ const Agents = () => {
 
   useEffect(() => {
     fetchAgents();
+  }, []);
+
+  // Listen for agent changes
+  useEffect(() => {
+    const handleAgentsChanged = () => {
+      // Re-fetch agents when changes occur
+      fetchAgents();
+    };
+
+    const handleFavoritesChanged = (data) => {
+      if (data.entityType === "agent") {
+        // Re-fetch agents to get updated favorite status
+        fetchAgents();
+      }
+    };
+
+    eventBus.on(EVENT_TYPES.AGENTS_CHANGED, handleAgentsChanged);
+    eventBus.on(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+
+    return () => {
+      eventBus.off(EVENT_TYPES.AGENTS_CHANGED, handleAgentsChanged);
+      eventBus.off(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+    };
   }, []);
 
   const fetchAgents = async () => {

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import API_BASE_URL from "../config";
 import "./AgentDetail.css";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 
 const AgentDetail = () => {
   const { id } = useParams();
@@ -30,6 +31,65 @@ const AgentDetail = () => {
     };
 
     fetchAgent();
+  }, [id]);
+
+  // Listen for agent changes
+  useEffect(() => {
+    const handleAgentsChanged = (data) => {
+      if (data.entityId && data.entityId === parseInt(id)) {
+        // Re-fetch agent when this specific agent changes
+        const fetchAgent = async () => {
+          try {
+            setLoading(true);
+            const response = await fetch(`${API_BASE_URL}/api/agents/${id}`);
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setAgent(data);
+          } catch (err) {
+            setError(err.message);
+            console.error("Error fetching agent:", err);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        fetchAgent();
+      }
+    };
+
+    const handleFavoritesChanged = (data) => {
+      if (data.entityType === "agent" && data.entityId === parseInt(id)) {
+        // Re-fetch agent to get updated favorite status
+        const fetchAgent = async () => {
+          try {
+            setLoading(true);
+            const response = await fetch(`${API_BASE_URL}/api/agents/${id}`);
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setAgent(data);
+          } catch (err) {
+            setError(err.message);
+            console.error("Error fetching agent:", err);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        fetchAgent();
+      }
+    };
+
+    eventBus.on(EVENT_TYPES.AGENTS_CHANGED, handleAgentsChanged);
+    eventBus.on(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+
+    return () => {
+      eventBus.off(EVENT_TYPES.AGENTS_CHANGED, handleAgentsChanged);
+      eventBus.off(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+    };
   }, [id]);
 
   if (loading) {

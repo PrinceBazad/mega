@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import API_BASE_URL from "../config";
 import "./About.css";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 
 const About = () => {
   const [aboutContent, setAboutContent] = useState({
@@ -37,10 +38,21 @@ const About = () => {
       }
     };
 
+    const handleHomeContentChanged = (data) => {
+      if (data.section === "about") {
+        setAboutContent((prev) => ({
+          ...prev,
+          ...data.content,
+        }));
+      }
+    };
+
     window.addEventListener("homeContentUpdated", handleHomeContentUpdate);
+    eventBus.on(EVENT_TYPES.HOME_CONTENT_CHANGED, handleHomeContentChanged);
 
     return () => {
       window.removeEventListener("homeContentUpdated", handleHomeContentUpdate);
+      eventBus.off(EVENT_TYPES.HOME_CONTENT_CHANGED, handleHomeContentChanged);
     };
   }, []);
   return (

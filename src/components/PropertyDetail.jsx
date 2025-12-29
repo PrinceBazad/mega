@@ -15,6 +15,7 @@ import {
 } from "react-icons/fa";
 import API_BASE_URL from "../config";
 import "./PropertyDetail.css";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 
 const PropertyDetail = () => {
   const { id } = useParams();
@@ -39,6 +40,31 @@ const PropertyDetail = () => {
   useEffect(() => {
     fetchProperty();
   }, [id]);
+
+  // Listen for property changes
+  useEffect(() => {
+    const handlePropertiesChanged = (data) => {
+      if (data.entityId && data.entityId === parseInt(id)) {
+        // Re-fetch property when this specific property changes
+        fetchProperty();
+      }
+    };
+
+    const handleFavoritesChanged = (data) => {
+      if (data.entityType === "property" && data.entityId === parseInt(id)) {
+        // Re-fetch property to get updated favorite status
+        fetchProperty();
+      }
+    };
+
+    eventBus.on(EVENT_TYPES.PROPERTIES_CHANGED, handlePropertiesChanged);
+    eventBus.on(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+
+    return () => {
+      eventBus.off(EVENT_TYPES.PROPERTIES_CHANGED, handlePropertiesChanged);
+      eventBus.off(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+    };
+  }, [id, fetchProperty]);
 
   const fetchProperty = async () => {
     try {

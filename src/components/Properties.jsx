@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import API_BASE_URL from "../config";
 import "./Properties.css";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 
 const Properties = () => {
   const [properties, setProperties] = useState([]);
@@ -147,6 +148,51 @@ const Properties = () => {
 
     return () => {
       window.removeEventListener("homeContentUpdated", handleHomeContentUpdate);
+    };
+  }, []);
+
+  // Listen for property changes
+  useEffect(() => {
+    const handlePropertiesChanged = () => {
+      // Re-fetch properties when changes occur
+      const fetchProperties = async () => {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/properties`);
+          const data = await response.json();
+          setProperties(data);
+          setFilteredProperties(data);
+        } catch (error) {
+          console.error("Error fetching properties:", error);
+        }
+      };
+
+      fetchProperties();
+    };
+
+    const handleFavoritesChanged = (data) => {
+      if (data.entityType === "property") {
+        // Re-fetch properties to get updated favorite status
+        const fetchProperties = async () => {
+          try {
+            const response = await fetch(`${API_BASE_URL}/api/properties`);
+            const data = await response.json();
+            setProperties(data);
+            setFilteredProperties(data);
+          } catch (error) {
+            console.error("Error fetching properties:", error);
+          }
+        };
+
+        fetchProperties();
+      }
+    };
+
+    eventBus.on(EVENT_TYPES.PROPERTIES_CHANGED, handlePropertiesChanged);
+    eventBus.on(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+
+    return () => {
+      eventBus.off(EVENT_TYPES.PROPERTIES_CHANGED, handlePropertiesChanged);
+      eventBus.off(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
     };
   }, []);
 

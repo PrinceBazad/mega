@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import API_BASE_URL from "../config";
 import "./Hero.css";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 
 const Hero = () => {
   const [searchData, setSearchData] = useState({
@@ -68,11 +69,22 @@ const Hero = () => {
       }
     };
 
+    const handleHomeContentChanged = (data) => {
+      if (data.section === "hero") {
+        setHeroContent((prev) => ({
+          ...prev,
+          ...data.content,
+        }));
+      }
+    };
+
     window.addEventListener("homeContentUpdated", handleHomeContentUpdate);
+    eventBus.on(EVENT_TYPES.HOME_CONTENT_CHANGED, handleHomeContentChanged);
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("homeContentUpdated", handleHomeContentUpdate);
+      eventBus.off(EVENT_TYPES.HOME_CONTENT_CHANGED, handleHomeContentChanged);
     };
   }, [floatingAnim]);
 

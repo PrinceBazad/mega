@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import API_BASE_URL from "../config";
 import "./Projects.css";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -35,6 +36,57 @@ const Projects = () => {
     };
 
     fetchProjects();
+  }, []);
+
+  // Listen for project changes
+  useEffect(() => {
+    const handleProjectsChanged = () => {
+      // Re-fetch projects when changes occur
+      const fetchProjects = async () => {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/projects`);
+          const data = await response.json();
+          // Filter to show only favorite projects
+          const favoriteProjects = data.filter(
+            (project) => project.is_favorite === true
+          );
+          setProjects(favoriteProjects);
+        } catch (error) {
+          console.error("Error fetching projects:", error);
+        }
+      };
+
+      fetchProjects();
+    };
+
+    const handleFavoritesChanged = (data) => {
+      if (data.entityType === "project") {
+        // Re-fetch projects to get updated favorite status
+        const fetchProjects = async () => {
+          try {
+            const response = await fetch(`${API_BASE_URL}/api/projects`);
+            const data = await response.json();
+            // Filter to show only favorite projects
+            const favoriteProjects = data.filter(
+              (project) => project.is_favorite === true
+            );
+            setProjects(favoriteProjects);
+          } catch (error) {
+            console.error("Error fetching projects:", error);
+          }
+        };
+
+        fetchProjects();
+      }
+    };
+
+    eventBus.on(EVENT_TYPES.PROJECTS_CHANGED, handleProjectsChanged);
+    eventBus.on(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+
+    return () => {
+      eventBus.off(EVENT_TYPES.PROJECTS_CHANGED, handleProjectsChanged);
+      eventBus.off(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+    };
   }, []);
 
   const handleViewAllProjects = () => {

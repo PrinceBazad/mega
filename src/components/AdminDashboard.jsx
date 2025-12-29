@@ -16,6 +16,7 @@ import Notification from "./Notification";
 import "./Notification.css";
 import API_BASE_URL from "../config";
 import "./AdminDashboard.css";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("properties");
   const [properties, setProperties] = useState([]);
@@ -382,6 +383,14 @@ const AdminDashboard = () => {
               : prop
           )
         );
+
+        // Emit event to notify other components
+        eventBus.emit(EVENT_TYPES.FAVORITES_CHANGED, {
+          action: "toggle",
+          entityType: "property",
+          entityId: propertyId,
+          newStatus: !currentStatus,
+        });
       }
     } catch (error) {
       console.error("Error toggling favorite:", error);
@@ -411,6 +420,14 @@ const AdminDashboard = () => {
               : agent
           )
         );
+
+        // Emit event to notify other components
+        eventBus.emit(EVENT_TYPES.FAVORITES_CHANGED, {
+          action: "toggle",
+          entityType: "agent",
+          entityId: agentId,
+          newStatus: !currentStatus,
+        });
       }
     } catch (error) {
       console.error("Error toggling agent favorite:", error);
@@ -440,6 +457,14 @@ const AdminDashboard = () => {
               : project
           )
         );
+
+        // Emit event to notify other components
+        eventBus.emit(EVENT_TYPES.FAVORITES_CHANGED, {
+          action: "toggle",
+          entityType: "project",
+          entityId: projectId,
+          newStatus: !currentStatus,
+        });
       }
     } catch (error) {
       console.error("Error toggling project favorite:", error);
@@ -757,6 +782,11 @@ const AdminDashboard = () => {
         setEditingProperty(null);
         resetForm();
         fetchData();
+        // Emit event to notify other components
+        eventBus.emit(EVENT_TYPES.PROPERTIES_CHANGED, {
+          action: editingProperty ? "update" : "create",
+          propertyId: editingProperty ? editingProperty.id : null,
+        });
       } else {
         console.error("Failed to save property");
       }
@@ -857,6 +887,11 @@ const AdminDashboard = () => {
 
         if (response.ok) {
           fetchData();
+          // Emit event to notify other components
+          eventBus.emit(EVENT_TYPES.PROPERTIES_CHANGED, {
+            action: "delete",
+            propertyId: id,
+          });
         } else {
           console.error("Failed to delete property");
         }
@@ -960,6 +995,11 @@ const AdminDashboard = () => {
         });
         // Reset image inputs
         setAgentImageInputs([""]);
+        // Emit event to notify other components
+        eventBus.emit(EVENT_TYPES.AGENTS_CHANGED, {
+          action: editingAgent ? "update" : "create",
+          agentId: editingAgent ? editingAgent.id : null,
+        });
       } else {
         console.error("Failed to save agent");
       }
@@ -998,6 +1038,11 @@ const AdminDashboard = () => {
 
         if (response.ok) {
           fetchData();
+          // Emit event to notify other components
+          eventBus.emit(EVENT_TYPES.AGENTS_CHANGED, {
+            action: "delete",
+            agentId: agentId,
+          });
         } else {
           console.error("Failed to delete agent");
         }
@@ -1045,6 +1090,11 @@ const AdminDashboard = () => {
         });
         // Reset image inputs
         setBuilderImageInputs([""]);
+        // Emit event to notify other components
+        eventBus.emit(EVENT_TYPES.BUILDERS_CHANGED, {
+          action: editingBuilder ? "update" : "create",
+          builderId: editingBuilder ? editingBuilder.id : null,
+        });
       } else {
         console.error("Failed to save builder");
       }
@@ -1134,6 +1184,11 @@ const AdminDashboard = () => {
         });
         // Reset image inputs
         setImageInputs([""]);
+        // Emit event to notify other components
+        eventBus.emit(EVENT_TYPES.PROJECTS_CHANGED, {
+          action: editingProject ? "update" : "create",
+          projectId: editingProject ? editingProject.id : null,
+        });
       } else {
         console.error("Failed to save project");
       }
@@ -1180,6 +1235,11 @@ const AdminDashboard = () => {
 
         if (response.ok) {
           fetchData();
+          // Emit event to notify other components
+          eventBus.emit(EVENT_TYPES.PROJECTS_CHANGED, {
+            action: "delete",
+            projectId: projectId,
+          });
         } else {
           console.error("Failed to delete project");
         }
@@ -1202,6 +1262,11 @@ const AdminDashboard = () => {
 
         if (response.ok) {
           fetchData();
+          // Emit event to notify other components
+          eventBus.emit(EVENT_TYPES.BUILDERS_CHANGED, {
+            action: "delete",
+            builderId: builderId,
+          });
         } else {
           console.error("Failed to delete builder");
         }
@@ -1835,6 +1900,12 @@ const AdminDashboard = () => {
               detail: { section, content: editForm },
             })
           );
+
+          // Emit event to notify other components
+          eventBus.emit(EVENT_TYPES.HOME_CONTENT_CHANGED, {
+            section,
+            content: editForm,
+          });
         }
       } catch (error) {
         console.error(`Error updating ${section} content:`, error);

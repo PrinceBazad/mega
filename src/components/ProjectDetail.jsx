@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import API_BASE_URL from "../config";
 import "./ProjectDetail.css";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 
 const ProjectDetail = () => {
   const { id } = useParams();
@@ -30,6 +31,65 @@ const ProjectDetail = () => {
     };
 
     fetchProject();
+  }, [id]);
+
+  // Listen for project changes
+  useEffect(() => {
+    const handleProjectsChanged = (data) => {
+      if (data.entityId && data.entityId === parseInt(id)) {
+        // Re-fetch project when this specific project changes
+        const fetchProject = async () => {
+          try {
+            setLoading(true);
+            const response = await fetch(`${API_BASE_URL}/api/projects/${id}`);
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setProject(data);
+          } catch (err) {
+            setError(err.message);
+            console.error("Error fetching project:", err);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        fetchProject();
+      }
+    };
+
+    const handleFavoritesChanged = (data) => {
+      if (data.entityType === "project" && data.entityId === parseInt(id)) {
+        // Re-fetch project to get updated favorite status
+        const fetchProject = async () => {
+          try {
+            setLoading(true);
+            const response = await fetch(`${API_BASE_URL}/api/projects/${id}`);
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setProject(data);
+          } catch (err) {
+            setError(err.message);
+            console.error("Error fetching project:", err);
+          } finally {
+            setLoading(false);
+          }
+        };
+
+        fetchProject();
+      }
+    };
+
+    eventBus.on(EVENT_TYPES.PROJECTS_CHANGED, handleProjectsChanged);
+    eventBus.on(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+
+    return () => {
+      eventBus.off(EVENT_TYPES.PROJECTS_CHANGED, handleProjectsChanged);
+      eventBus.off(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+    };
   }, [id]);
 
   if (loading) {

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa"; // Removed FaPlay, FaPause since we're removing the toggle
 import API_BASE_URL from "../config";
 import "./AutoScrollSection.css";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 
 const AutoScrollSection = () => {
   const [pages, setPages] = useState([
@@ -77,10 +78,22 @@ const AutoScrollSection = () => {
       }
     };
 
+    const handleHomeContentChanged = (data) => {
+      if (data.section === "autoscroll") {
+        // Update with specific autoscroll content
+        setPages(data.content.pages || pages);
+      } else if (data.section === "autoScrollSection") {
+        // Fallback to old section name
+        setPages(data.content.pages || pages);
+      }
+    };
+
     window.addEventListener("homeContentUpdated", handleHomeContentUpdate);
+    eventBus.on(EVENT_TYPES.HOME_CONTENT_CHANGED, handleHomeContentChanged);
 
     return () => {
       window.removeEventListener("homeContentUpdated", handleHomeContentUpdate);
+      eventBus.off(EVENT_TYPES.HOME_CONTENT_CHANGED, handleHomeContentChanged);
     };
   }, []);
 
