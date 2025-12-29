@@ -82,8 +82,7 @@
 }
 
 .agent-bio-section h2,
-.agent-contact-section h2,
-.agent-stats-section h2 {
+.agent-contact-section h2 {
   font-size: 1.8rem;
   color: #1a202c;
   margin-bottom: 1.5rem;
@@ -113,37 +112,7 @@
   color: #1a202c;
 }
 
-.agent-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
 
-.stat-card {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  text-align: center;
-  transition: transform 0.3s ease;
-}
-
-.stat-card:hover {
-  transform: translateY(-5px);
-}
-
-.stat-card h3 {
-  font-size: 2rem;
-  color: #667eea;
-  margin: 0 0 0.5rem 0;
-}
-
-.stat-card p {
-  font-size: 1rem;
-  color: #718096;
-  margin: 0;
-}
 
 .error-container {
   text-align: center;
@@ -219,9 +188,7 @@
     font-size: 2rem;
   }
 
-  .agent-stats {
-    grid-template-columns: 1fr;
-  }
+
 
   .back-button {
     margin-bottom: 1rem;

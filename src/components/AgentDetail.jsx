@@ -123,23 +123,7 @@ const AgentDetail = () => {
             </div>
           </div>
 
-          <div className="agent-stats-section">
-            <h2>Performance</h2>
-            <div className="agent-stats">
-              <div className="stat-card">
-                <h3>{agent.properties_sold}</h3>
-                <p>Properties Sold</p>
-              </div>
-              <div className="stat-card">
-                <h3>{agent.average_sale_price}</h3>
-                <p>Avg. Sale Price</p>
-              </div>
-              <div className="stat-card">
-                <h3>{agent.satisfaction_rate}%</h3>
-                <p>Client Satisfaction</p>
-              </div>
-            </div>
-          </div>
+
         </div>
       </div>
     </motion.div>
