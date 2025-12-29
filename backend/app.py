@@ -1080,6 +1080,14 @@ def toggle_property_favorite(property_id):
         VALUES (?, ?, ?, ?, ?, ?)
     ''', ('property', f'Property {status_text} favorites: {updated_property["title"]}', 1, 'Admin User', datetime.now().isoformat(), 0))
     
+    # Get builder name for updated property
+    updated_builder_name = ""
+    if updated_property['builder_id']:
+        cursor.execute("SELECT name FROM builders WHERE id = ?", (updated_property['builder_id'],))
+        builder = cursor.fetchone()
+        if builder:
+            updated_builder_name = builder['name']
+    
     conn.commit()
     conn.close()
     
@@ -1090,19 +1098,7 @@ def toggle_property_favorite(property_id):
     except:
         prop_dict['images'] = []
     
-    # Get builder name
-    if prop_dict['builder_id']:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT name FROM builders WHERE id = ?", (prop_dict['builder_id'],))
-        builder = cursor.fetchone()
-        conn.close()
-        if builder:
-            prop_dict['builder_name'] = builder['name']
-        else:
-            prop_dict['builder_name'] = ""
-    else:
-        prop_dict['builder_name'] = ""
+    prop_dict['builder_name'] = updated_builder_name
     
     return jsonify(prop_dict)
 
@@ -1835,6 +1831,14 @@ def toggle_project_favorite(project_id):
         VALUES (?, ?, ?, ?, ?, ?)
     ''', ('project', f'Project {status_text} favorites: {updated_project["title"]}', 1, 'Admin User', datetime.now().isoformat(), 0))
     
+    # Get builder name for updated project
+    updated_builder_name = ""
+    if updated_project['builder_id']:
+        cursor.execute("SELECT name FROM builders WHERE id = ?", (updated_project['builder_id'],))
+        builder = cursor.fetchone()
+        if builder:
+            updated_builder_name = builder['name']
+    
     conn.commit()
     conn.close()
     
@@ -1845,19 +1849,7 @@ def toggle_project_favorite(project_id):
     except:
         proj_dict['images'] = []
     
-    # Get builder name
-    if proj_dict['builder_id']:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        cursor.execute("SELECT name FROM builders WHERE id = ?", (proj_dict['builder_id'],))
-        builder = cursor.fetchone()
-        conn.close()
-        if builder:
-            proj_dict['builder_name'] = builder['name']
-        else:
-            proj_dict['builder_name'] = ""
-    else:
-        proj_dict['builder_name'] = ""
+    proj_dict['builder_name'] = updated_builder_name
     
     return jsonify(proj_dict)
 
