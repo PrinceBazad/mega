@@ -613,6 +613,31 @@ def reset_favorites():
     
     return jsonify({'message': 'Favorites reset successfully'})
 
+
+@app.route('/api/admin/verify-favorites', methods=['GET'])
+def verify_favorites():
+    """Endpoint to verify favorite counts in database"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Count favorites
+    cursor.execute("SELECT COUNT(*) FROM properties WHERE is_favorite = 1")
+    property_favorites = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM agents WHERE is_favorite = 1")
+    agent_favorites = cursor.fetchone()[0]
+    
+    cursor.execute("SELECT COUNT(*) FROM projects WHERE is_favorite = 1")
+    project_favorites = cursor.fetchone()[0]
+    
+    conn.close()
+    
+    return jsonify({
+        'properties': property_favorites,
+        'agents': agent_favorites,
+        'projects': project_favorites
+    })
+
 # Admin Authentication
 @app.route('/api/admin/login', methods=['POST'])
 def admin_login():
