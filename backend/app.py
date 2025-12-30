@@ -178,6 +178,7 @@ def init_db():
                 'bathrooms': 4,
                 'area_sqft': 4500,
                 'builder_id': 1,
+                'is_favorite': 1,
                 'images': json.dumps(['https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80']),
                 'created_at': datetime.now().isoformat()
             },
@@ -206,6 +207,7 @@ def init_db():
                 'bathrooms': 3,
                 'area_sqft': 2100,
                 'builder_id': 1,
+                'is_favorite': 1,
                 'images': json.dumps(['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80']),
                 'created_at': datetime.now().isoformat()
             },
@@ -234,6 +236,7 @@ def init_db():
                 'bathrooms': 4,
                 'area_sqft': 3800,
                 'builder_id': 5,
+                'is_favorite': 1,
                 'images': json.dumps(['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80']),
                 'created_at': datetime.now().isoformat()
             },
@@ -248,6 +251,7 @@ def init_db():
                 'bathrooms': 2,
                 'area_sqft': 1100,
                 'builder_id': 6,
+                'is_favorite': 0,
                 'images': json.dumps(['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80']),
                 'created_at': datetime.now().isoformat()
             }
@@ -256,12 +260,12 @@ def init_db():
         for prop in sample_properties:
             cursor.execute('''
                 INSERT INTO properties (title, description, price, location, property_type, 
-                status, bedrooms, bathrooms, area_sqft, builder_id, images, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                status, bedrooms, bathrooms, area_sqft, builder_id, is_favorite, images, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 prop['title'], prop['description'], prop['price'], prop['location'],
-                prop['property_type'], prop['status'], prop['bedrooms'], prop['bathrooms'],
-                prop['area_sqft'], prop['builder_id'], prop['images'], prop['created_at']
+                prop['property_type'], prop['status'], prop['bedrooms'], prop['bathrooms'], 
+                prop['area_sqft'], prop['builder_id'], prop['is_favorite'], prop['images'], prop['created_at']
             ))
     
     # Check if sample agents exist
@@ -278,7 +282,7 @@ def init_db():
                 'properties_sold': 120,
                 'image': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
                 'bio': 'Specialized in luxury properties and commercial real estate with extensive knowledge of local market trends.',
-                'is_favorite': 0
+                'is_favorite': 1
             },
             {
                 'name': 'Sarah Johnson',
@@ -289,7 +293,7 @@ def init_db():
                 'properties_sold': 95,
                 'image': 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop',
                 'bio': 'Focuses on residential properties with expertise in first-time home buyers and family housing.',
-                'is_favorite': 0
+                'is_favorite': 1
             },
             {
                 'name': 'Michael Brown',
@@ -341,7 +345,7 @@ def init_db():
                 'builder_id': 1,
                 'images': json.dumps(['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80']),
                 'tag': 'latest',
-                'is_favorite': 0,
+                'is_favorite': 1,
                 'created_at': datetime.now().isoformat(),
                 'type': 'Residential',
                 'area': '50 acres',
@@ -381,7 +385,7 @@ def init_db():
                 'builder_id': 3,
                 'images': json.dumps(['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80']),
                 'tag': 'available',
-                'is_favorite': 0,
+                'is_favorite': 1,
                 'created_at': datetime.now().isoformat(),
                 'type': 'Villa',
                 'area': '100 acres',
@@ -529,6 +533,34 @@ def init_db():
                 INSERT INTO home_content (section, content)
                 VALUES (?, ?)
             ''', (section, json.dumps(content)))
+    
+    # Set some favorites for existing data if no favorites exist
+    # Check if there are any favorite properties
+    cursor.execute("SELECT COUNT(*) FROM properties WHERE is_favorite = 1")
+    if cursor.fetchone()[0] == 0:
+        # If no favorites exist, make the first 3 properties favorites
+        cursor.execute("SELECT id FROM properties ORDER BY id LIMIT 3")
+        favorite_property_ids = [row[0] for row in cursor.fetchall()]
+        for prop_id in favorite_property_ids:
+            cursor.execute("UPDATE properties SET is_favorite = 1 WHERE id = ?", (prop_id,))
+    
+    # Check if there are any favorite agents
+    cursor.execute("SELECT COUNT(*) FROM agents WHERE is_favorite = 1")
+    if cursor.fetchone()[0] == 0:
+        # If no favorites exist, make the first 2 agents favorites
+        cursor.execute("SELECT id FROM agents ORDER BY id LIMIT 2")
+        favorite_agent_ids = [row[0] for row in cursor.fetchall()]
+        for agent_id in favorite_agent_ids:
+            cursor.execute("UPDATE agents SET is_favorite = 1 WHERE id = ?", (agent_id,))
+    
+    # Check if there are any favorite projects
+    cursor.execute("SELECT COUNT(*) FROM projects WHERE is_favorite = 1")
+    if cursor.fetchone()[0] == 0:
+        # If no favorites exist, make the first 2 projects favorites
+        cursor.execute("SELECT id FROM projects ORDER BY id LIMIT 2")
+        favorite_project_ids = [row[0] for row in cursor.fetchall()]
+        for project_id in favorite_project_ids:
+            cursor.execute("UPDATE projects SET is_favorite = 1 WHERE id = ?", (project_id,))
     
     conn.commit()
     conn.close()

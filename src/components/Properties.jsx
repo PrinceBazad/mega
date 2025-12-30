@@ -29,7 +29,7 @@ const Properties = () => {
     if (!properties.length) return; // Handle empty properties
 
     let filtered;
-    
+
     // On homepage, show all favorites regardless of location
     // For other pages, we can apply location filtering
     if (window.location.pathname === "/") {
@@ -38,7 +38,7 @@ const Properties = () => {
     } else {
       // On other pages, filter by favorites first
       filtered = properties.filter((prop) => prop.is_favorite === true);
-      
+
       // Apply location filter based on selected location if location is specified
       if (location && location !== "") {
         if (location === "gurugram") {
@@ -98,11 +98,13 @@ const Properties = () => {
         const response = await fetch(`${API_BASE_URL}/api/properties`);
         const data = await response.json();
         setProperties(data);
-        
+
         // Apply favorite filtering immediately
-        const favoriteProperties = data.filter((prop) => prop.is_favorite === true);
+        const favoriteProperties = data.filter(
+          (prop) => prop.is_favorite === true
+        );
         setFilteredProperties(favoriteProperties);
-        
+
         setLoading(false);
 
         // Apply location filter after initial load if needed
@@ -175,11 +177,12 @@ const Properties = () => {
           const response = await fetch(`${API_BASE_URL}/api/properties`);
           const data = await response.json();
           setProperties(data);
-          
+
           // Apply favorite filtering
-          const favoriteProperties = data.filter((prop) => prop.is_favorite === true);
+          const favoriteProperties = data.filter(
+            (prop) => prop.is_favorite === true
+          );
           setFilteredProperties(favoriteProperties);
-          
         } catch (error) {
           console.error("Error fetching properties:", error);
         }
@@ -196,11 +199,12 @@ const Properties = () => {
             const response = await fetch(`${API_BASE_URL}/api/properties`);
             const data = await response.json();
             setProperties(data);
-            
+
             // Apply favorite filtering
-            const favoriteProperties = data.filter((prop) => prop.is_favorite === true);
+            const favoriteProperties = data.filter(
+              (prop) => prop.is_favorite === true
+            );
             setFilteredProperties(favoriteProperties);
-            
           } catch (error) {
             console.error("Error fetching properties:", error);
           }
