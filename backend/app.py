@@ -180,374 +180,40 @@ def init_db():
             VALUES (?, ?, ?, ?, ?)
         ''', ('Admin User', 'admin@example.com', admin_password_hash, 'admin', datetime.now().isoformat()))
     
-    # Check if sample properties exist
+    # Don't insert sample properties - only admin-added content will be available
+    # Check if properties exist
     cursor.execute("SELECT COUNT(*) FROM properties")
     if cursor.fetchone()[0] == 0:
-        # Insert sample properties
-        sample_properties = [
-            {
-                'title': 'Luxury Villa in Sector 15',
-                'description': 'Beautiful modern villa with stunning garden views in the heart of Gurugram',
-                'price': 2500000,
-                'location': 'Sector 15, Gurugram, Haryana',
-                'property_type': 'House',
-                'status': 'Available',
-                'bedrooms': 5,
-                'bathrooms': 4,
-                'area_sqft': 4500,
-                'builder_id': 1,
-                'images': json.dumps(['https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80']),
-                'created_at': datetime.now().isoformat()
-            },
-            {
-                'title': 'Modern Apartment in MG Road',
-                'description': 'Contemporary apartment in prime location of Gurugram',
-                'price': 850000,
-                'location': 'MG Road, Gurugram, Haryana',
-                'property_type': 'Flat',
-                'status': 'Available',
-                'bedrooms': 2,
-                'bathrooms': 2,
-                'area_sqft': 1200,
-                'builder_id': 2,
-                'images': json.dumps(['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80']),
-                'created_at': datetime.now().isoformat()
-            },
-            {
-                'title': 'Premium Condo in DLF Phase 1',
-                'description': 'Luxury condo with premium amenities in DLF Phase 1',
-                'price': 1200000,
-                'location': 'DLF Phase 1, Gurugram, Haryana',
-                'property_type': 'Flat',
-                'status': 'Available',
-                'bedrooms': 3,
-                'bathrooms': 3,
-                'area_sqft': 2100,
-                'builder_id': 1,
-                'images': json.dumps(['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80']),
-                'created_at': datetime.now().isoformat()
-            },
-            {
-                'title': 'Spacious House in South Delhi',
-                'description': 'Elegant house with beautiful garden in South Delhi',
-                'price': 3200000,
-                'location': 'South Delhi, New Delhi',
-                'property_type': 'House',
-                'status': 'Available',
-                'bedrooms': 4,
-                'bathrooms': 3,
-                'area_sqft': 3500,
-                'builder_id': 3,
-                'is_favorite': 0,
-                'images': json.dumps(['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80']),
-                'created_at': datetime.now().isoformat()
-            },
-            {
-                'title': 'Luxury Penthouse in Central Delhi',
-                'description': 'Stunning penthouse with panoramic city views',
-                'price': 4500000,
-                'location': 'Central Delhi, New Delhi',
-                'property_type': 'Flat',
-                'status': 'Available',
-                'bedrooms': 4,
-                'bathrooms': 4,
-                'area_sqft': 3800,
-                'builder_id': 5,
-                'images': json.dumps(['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80']),
-                'created_at': datetime.now().isoformat()
-            },
-            {
-                'title': 'Affordable Apartment in East Delhi',
-                'description': 'Well-designed apartment in a developing locality of East Delhi',
-                'price': 650000,
-                'location': 'East Delhi, New Delhi',
-                'property_type': 'Flat',
-                'status': 'Available',
-                'bedrooms': 2,
-                'bathrooms': 2,
-                'area_sqft': 1100,
-                'builder_id': 6,
-                'images': json.dumps(['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80']),
-                'created_at': datetime.now().isoformat()
-            }
-        ]
-        
-        for prop in sample_properties:
-            cursor.execute('''
-                INSERT INTO properties (title, description, price, location, property_type, 
-                status, bedrooms, bathrooms, area_sqft, builder_id, images, is_favorite, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (
-                prop['title'], prop['description'], prop['price'], prop['location'],
-                prop['property_type'], prop['status'], prop['bedrooms'], prop['bathrooms'], 
-                prop['area_sqft'], prop['builder_id'], prop['images'], prop.get('is_favorite', 0), prop['created_at']
-            ))
+        # No sample properties will be added - only admin-added content will be available
+        pass
     
-    # Check if sample agents exist
+    # Don't insert sample agents - only admin-added content will be available
+    # Check if agents exist
     cursor.execute("SELECT COUNT(*) FROM agents")
     if cursor.fetchone()[0] == 0:
-        # Insert sample agents
-        sample_agents = [
-            {
-                'name': 'John Smith',
-                'email': 'john.smith@megareality.com',
-                'phone': '+91 98765 43210',
-                'position': 'Senior Real Estate Agent',
-                'experience': '8 years',
-                'properties_sold': 120,
-                'image': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
-                'bio': 'Specialized in luxury properties and commercial real estate with extensive knowledge of local market trends.',
-                'is_favorite': 1
-            },
-            {
-                'name': 'Sarah Johnson',
-                'email': 'sarah.johnson@megareality.com',
-                'phone': '+91 98765 43211',
-                'position': 'Residential Property Expert',
-                'experience': '6 years',
-                'properties_sold': 95,
-                'image': 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop',
-                'bio': 'Focuses on residential properties with expertise in first-time home buyers and family housing.',
-                'is_favorite': 1
-            },
-            {
-                'name': 'Michael Brown',
-                'email': 'michael.brown@megareality.com',
-                'phone': '+91 98765 43212',
-                'position': 'Commercial Real Estate Specialist',
-                'experience': '10 years',
-                'properties_sold': 150,
-                'image': 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop',
-                'bio': 'Expert in commercial properties, office spaces, and retail locations with strong negotiation skills.',
-                'is_favorite': 0
-            },
-            {
-                'name': 'Emily Davis',
-                'email': 'emily.davis@megareality.com',
-                'phone': '+91 98765 43213',
-                'position': 'Property Investment Advisor',
-                'experience': '7 years',
-                'properties_sold': 110,
-                'image': 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop',
-                'bio': 'Helps clients with property investment strategies and portfolio management for maximum ROI.',
-                'is_favorite': 0
-            }
-        ]
-        
-        for agent in sample_agents:
-            cursor.execute('''
-                INSERT INTO agents (name, email, phone, position, experience, properties_sold, 
-                image, bio, is_favorite)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (
-                agent['name'], agent['email'], agent['phone'], agent['position'],
-                agent['experience'], agent['properties_sold'], agent['image'],
-                agent['bio'], agent.get('is_favorite', 0)
-            ))
+        # No sample agents will be added - only admin-added content will be available
+        pass
     
-    # Check if sample projects exist
+    # Don't insert sample projects - only admin-added content will be available
+    # Check if projects exist
     cursor.execute("SELECT COUNT(*) FROM projects")
     if cursor.fetchone()[0] == 0:
-        # Insert sample projects
-        sample_projects = [
-            {
-                'title': 'Skyline Heights',
-                'description': 'Luxury residential towers with panoramic city views',
-                'location': 'Sector 23, Gurugram, Haryana',
-                'status': 'Available',
-                'completion_date': '2025-12-31',
-                'total_units': 120,
-                'builder_id': 1,
-                'images': json.dumps(['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80']),
-                'tag': 'latest',
-                'is_favorite': 1,
-                'created_at': datetime.now().isoformat(),
-                'type': 'Residential',
-                'area': '50 acres',
-                'price_range': '₹80L - ₹2Cr',
-                'address': 'Sector 23, Golf Course Road',
-                'city': 'Gurugram',
-                'state': 'Haryana',
-                'pincode': '122002'
-            },
-            {
-                'title': 'Green Valley Apartments',
-                'description': 'Eco-friendly residential complex with green spaces',
-                'location': 'Sector 45, Gurugram, Haryana',
-                'status': 'Working',
-                'completion_date': '2026-06-30',
-                'total_units': 80,
-                'builder_id': 2,
-                'images': json.dumps(['https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80']),
-                'tag': 'working',
-                'is_favorite': 0,
-                'created_at': datetime.now().isoformat(),
-                'type': 'Apartment',
-                'area': '35 acres',
-                'price_range': '₹60L - ₹1.5Cr',
-                'address': 'Sector 45, Udyog Vihar',
-                'city': 'Gurugram',
-                'state': 'Haryana',
-                'pincode': '122016'
-            },
-            {
-                'title': 'Royal Enclave',
-                'description': 'Premium gated community with luxury amenities',
-                'location': 'South Delhi, New Delhi',
-                'status': 'Available',
-                'completion_date': '2024-05-15',
-                'total_units': 200,
-                'builder_id': 3,
-                'images': json.dumps(['https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&q=80']),
-                'tag': 'available',
-                'is_favorite': 1,
-                'created_at': datetime.now().isoformat(),
-                'type': 'Villa',
-                'area': '100 acres',
-                'price_range': '₹1.5Cr - ₹5Cr',
-                'address': 'Lodhi Road',
-                'city': 'New Delhi',
-                'state': 'Delhi',
-                'pincode': '110003'
-            }
-        ]
-        
-        for project in sample_projects:
-            cursor.execute('''
-                INSERT INTO projects (title, description, location, status, completion_date,
-                total_units, builder_id, images, tag, is_favorite, created_at, type, area,
-                price_range, address, city, state, pincode)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (
-                project['title'], project['description'], project['location'], project['status'],
-                project['completion_date'], project['total_units'], project['builder_id'],
-                project['images'], project['tag'], project.get('is_favorite', 0), project['created_at'],
-                project['type'], project['area'], project['price_range'], project['address'],
-                project['city'], project['state'], project['pincode']
-            ))
+        # No sample projects will be added - only admin-added content will be available
+        pass
     
-    # Check if sample builders exist
+    # Don't insert sample builders - only admin-added content will be available
+    # Check if builders exist
     cursor.execute("SELECT COUNT(*) FROM builders")
     if cursor.fetchone()[0] == 0:
-        # Insert sample builders
-        sample_builders = [
-            {
-                'name': 'DLF Limited',
-                'projects_count': 125,
-                'image': 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=400&fit=crop',
-                'description': 'Leading real estate developer with projects across India'
-            },
-            {
-                'name': 'Amrapali Group',
-                'projects_count': 89,
-                'image': 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=400&fit=crop',
-                'description': 'Premium residential and commercial property developer'
-            },
-            {
-                'name': 'Godrej Properties',
-                'projects_count': 156,
-                'image': 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=400&fit=crop',
-                'description': 'Innovative sustainable living solutions provider'
-            },
-            {
-                'name': 'Prestige Estates',
-                'projects_count': 98,
-                'image': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&h=400&fit=crop',
-                'description': 'Luxury residential and commercial developments'
-            },
-            {
-                'name': 'Oberoi Realty',
-                'projects_count': 72,
-                'image': 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=400&h=400&fit=crop',
-                'description': 'High-end luxury property developers'
-            },
-            {
-                'name': 'Tata Housing',
-                'projects_count': 112,
-                'image': 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=400&fit=crop',
-                'description': 'Quality affordable and premium housing solutions'
-            }
-        ]
-        
-        for builder in sample_builders:
-            cursor.execute('''
-                INSERT INTO builders (name, projects_count, image, description)
-                VALUES (?, ?, ?, ?)
-            ''', (builder['name'], builder['projects_count'], builder['image'], builder['description']))
+        # No sample builders will be added - only admin-added content will be available
+        pass
     
+    # Don't insert default home content - only admin-added content will be available
     # Check if home content exists
     cursor.execute("SELECT COUNT(*) FROM home_content")
     if cursor.fetchone()[0] == 0:
-        # Insert default home content
-        home_content = {
-            'hero': {
-                'title': 'Find Your Dream Property',
-                'subtitle': 'Discover the perfect place to call home with MegaReality',
-                'backgroundImage': 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80',
-            },
-            'about': {
-                'title': 'About MegaReality',
-                'description': 'We are a leading real estate company dedicated to helping you find your perfect property. With years of experience and a commitment to excellence, we make your property dreams come true.',
-                'image': 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80',
-            },
-            'contact': {
-                'phone': '+91 98765 43210',
-                'email': 'info@megareality.com',
-                'address': '123 Real Estate Avenue, Gurugram, Haryana 122001',
-            },
-            'properties': {
-                'title': 'Featured Properties',
-                'description': 'Discover our handpicked selection of premium properties',
-            },
-            'agents': {
-                'title': 'Our Expert Agents',
-                'description': 'Meet our team of experienced real estate professionals',
-            },
-            'services': {
-                'title': 'Our Services',
-                'description': 'Comprehensive real estate solutions tailored to your needs',
-            },
-            'autoscroll': {
-                'title': 'Auto-Scroll Section',
-                'description': 'Dynamic content that auto-scrolls to showcase our offerings',
-                'pages': [
-                    {
-                        'backgroundImage': 'https://images.unsplash.com/photo-1560448204-e02f33c33ddc?w=1920&q=80',
-                        'title': 'Premium Properties',
-                        'description': 'Discover our collection of premium properties in the best locations',
-                    },
-                    {
-                        'backgroundImage': 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1920&q=80',
-                        'title': 'Luxury Living',
-                        'description': 'Experience luxury living with our exclusive property collection',
-                    },
-                    {
-                        'backgroundImage': 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=1920&q=80',
-                        'title': 'Modern Designs',
-                        'description': 'Modern architectural designs for contemporary living',
-                    },
-                    {
-                        'backgroundImage': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80',
-                        'title': 'Affordable Options',
-                        'description': 'Find affordable options without compromising on quality',
-                    },
-                    {
-                        'backgroundImage': 'https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&q=80',
-                        'title': 'Investment Opportunities',
-                        'description': 'Great investment opportunities with high returns',
-                    },
-                ],
-            },
-            'typewriter': {
-                'messages': ['Find Your Dream Property', 'Discover the perfect place to call home'],
-            },
-        }
-        
-        for section, content in home_content.items():
-            cursor.execute('''
-                INSERT INTO home_content (section, content)
-                VALUES (?, ?)
-            ''', (section, json.dumps(content)))
+        # No default home content will be added - only admin-added content will be available
+        pass
     
     # Removed favorite initialization code
     
