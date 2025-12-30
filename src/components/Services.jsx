@@ -74,12 +74,10 @@ const Services = () => {
         const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
         if (response.ok) {
           const data = await response.json();
-          if (data.services) {
-            setSectionContent({
-              title: data.services.title,
-              description: data.services.description,
-            });
-          }
+          setSectionContent({
+            title: data.services?.title || "Our Services",
+            description: data.services?.description || "Comprehensive real estate solutions tailored to your needs",
+          });
         }
       } catch (error) {
         console.error("Error fetching services section content:", error);
@@ -159,8 +157,8 @@ const Services = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2>{sectionContent.title}</h2>
-          <p>{sectionContent.description}</p>
+          <h2>{sectionContent.title || "Our Services"}</h2>
+          <p>{sectionContent.description || "Comprehensive real estate solutions tailored to your needs"}</p>
         </motion.div>
 
         <div className="services-slider">

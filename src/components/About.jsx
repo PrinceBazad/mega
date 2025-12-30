@@ -19,7 +19,11 @@ const About = () => {
         const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
         if (response.ok) {
           const data = await response.json();
-          setAboutContent(data.about);
+          setAboutContent(data.about || {
+            title: "About MegaReality",
+            description: "We are a leading real estate company dedicated to helping you find your perfect property. With years of experience and a commitment to excellence, we make your property dreams come true.",
+            image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80",
+          });
         }
       } catch (error) {
         console.error("Error fetching about content:", error);
@@ -65,7 +69,7 @@ const About = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            {aboutContent.title}
+            {aboutContent.title || "About MegaReality"}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0 }}
@@ -73,7 +77,7 @@ const About = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.6 }}
           >
-            {aboutContent.description}
+            {aboutContent.description || "We are a leading real estate company dedicated to helping you find your perfect property. With years of experience and a commitment to excellence, we make your property dreams come true."}
           </motion.p>
         </div>
         <div className="about-content">
@@ -105,7 +109,7 @@ const About = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <img src={aboutContent.image} alt="About MegaReality" />
+              <img src={aboutContent.image || "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80"} alt="About MegaReality" />
             </motion.div>
           </div>
         </div>

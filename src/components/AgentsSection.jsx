@@ -69,12 +69,10 @@ const AgentsSection = () => {
         const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
         if (response.ok) {
           const data = await response.json();
-          if (data.agents) {
-            setSectionContent({
-              title: data.agents.title,
-              description: data.agents.description,
-            });
-          }
+          setSectionContent({
+            title: data.agents?.title || "Meet Our Agents",
+            description: data.agents?.description || "Connect with our real estate professionals who are here to guide you",
+          });
         }
       } catch (error) {
         console.error("Error fetching agents section content:", error);
@@ -151,8 +149,8 @@ const AgentsSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h2>{sectionContent.title}</h2>
-            <p>{sectionContent.description}</p>
+            <h2>{sectionContent.title || "Meet Our Agents"}</h2>
+            <p>{sectionContent.description || "Connect with our real estate professionals who are here to guide you"}</p>
           </motion.div>
           <div className="no-agents-message">
             <p>No agents available at the moment.</p>
@@ -175,8 +173,8 @@ const AgentsSection = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2>{sectionContent.title}</h2>
-          <p>{sectionContent.description}</p>
+          <h2>{sectionContent.title || "Meet Our Agents"}</h2>
+          <p>{sectionContent.description || "Connect with our real estate professionals who are here to guide you"}</p>
         </motion.div>
 
         <div className="agents-carousel">

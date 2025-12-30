@@ -37,7 +37,11 @@ const Contact = () => {
         const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
         if (response.ok) {
           const data = await response.json();
-          setContactContent(data.contact);
+          setContactContent(data.contact || {
+            phone: "+91 98765 43210",
+            email: "info@megareality.com",
+            address: "123 Real Estate Avenue, Gurugram, Haryana 122001",
+          });
         }
       } catch (error) {
         console.error("Error fetching contact content:", error);
@@ -136,19 +140,19 @@ const Contact = () => {
     {
       icon: <FaPhone />,
       title: "Phone",
-      info: contactContent.phone,
-      link: `tel:${contactContent.phone}`,
+      info: contactContent.phone || "+91 98765 43210",
+      link: `tel:${contactContent.phone || "+91 98765 43210"}`,
     },
     {
       icon: <FaEnvelope />,
       title: "Email",
-      info: contactContent.email,
-      link: `mailto:${contactContent.email}`,
+      info: contactContent.email || "info@megareality.com",
+      link: `mailto:${contactContent.email || "info@megareality.com"}`,
     },
     {
       icon: <FaMapMarkerAlt />,
       title: "Address",
-      info: contactContent.address,
+      info: contactContent.address || "123 Real Estate Avenue, Gurugram, Haryana 122001",
       link: null,
     },
     {

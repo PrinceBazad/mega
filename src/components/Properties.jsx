@@ -123,12 +123,10 @@ const Properties = () => {
         const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
         if (response.ok) {
           const data = await response.json();
-          if (data.properties) {
-            setSectionContent({
-              title: data.properties.title,
-              description: data.properties.description,
-            });
-          }
+          setSectionContent({
+            title: data.properties?.title || "Featured Properties",
+            description: data.properties?.description || "Discover our handpicked selection of premium properties",
+          });
         }
       } catch (error) {
         console.error("Error fetching properties section content:", error);
@@ -274,12 +272,12 @@ const Properties = () => {
           transition={{ duration: 0.6 }}
         >
           <h2>
-            {sectionContent.title} in{" "}
+            {sectionContent.title || "Featured Properties"} in{" "}
             {selectedLocation &&
               selectedLocation.charAt(0).toUpperCase() +
                 selectedLocation.slice(1)}
           </h2>
-          <p>{sectionContent.description}</p>
+          <p>{sectionContent.description || "Discover our handpicked selection of premium properties"}</p>
         </motion.div>
 
         {/* Loading indicator when location is changing */}
