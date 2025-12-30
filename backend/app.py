@@ -578,6 +578,41 @@ def get_db_connection():
 def health_check():
     return jsonify({'status': 'OK', 'message': 'Real Estate API is running'})
 
+@app.route('/api/admin/reset-favorites', methods=['POST'])
+def reset_favorites():
+    """Temporary endpoint to reset favorite status for testing"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Reset all favorites to false
+    cursor.execute("UPDATE properties SET is_favorite = 0")
+    cursor.execute("UPDATE agents SET is_favorite = 0")
+    cursor.execute("UPDATE projects SET is_favorite = 0")
+    
+    # Set some favorites
+    # Properties: Make first 3 properties favorites
+    cursor.execute("SELECT id FROM properties ORDER BY id LIMIT 3")
+    prop_ids = [row[0] for row in cursor.fetchall()]
+    for prop_id in prop_ids:
+        cursor.execute("UPDATE properties SET is_favorite = 1 WHERE id = ?", (prop_id,))
+    
+    # Agents: Make first 2 agents favorites
+    cursor.execute("SELECT id FROM agents ORDER BY id LIMIT 2")
+    agent_ids = [row[0] for row in cursor.fetchall()]
+    for agent_id in agent_ids:
+        cursor.execute("UPDATE agents SET is_favorite = 1 WHERE id = ?", (agent_id,))
+    
+    # Projects: Make first 2 projects favorites
+    cursor.execute("SELECT id FROM projects ORDER BY id LIMIT 2")
+    project_ids = [row[0] for row in cursor.fetchall()]
+    for project_id in project_ids:
+        cursor.execute("UPDATE projects SET is_favorite = 1 WHERE id = ?", (project_id,))
+    
+    conn.commit()
+    conn.close()
+    
+    return jsonify({'message': 'Favorites reset successfully'})
+
 # Admin Authentication
 @app.route('/api/admin/login', methods=['POST'])
 def admin_login():
