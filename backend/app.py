@@ -65,9 +65,16 @@ def init_db():
             area_sqft INTEGER DEFAULT 0,
             builder_id INTEGER,
             images TEXT,
+            is_favorite INTEGER DEFAULT 0,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     ''')
+    
+    # Check if is_favorite column exists, if not, add it
+    cursor.execute("PRAGMA table_info(properties)")
+    columns = [column[1] for column in cursor.fetchall()]
+    if 'is_favorite' not in columns:
+        cursor.execute("ALTER TABLE properties ADD COLUMN is_favorite INTEGER DEFAULT 0")
     
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS agents (
@@ -79,9 +86,16 @@ def init_db():
             experience TEXT,
             properties_sold INTEGER DEFAULT 0,
             image TEXT,
-            bio TEXT
+            bio TEXT,
+            is_favorite INTEGER DEFAULT 0
         )
     ''')
+    
+    # Check if is_favorite column exists in agents table, if not, add it
+    cursor.execute("PRAGMA table_info(agents)")
+    columns = [column[1] for column in cursor.fetchall()]
+    if 'is_favorite' not in columns:
+        cursor.execute("ALTER TABLE agents ADD COLUMN is_favorite INTEGER DEFAULT 0")
     
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS projects (
@@ -95,6 +109,7 @@ def init_db():
             builder_id INTEGER,
             images TEXT,
             tag TEXT DEFAULT 'available',
+            is_favorite INTEGER DEFAULT 0,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
             type TEXT,
             area TEXT,
@@ -105,6 +120,12 @@ def init_db():
             pincode TEXT
         )
     ''')
+    
+    # Check if is_favorite column exists in projects table, if not, add it
+    cursor.execute("PRAGMA table_info(projects)")
+    columns = [column[1] for column in cursor.fetchall()]
+    if 'is_favorite' not in columns:
+        cursor.execute("ALTER TABLE projects ADD COLUMN is_favorite INTEGER DEFAULT 0")
     
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS builders (
@@ -254,12 +275,12 @@ def init_db():
         for prop in sample_properties:
             cursor.execute('''
                 INSERT INTO properties (title, description, price, location, property_type, 
-                status, bedrooms, bathrooms, area_sqft, builder_id, images, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                status, bedrooms, bathrooms, area_sqft, builder_id, images, is_favorite, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 prop['title'], prop['description'], prop['price'], prop['location'],
                 prop['property_type'], prop['status'], prop['bedrooms'], prop['bathrooms'], 
-                prop['area_sqft'], prop['builder_id'], prop['images'], prop['created_at']
+                prop['area_sqft'], prop['builder_id'], prop['images'], prop.get('is_favorite', 0), prop['created_at']
             ))
     
     # Check if sample agents exist
@@ -316,12 +337,12 @@ def init_db():
         for agent in sample_agents:
             cursor.execute('''
                 INSERT INTO agents (name, email, phone, position, experience, properties_sold, 
-                image, bio)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                image, bio, is_favorite)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 agent['name'], agent['email'], agent['phone'], agent['position'],
                 agent['experience'], agent['properties_sold'], agent['image'],
-                agent['bio']
+                agent['bio'], agent.get('is_favorite', 0)
             ))
     
     # Check if sample projects exist
@@ -394,13 +415,13 @@ def init_db():
         for project in sample_projects:
             cursor.execute('''
                 INSERT INTO projects (title, description, location, status, completion_date,
-                total_units, builder_id, images, tag, created_at, type, area,
+                total_units, builder_id, images, tag, is_favorite, created_at, type, area,
                 price_range, address, city, state, pincode)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 project['title'], project['description'], project['location'], project['status'],
                 project['completion_date'], project['total_units'], project['builder_id'],
-                project['images'], project['tag'], project['created_at'],
+                project['images'], project['tag'], project.get('is_favorite', 0), project['created_at'],
                 project['type'], project['area'], project['price_range'], project['address'],
                 project['city'], project['state'], project['pincode']
             ))
@@ -880,13 +901,13 @@ def create_property():
     
     cursor.execute('''
         INSERT INTO properties (title, description, price, location, property_type, 
-        status, bedrooms, bathrooms, area_sqft, builder_id, images, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        status, bedrooms, bathrooms, area_sqft, builder_id, images, is_favorite, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (
         data['title'], data.get('description', ''), float(data['price']), data['location'],
         data['property_type'], data.get('status', 'Available'), 
         data.get('bedrooms', 0), data.get('bathrooms', 0), 
-        data.get('area_sqft', 0), builder_id, images_json, datetime.now().isoformat()
+        data.get('area_sqft', 0), builder_id, images_json, data.get('is_favorite', 0), datetime.now().isoformat()
     ))
     
     property_id = cursor.lastrowid
@@ -980,6 +1001,9 @@ def update_property(property_id):
         images_json = json.dumps(data['images'])
         update_fields.append("images = ?")
         params.append(images_json)
+    if 'is_favorite' in data:
+        update_fields.append("is_favorite = ?")
+        params.append(data['is_favorite'])
     
     if update_fields:
         update_query = f"UPDATE properties SET {', '.join(update_fields)} WHERE id = ?"
@@ -1112,13 +1136,13 @@ def create_agent():
     cursor = conn.cursor()
     
     cursor.execute('''
-        INSERT INTO agents (name, email, phone, position, experience, properties_sold, image, bio)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO agents (name, email, phone, position, experience, properties_sold, image, bio, is_favorite)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (
         data['name'], data.get('email', ''), data.get('phone', ''), 
         data.get('position', ''), data.get('experience', ''), 
         data.get('properties_sold', 0), data.get('image', ''), 
-        data.get('bio', '')
+        data.get('bio', ''), data.get('is_favorite', 0)
     ))
     
     agent_id = cursor.lastrowid
@@ -1183,6 +1207,9 @@ def update_agent(agent_id):
     if 'bio' in data:
         update_fields.append("bio = ?")
         params.append(data['bio'])
+    if 'is_favorite' in data:
+        update_fields.append("is_favorite = ?")
+        params.append(data['is_favorite'])
     
     if update_fields:
         update_query = f"UPDATE agents SET {', '.join(update_fields)} WHERE id = ?"
@@ -1532,14 +1559,14 @@ def create_project():
     
     cursor.execute('''
         INSERT INTO projects (title, description, location, status, completion_date, 
-        total_units, builder_id, images, tag, created_at, type, area, 
+        total_units, builder_id, images, tag, is_favorite, created_at, type, area, 
         price_range, address, city, state, pincode)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (
         data['title'], data.get('description', ''), data['location'], 
         data.get('status', 'Available'), data.get('completion_date', ''), 
         data.get('total_units', 0), builder_id, images_json, 
-        data.get('tag', 'available'), datetime.now().isoformat(), 
+        data.get('tag', 'available'), data.get('is_favorite', 0), datetime.now().isoformat(), 
         data.get('type', ''), data.get('area', ''), data.get('price_range', ''), 
         data.get('address', ''), data.get('city', ''), 
         data.get('state', ''), data.get('pincode', '')
@@ -1630,6 +1657,9 @@ def update_project(project_id):
     if 'tag' in data:
         update_fields.append("tag = ?")
         params.append(data['tag'])
+    if 'is_favorite' in data:
+        update_fields.append("is_favorite = ?")
+        params.append(data['is_favorite'])
     if 'type' in data:
         update_fields.append("type = ?")
         params.append(data['type'])
