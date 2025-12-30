@@ -16,7 +16,7 @@ const Properties = () => {
   const [filteredProperties, setFilteredProperties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [locationChanging, setLocationChanging] = useState(false);
-  const [selectedLocation, setSelectedLocation] = useState("gurugram");
+  const [selectedLocation, setSelectedLocation] = useState("");
   const [sectionContent, setSectionContent] = useState({
     title: "Featured Properties",
     description: "Explore our handpicked selection of premium properties",
@@ -45,6 +45,9 @@ const Properties = () => {
             prop.location.toLowerCase().includes("new delhi")
         );
       }
+    } else {
+      // If no location is selected, show all properties
+      filtered = properties;
     }
 
     setFilteredProperties(filtered);
@@ -125,7 +128,9 @@ const Properties = () => {
           const data = await response.json();
           setSectionContent({
             title: data.properties?.title || "Featured Properties",
-            description: data.properties?.description || "Discover our handpicked selection of premium properties",
+            description:
+              data.properties?.description ||
+              "Discover our handpicked selection of premium properties",
           });
         }
       } catch (error) {
@@ -272,12 +277,20 @@ const Properties = () => {
           transition={{ duration: 0.6 }}
         >
           <h2>
-            {sectionContent.title || "Featured Properties"} in{" "}
-            {selectedLocation &&
-              selectedLocation.charAt(0).toUpperCase() +
-                selectedLocation.slice(1)}
+            {selectedLocation && selectedLocation !== "" ? (
+              <>
+                {sectionContent.title || "Featured Properties"} in {" "}
+                {selectedLocation.charAt(0).toUpperCase() +
+                  selectedLocation.slice(1)}
+              </>
+            ) : (
+              sectionContent.title || "Featured Properties"
+            )}
           </h2>
-          <p>{sectionContent.description || "Discover our handpicked selection of premium properties"}</p>
+          <p>
+            {sectionContent.description ||
+              "Discover our handpicked selection of premium properties"}
+          </p>
         </motion.div>
 
         {/* Loading indicator when location is changing */}

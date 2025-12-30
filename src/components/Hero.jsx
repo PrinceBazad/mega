@@ -37,11 +37,15 @@ const Hero = () => {
         const response = await fetch(`${API_BASE_URL}/api/admin/home-content`);
         if (response.ok) {
           const data = await response.json();
-          setHeroContent(data.hero || {
-            title: "Find Your Dream Property",
-            subtitle: "Discover the perfect place to call home with MegaReality",
-            backgroundImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
-          });
+          setHeroContent(
+            data.hero || {
+              title: "Find Your Dream Property",
+              subtitle:
+                "Discover the perfect place to call home with MegaReality",
+              backgroundImage:
+                "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+            }
+          );
         }
       } catch (error) {
         console.error("Error fetching hero content:", error);
@@ -196,7 +200,10 @@ const Hero = () => {
       <div
         className="hero-overlay"
         style={{
-          backgroundImage: `url(${heroContent.backgroundImage || "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80"})`,
+          backgroundImage: `url(${
+            heroContent.backgroundImage ||
+            "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80"
+          })`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
@@ -226,7 +233,8 @@ const Hero = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            {heroContent.subtitle || "Discover the perfect place to call home with MegaReality"}
+            {heroContent.subtitle ||
+              "Discover the perfect place to call home with MegaReality"}
           </motion.p>
 
           <motion.div

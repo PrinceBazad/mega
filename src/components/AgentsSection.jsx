@@ -71,7 +71,9 @@ const AgentsSection = () => {
           const data = await response.json();
           setSectionContent({
             title: data.agents?.title || "Meet Our Agents",
-            description: data.agents?.description || "Connect with our real estate professionals who are here to guide you",
+            description:
+              data.agents?.description ||
+              "Connect with our real estate professionals who are here to guide you",
           });
         }
       } catch (error) {
@@ -150,7 +152,10 @@ const AgentsSection = () => {
             transition={{ duration: 0.6 }}
           >
             <h2>{sectionContent.title || "Meet Our Agents"}</h2>
-            <p>{sectionContent.description || "Connect with our real estate professionals who are here to guide you"}</p>
+            <p>
+              {sectionContent.description ||
+                "Connect with our real estate professionals who are here to guide you"}
+            </p>
           </motion.div>
           <div className="no-agents-message">
             <p>No agents available at the moment.</p>
@@ -174,7 +179,10 @@ const AgentsSection = () => {
           transition={{ duration: 0.6 }}
         >
           <h2>{sectionContent.title || "Meet Our Agents"}</h2>
-          <p>{sectionContent.description || "Connect with our real estate professionals who are here to guide you"}</p>
+          <p>
+            {sectionContent.description ||
+              "Connect with our real estate professionals who are here to guide you"}
+          </p>
         </motion.div>
 
         <div className="agents-carousel">

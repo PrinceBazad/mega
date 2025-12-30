@@ -76,7 +76,9 @@ const Services = () => {
           const data = await response.json();
           setSectionContent({
             title: data.services?.title || "Our Services",
-            description: data.services?.description || "Comprehensive real estate solutions tailored to your needs",
+            description:
+              data.services?.description ||
+              "Comprehensive real estate solutions tailored to your needs",
           });
         }
       } catch (error) {
@@ -158,7 +160,10 @@ const Services = () => {
           transition={{ duration: 0.6 }}
         >
           <h2>{sectionContent.title || "Our Services"}</h2>
-          <p>{sectionContent.description || "Comprehensive real estate solutions tailored to your needs"}</p>
+          <p>
+            {sectionContent.description ||
+              "Comprehensive real estate solutions tailored to your needs"}
+          </p>
         </motion.div>
 
         <div className="services-slider">
