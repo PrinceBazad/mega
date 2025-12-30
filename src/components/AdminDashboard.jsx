@@ -359,117 +359,11 @@ const AdminDashboard = () => {
     navigate("/admin/login");
   };
 
-  const handleToggleFavorite = async (propertyId, currentStatus) => {
-    try {
-      const token = localStorage.getItem("adminToken");
-      const response = await fetch(
-        `${API_BASE_URL}/api/admin/properties/${propertyId}/favorite`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ is_favorite: !currentStatus }),
-        }
-      );
+  // Removed favorite toggle functionality
 
-      if (response.ok) {
-        // Update local state
-        setProperties((prev) =>
-          prev.map((prop) =>
-            prop.id === propertyId
-              ? { ...prop, is_favorite: !currentStatus }
-              : prop
-          )
-        );
+  // Removed agent favorite toggle functionality
 
-        // Emit event to notify other components
-        eventBus.emit(EVENT_TYPES.FAVORITES_CHANGED, {
-          action: "toggle",
-          entityType: "property",
-          entityId: propertyId,
-          newStatus: !currentStatus,
-        });
-      }
-    } catch (error) {
-      console.error("Error toggling favorite:", error);
-    }
-  };
-
-  const handleToggleAgentFavorite = async (agentId, currentStatus) => {
-    try {
-      const token = localStorage.getItem("adminToken");
-      const response = await fetch(
-        `${API_BASE_URL}/api/admin/agents/${agentId}/favorite`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ is_favorite: !currentStatus }),
-        }
-      );
-
-      if (response.ok) {
-        setAgents((prev) =>
-          prev.map((agent) =>
-            agent.id === agentId
-              ? { ...agent, is_favorite: !currentStatus }
-              : agent
-          )
-        );
-
-        // Emit event to notify other components
-        eventBus.emit(EVENT_TYPES.FAVORITES_CHANGED, {
-          action: "toggle",
-          entityType: "agent",
-          entityId: agentId,
-          newStatus: !currentStatus,
-        });
-      }
-    } catch (error) {
-      console.error("Error toggling agent favorite:", error);
-    }
-  };
-
-  const handleToggleProjectFavorite = async (projectId, currentStatus) => {
-    try {
-      const token = localStorage.getItem("adminToken");
-      const response = await fetch(
-        `${API_BASE_URL}/api/admin/projects/${projectId}/favorite`,
-        {
-          method: "PUT",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ is_favorite: !currentStatus }),
-        }
-      );
-
-      if (response.ok) {
-        setProjects((prev) =>
-          prev.map((project) =>
-            project.id === projectId
-              ? { ...project, is_favorite: !currentStatus }
-              : project
-          )
-        );
-
-        // Emit event to notify other components
-        eventBus.emit(EVENT_TYPES.FAVORITES_CHANGED, {
-          action: "toggle",
-          entityType: "project",
-          entityId: projectId,
-          newStatus: !currentStatus,
-        });
-      }
-    } catch (error) {
-      console.error("Error toggling project favorite:", error);
-    }
-  };
+  // Removed project favorite toggle functionality
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -1301,47 +1195,6 @@ const AdminDashboard = () => {
               ) : (
                 <div className="no-image">No Image</div>
               )}
-              <button
-                className={`favorite-btn ${
-                  property.is_favorite ? "active" : ""
-                }`}
-                onClick={() =>
-                  handleToggleFavorite(property.id, property.is_favorite)
-                }
-                title={
-                  property.is_favorite
-                    ? "Remove from favorites"
-                    : "Add to favorites"
-                }
-              >
-                {property.is_favorite ? (
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="#ff3838"
-                    stroke="#ff3838"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                  </svg>
-                ) : (
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#e0e0e0"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                  </svg>
-                )}
-              </button>
             </div>
             <div className="property-info">
               <h3>{property.title}</h3>
@@ -2600,47 +2453,6 @@ const AdminDashboard = () => {
               ) : (
                 <div className="no-image">No Image</div>
               )}
-              <button
-                className={`favorite-btn ${
-                  project.is_favorite ? "active" : ""
-                }`}
-                onClick={() =>
-                  handleToggleProjectFavorite(project.id, project.is_favorite)
-                }
-                title={
-                  project.is_favorite
-                    ? "Remove from favorites"
-                    : "Add to favorites"
-                }
-              >
-                {project.is_favorite ? (
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="#ff3838"
-                    stroke="#ff3838"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                  </svg>
-                ) : (
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#e0e0e0"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                  </svg>
-                )}
-              </button>
             </div>
             <div className="property-info">
               <h3>{project.title}</h3>
@@ -3364,47 +3176,6 @@ const AdminDashboard = () => {
                           <FaUserFriends />
                         </div>
                       )}
-                      <button
-                        className={`favorite-btn ${
-                          agent.is_favorite ? "active" : ""
-                        }`}
-                        onClick={() =>
-                          handleToggleAgentFavorite(agent.id, agent.is_favorite)
-                        }
-                        title={
-                          agent.is_favorite
-                            ? "Remove from favorites"
-                            : "Add to favorites"
-                        }
-                      >
-                        {agent.is_favorite ? (
-                          <svg
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="#ff3838"
-                            stroke="#ff3838"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                          </svg>
-                        ) : (
-                          <svg
-                            width="20"
-                            height="20"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="#e0e0e0"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          >
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                          </svg>
-                        )}
-                      </button>
                     </div>
                     <div className="agent-card-content">
                       <h4 className="agent-name">{agent.name}</h4>

@@ -64,7 +64,6 @@ def init_db():
             bathrooms INTEGER DEFAULT 0,
             area_sqft INTEGER DEFAULT 0,
             builder_id INTEGER,
-            is_favorite BOOLEAN DEFAULT 0,
             images TEXT,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
@@ -80,8 +79,7 @@ def init_db():
             experience TEXT,
             properties_sold INTEGER DEFAULT 0,
             image TEXT,
-            bio TEXT,
-            is_favorite BOOLEAN DEFAULT 0
+            bio TEXT
         )
     ''')
     
@@ -97,7 +95,6 @@ def init_db():
             builder_id INTEGER,
             images TEXT,
             tag TEXT DEFAULT 'available',
-            is_favorite BOOLEAN DEFAULT 0,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP,
             type TEXT,
             area TEXT,
@@ -178,7 +175,6 @@ def init_db():
                 'bathrooms': 4,
                 'area_sqft': 4500,
                 'builder_id': 1,
-                'is_favorite': 1,
                 'images': json.dumps(['https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&q=80']),
                 'created_at': datetime.now().isoformat()
             },
@@ -193,7 +189,6 @@ def init_db():
                 'bathrooms': 2,
                 'area_sqft': 1200,
                 'builder_id': 2,
-                'is_favorite': 0,
                 'images': json.dumps(['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80']),
                 'created_at': datetime.now().isoformat()
             },
@@ -208,7 +203,6 @@ def init_db():
                 'bathrooms': 3,
                 'area_sqft': 2100,
                 'builder_id': 1,
-                'is_favorite': 1,
                 'images': json.dumps(['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80']),
                 'created_at': datetime.now().isoformat()
             },
@@ -238,7 +232,6 @@ def init_db():
                 'bathrooms': 4,
                 'area_sqft': 3800,
                 'builder_id': 5,
-                'is_favorite': 1,
                 'images': json.dumps(['https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80']),
                 'created_at': datetime.now().isoformat()
             },
@@ -253,7 +246,6 @@ def init_db():
                 'bathrooms': 2,
                 'area_sqft': 1100,
                 'builder_id': 6,
-                'is_favorite': 0,
                 'images': json.dumps(['https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80']),
                 'created_at': datetime.now().isoformat()
             }
@@ -262,12 +254,12 @@ def init_db():
         for prop in sample_properties:
             cursor.execute('''
                 INSERT INTO properties (title, description, price, location, property_type, 
-                status, bedrooms, bathrooms, area_sqft, builder_id, is_favorite, images, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                status, bedrooms, bathrooms, area_sqft, builder_id, images, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 prop['title'], prop['description'], prop['price'], prop['location'],
                 prop['property_type'], prop['status'], prop['bedrooms'], prop['bathrooms'], 
-                prop['area_sqft'], prop['builder_id'], prop['is_favorite'], prop['images'], prop['created_at']
+                prop['area_sqft'], prop['builder_id'], prop['images'], prop['created_at']
             ))
     
     # Check if sample agents exist
@@ -324,12 +316,12 @@ def init_db():
         for agent in sample_agents:
             cursor.execute('''
                 INSERT INTO agents (name, email, phone, position, experience, properties_sold, 
-                image, bio, is_favorite)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                image, bio)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 agent['name'], agent['email'], agent['phone'], agent['position'],
                 agent['experience'], agent['properties_sold'], agent['image'],
-                agent['bio'], agent['is_favorite']
+                agent['bio']
             ))
     
     # Check if sample projects exist
@@ -402,13 +394,13 @@ def init_db():
         for project in sample_projects:
             cursor.execute('''
                 INSERT INTO projects (title, description, location, status, completion_date,
-                total_units, builder_id, images, tag, is_favorite, created_at, type, area,
+                total_units, builder_id, images, tag, created_at, type, area,
                 price_range, address, city, state, pincode)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
                 project['title'], project['description'], project['location'], project['status'],
                 project['completion_date'], project['total_units'], project['builder_id'],
-                project['images'], project['tag'], project['is_favorite'], project['created_at'],
+                project['images'], project['tag'], project['created_at'],
                 project['type'], project['area'], project['price_range'], project['address'],
                 project['city'], project['state'], project['pincode']
             ))
@@ -536,33 +528,7 @@ def init_db():
                 VALUES (?, ?)
             ''', (section, json.dumps(content)))
     
-    # Set some favorites for existing data if no favorites exist
-    # Check if there are any favorite properties
-    cursor.execute("SELECT COUNT(*) FROM properties WHERE is_favorite = 1")
-    if cursor.fetchone()[0] == 0:
-        # If no favorites exist, make the first 3 properties favorites
-        cursor.execute("SELECT id FROM properties ORDER BY id LIMIT 3")
-        favorite_property_ids = [row[0] for row in cursor.fetchall()]
-        for prop_id in favorite_property_ids:
-            cursor.execute("UPDATE properties SET is_favorite = 1 WHERE id = ?", (prop_id,))
-    
-    # Check if there are any favorite agents
-    cursor.execute("SELECT COUNT(*) FROM agents WHERE is_favorite = 1")
-    if cursor.fetchone()[0] == 0:
-        # If no favorites exist, make the first 2 agents favorites
-        cursor.execute("SELECT id FROM agents ORDER BY id LIMIT 2")
-        favorite_agent_ids = [row[0] for row in cursor.fetchall()]
-        for agent_id in favorite_agent_ids:
-            cursor.execute("UPDATE agents SET is_favorite = 1 WHERE id = ?", (agent_id,))
-    
-    # Check if there are any favorite projects
-    cursor.execute("SELECT COUNT(*) FROM projects WHERE is_favorite = 1")
-    if cursor.fetchone()[0] == 0:
-        # If no favorites exist, make the first 2 projects favorites
-        cursor.execute("SELECT id FROM projects ORDER BY id LIMIT 2")
-        favorite_project_ids = [row[0] for row in cursor.fetchall()]
-        for project_id in favorite_project_ids:
-            cursor.execute("UPDATE projects SET is_favorite = 1 WHERE id = ?", (project_id,))
+    # Removed favorite initialization code
     
     conn.commit()
     conn.close()
@@ -578,65 +544,7 @@ def get_db_connection():
 def health_check():
     return jsonify({'status': 'OK', 'message': 'Real Estate API is running'})
 
-@app.route('/api/admin/reset-favorites', methods=['POST'])
-def reset_favorites():
-    """Temporary endpoint to reset favorite status for testing"""
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    # Reset all favorites to false
-    cursor.execute("UPDATE properties SET is_favorite = 0")
-    cursor.execute("UPDATE agents SET is_favorite = 0")
-    cursor.execute("UPDATE projects SET is_favorite = 0")
-    
-    # Set some favorites
-    # Properties: Make first 3 properties favorites
-    cursor.execute("SELECT id FROM properties ORDER BY id LIMIT 3")
-    prop_ids = [row[0] for row in cursor.fetchall()]
-    for prop_id in prop_ids:
-        cursor.execute("UPDATE properties SET is_favorite = 1 WHERE id = ?", (prop_id,))
-    
-    # Agents: Make first 2 agents favorites
-    cursor.execute("SELECT id FROM agents ORDER BY id LIMIT 2")
-    agent_ids = [row[0] for row in cursor.fetchall()]
-    for agent_id in agent_ids:
-        cursor.execute("UPDATE agents SET is_favorite = 1 WHERE id = ?", (agent_id,))
-    
-    # Projects: Make first 2 projects favorites
-    cursor.execute("SELECT id FROM projects ORDER BY id LIMIT 2")
-    project_ids = [row[0] for row in cursor.fetchall()]
-    for project_id in project_ids:
-        cursor.execute("UPDATE projects SET is_favorite = 1 WHERE id = ?", (project_id,))
-    
-    conn.commit()
-    conn.close()
-    
-    return jsonify({'message': 'Favorites reset successfully'})
-
-
-@app.route('/api/admin/verify-favorites', methods=['GET'])
-def verify_favorites():
-    """Endpoint to verify favorite counts in database"""
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    # Count favorites
-    cursor.execute("SELECT COUNT(*) FROM properties WHERE is_favorite = 1")
-    property_favorites = cursor.fetchone()[0]
-    
-    cursor.execute("SELECT COUNT(*) FROM agents WHERE is_favorite = 1")
-    agent_favorites = cursor.fetchone()[0]
-    
-    cursor.execute("SELECT COUNT(*) FROM projects WHERE is_favorite = 1")
-    project_favorites = cursor.fetchone()[0]
-    
-    conn.close()
-    
-    return jsonify({
-        'properties': property_favorites,
-        'agents': agent_favorites,
-        'projects': project_favorites
-    })
+# Removed favorite functionality and temporary endpoints
 
 # Admin Authentication
 @app.route('/api/admin/login', methods=['POST'])
@@ -1072,9 +980,6 @@ def update_property(property_id):
         images_json = json.dumps(data['images'])
         update_fields.append("images = ?")
         params.append(images_json)
-    if 'is_favorite' in data:
-        update_fields.append("is_favorite = ?")
-        params.append(data['is_favorite'])
     
     if update_fields:
         update_query = f"UPDATE properties SET {', '.join(update_fields)} WHERE id = ?"
@@ -1146,55 +1051,7 @@ def delete_property(property_id):
     
     return jsonify({'message': 'Property deleted successfully'})
 
-@app.route('/api/admin/properties/<int:property_id>/favorite', methods=['PUT'])
-def toggle_property_favorite(property_id):
-    # In a real app, this would require authentication
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    cursor.execute("SELECT * FROM properties WHERE id = ?", (property_id,))
-    property = cursor.fetchone()
-    if not property:
-        conn.close()
-        return jsonify({'message': 'Property not found'}), 404
-    
-    data = request.get_json()
-    new_favorite_status = data.get('is_favorite', False)
-    
-    cursor.execute("UPDATE properties SET is_favorite = ? WHERE id = ?", (int(new_favorite_status), property_id))
-    
-    # Get updated property
-    cursor.execute("SELECT * FROM properties WHERE id = ?", (property_id,))
-    updated_property = cursor.fetchone()
-    
-    # Add notification for favorite status change
-    status_text = 'added to' if new_favorite_status else 'removed from'
-    cursor.execute('''
-        INSERT INTO notifications (type, message, admin_id, admin_name, created_at, read_status)
-        VALUES (?, ?, ?, ?, ?, ?)
-    ''', ('property', f'Property {status_text} favorites: {updated_property["title"]}', 1, 'Admin User', datetime.now().isoformat(), 0))
-    
-    # Get builder name for updated property
-    updated_builder_name = ""
-    if updated_property['builder_id']:
-        cursor.execute("SELECT name FROM builders WHERE id = ?", (updated_property['builder_id'],))
-        builder = cursor.fetchone()
-        if builder:
-            updated_builder_name = builder['name']
-    
-    conn.commit()
-    conn.close()
-    
-    prop_dict = dict(updated_property)
-    # Convert images from JSON string to list
-    try:
-        prop_dict['images'] = json.loads(prop_dict['images']) if prop_dict['images'] else []
-    except:
-        prop_dict['images'] = []
-    
-    prop_dict['builder_name'] = updated_builder_name
-    
-    return jsonify(prop_dict)
+# Favorite functionality removed
 
 # Agent Routes
 @app.route('/api/agents', methods=['GET'])
@@ -1255,13 +1112,13 @@ def create_agent():
     cursor = conn.cursor()
     
     cursor.execute('''
-        INSERT INTO agents (name, email, phone, position, experience, properties_sold, image, bio, is_favorite)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO agents (name, email, phone, position, experience, properties_sold, image, bio)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ''', (
         data['name'], data.get('email', ''), data.get('phone', ''), 
         data.get('position', ''), data.get('experience', ''), 
         data.get('properties_sold', 0), data.get('image', ''), 
-        data.get('bio', ''), data.get('is_favorite', False)
+        data.get('bio', '')
     ))
     
     agent_id = cursor.lastrowid
@@ -1326,9 +1183,6 @@ def update_agent(agent_id):
     if 'bio' in data:
         update_fields.append("bio = ?")
         params.append(data['bio'])
-    if 'is_favorite' in data:
-        update_fields.append("is_favorite = ?")
-        params.append(data['is_favorite'])
     
     if update_fields:
         update_query = f"UPDATE agents SET {', '.join(update_fields)} WHERE id = ?"
@@ -1376,38 +1230,7 @@ def delete_agent(agent_id):
     
     return jsonify({'message': 'Agent deleted successfully'})
 
-@app.route('/api/admin/agents/<int:agent_id>/favorite', methods=['PUT'])
-def toggle_agent_favorite(agent_id):
-    # In a real app, this would require authentication
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    cursor.execute("SELECT * FROM agents WHERE id = ?", (agent_id,))
-    agent = cursor.fetchone()
-    if not agent:
-        conn.close()
-        return jsonify({'message': 'Agent not found'}), 404
-    
-    data = request.get_json()
-    new_favorite_status = data.get('is_favorite', False)
-    
-    cursor.execute("UPDATE agents SET is_favorite = ? WHERE id = ?", (int(new_favorite_status), agent_id))
-    
-    # Get updated agent
-    cursor.execute("SELECT * FROM agents WHERE id = ?", (agent_id,))
-    updated_agent = cursor.fetchone()
-    
-    # Add notification for favorite status change
-    status_text = 'added to' if new_favorite_status else 'removed from'
-    cursor.execute('''
-        INSERT INTO notifications (type, message, admin_id, admin_name, created_at, read_status)
-        VALUES (?, ?, ?, ?, ?, ?)
-    ''', ('agent', f'Agent {status_text} favorites: {updated_agent["name"]}', 1, 'Admin User', datetime.now().isoformat(), 0))
-    
-    conn.commit()
-    conn.close()
-    
-    return jsonify(dict(updated_agent))
+# Agent favorite functionality removed
 
 # Builder Routes
 @app.route('/api/builders', methods=['GET'])
@@ -1709,16 +1532,15 @@ def create_project():
     
     cursor.execute('''
         INSERT INTO projects (title, description, location, status, completion_date, 
-        total_units, builder_id, images, tag, is_favorite, created_at, type, area, 
+        total_units, builder_id, images, tag, created_at, type, area, 
         price_range, address, city, state, pincode)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (
         data['title'], data.get('description', ''), data['location'], 
         data.get('status', 'Available'), data.get('completion_date', ''), 
         data.get('total_units', 0), builder_id, images_json, 
-        data.get('tag', 'available'), data.get('is_favorite', False), 
-        datetime.now().isoformat(), data.get('type', ''), 
-        data.get('area', ''), data.get('price_range', ''), 
+        data.get('tag', 'available'), datetime.now().isoformat(), 
+        data.get('type', ''), data.get('area', ''), data.get('price_range', ''), 
         data.get('address', ''), data.get('city', ''), 
         data.get('state', ''), data.get('pincode', '')
     ))
@@ -1808,9 +1630,6 @@ def update_project(project_id):
     if 'tag' in data:
         update_fields.append("tag = ?")
         params.append(data['tag'])
-    if 'is_favorite' in data:
-        update_fields.append("is_favorite = ?")
-        params.append(data['is_favorite'])
     if 'type' in data:
         update_fields.append("type = ?")
         params.append(data['type'])
@@ -1897,55 +1716,7 @@ def delete_project(project_id):
     
     return jsonify({'message': 'Project deleted successfully'})
 
-@app.route('/api/admin/projects/<int:project_id>/favorite', methods=['PUT'])
-def toggle_project_favorite(project_id):
-    # In a real app, this would require authentication
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    
-    cursor.execute("SELECT * FROM projects WHERE id = ?", (project_id,))
-    project = cursor.fetchone()
-    if not project:
-        conn.close()
-        return jsonify({'message': 'Project not found'}), 404
-    
-    data = request.get_json()
-    new_favorite_status = data.get('is_favorite', False)
-    
-    cursor.execute("UPDATE projects SET is_favorite = ? WHERE id = ?", (int(new_favorite_status), project_id))
-    
-    # Get updated project
-    cursor.execute("SELECT * FROM projects WHERE id = ?", (project_id,))
-    updated_project = cursor.fetchone()
-    
-    # Add notification for favorite status change
-    status_text = 'added to' if new_favorite_status else 'removed from'
-    cursor.execute('''
-        INSERT INTO notifications (type, message, admin_id, admin_name, created_at, read_status)
-        VALUES (?, ?, ?, ?, ?, ?)
-    ''', ('project', f'Project {status_text} favorites: {updated_project["title"]}', 1, 'Admin User', datetime.now().isoformat(), 0))
-    
-    # Get builder name for updated project
-    updated_builder_name = ""
-    if updated_project['builder_id']:
-        cursor.execute("SELECT name FROM builders WHERE id = ?", (updated_project['builder_id'],))
-        builder = cursor.fetchone()
-        if builder:
-            updated_builder_name = builder['name']
-    
-    conn.commit()
-    conn.close()
-    
-    proj_dict = dict(updated_project)
-    # Convert images from JSON string to list
-    try:
-        proj_dict['images'] = json.loads(proj_dict['images']) if proj_dict['images'] else []
-    except:
-        proj_dict['images'] = []
-    
-    proj_dict['builder_name'] = updated_builder_name
-    
-    return jsonify(proj_dict)
+# Project favorite functionality removed
 
 # Home Content Management Routes
 @app.route('/api/admin/home-content', methods=['GET'])

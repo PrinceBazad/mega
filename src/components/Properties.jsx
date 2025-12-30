@@ -28,32 +28,22 @@ const Properties = () => {
   const applyLocationFilter = (location) => {
     if (!properties.length) return; // Handle empty properties
 
-    let filtered;
+    let filtered = properties;
 
-    // On homepage, show all favorites regardless of location
-    // For other pages, we can apply location filtering
-    if (window.location.pathname === "/") {
-      // On homepage, show all favorite properties
-      filtered = properties.filter((prop) => prop.is_favorite === true);
-    } else {
-      // On other pages, filter by favorites first
-      filtered = properties.filter((prop) => prop.is_favorite === true);
-
-      // Apply location filter based on selected location if location is specified
-      if (location && location !== "") {
-        if (location === "gurugram") {
-          filtered = filtered.filter(
-            (prop) =>
-              prop.location.toLowerCase().includes("gurugram") ||
-              prop.location.toLowerCase().includes("gurgaon")
-          );
-        } else if (location === "delhi") {
-          filtered = filtered.filter(
-            (prop) =>
-              prop.location.toLowerCase().includes("delhi") ||
-              prop.location.toLowerCase().includes("new delhi")
-          );
-        }
+    // Apply location filter based on selected location if location is specified
+    if (location && location !== "") {
+      if (location === "gurugram") {
+        filtered = filtered.filter(
+          (prop) =>
+            prop.location.toLowerCase().includes("gurugram") ||
+            prop.location.toLowerCase().includes("gurgaon")
+        );
+      } else if (location === "delhi") {
+        filtered = filtered.filter(
+          (prop) =>
+            prop.location.toLowerCase().includes("delhi") ||
+            prop.location.toLowerCase().includes("new delhi")
+        );
       }
     }
 
@@ -99,11 +89,7 @@ const Properties = () => {
         const data = await response.json();
         setProperties(data);
 
-        // Apply favorite filtering immediately
-        const favoriteProperties = data.filter(
-          (prop) => prop.is_favorite === true
-        );
-        setFilteredProperties(favoriteProperties);
+        setFilteredProperties(data);
 
         setLoading(false);
 
@@ -178,11 +164,7 @@ const Properties = () => {
           const data = await response.json();
           setProperties(data);
 
-          // Apply favorite filtering
-          const favoriteProperties = data.filter(
-            (prop) => prop.is_favorite === true
-          );
-          setFilteredProperties(favoriteProperties);
+          setFilteredProperties(data);
         } catch (error) {
           console.error("Error fetching properties:", error);
         }
@@ -200,11 +182,7 @@ const Properties = () => {
             const data = await response.json();
             setProperties(data);
 
-            // Apply favorite filtering
-            const favoriteProperties = data.filter(
-              (prop) => prop.is_favorite === true
-            );
-            setFilteredProperties(favoriteProperties);
+            setFilteredProperties(data);
           } catch (error) {
             console.error("Error fetching properties:", error);
           }

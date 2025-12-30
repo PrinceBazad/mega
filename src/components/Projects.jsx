@@ -23,11 +23,7 @@ const Projects = () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/projects`);
         const data = await response.json();
-        // Filter to show only favorite projects
-        const favoriteProjects = data.filter(
-          (project) => project.is_favorite === true
-        );
-        setProjects(favoriteProjects);
+        setProjects(data);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching projects:", error);
@@ -46,11 +42,7 @@ const Projects = () => {
         try {
           const response = await fetch(`${API_BASE_URL}/api/projects`);
           const data = await response.json();
-          // Filter to show only favorite projects
-          const favoriteProjects = data.filter(
-            (project) => project.is_favorite === true
-          );
-          setProjects(favoriteProjects);
+          setProjects(data);
         } catch (error) {
           console.error("Error fetching projects:", error);
         }
@@ -66,11 +58,7 @@ const Projects = () => {
           try {
             const response = await fetch(`${API_BASE_URL}/api/projects`);
             const data = await response.json();
-            // Filter to show only favorite projects
-            const favoriteProjects = data.filter(
-              (project) => project.is_favorite === true
-            );
-            setProjects(favoriteProjects);
+            setProjects(data);
           } catch (error) {
             console.error("Error fetching projects:", error);
           }
