@@ -193,6 +193,7 @@ def init_db():
                 'bathrooms': 2,
                 'area_sqft': 1200,
                 'builder_id': 2,
+                'is_favorite': 0,
                 'images': json.dumps(['https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80']),
                 'created_at': datetime.now().isoformat()
             },
@@ -222,6 +223,7 @@ def init_db():
                 'bathrooms': 3,
                 'area_sqft': 3500,
                 'builder_id': 3,
+                'is_favorite': 0,
                 'images': json.dumps(['https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80']),
                 'created_at': datetime.now().isoformat()
             },
