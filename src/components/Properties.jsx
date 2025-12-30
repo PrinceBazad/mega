@@ -293,74 +293,76 @@ const Properties = () => {
         )}
 
         <div className="properties-scroller">
-          <button className="carousel-btn prev-btn" onClick={prevGroup}>
-            <FaArrowLeft />
-          </button>
+          <div className="properties-scroller-inner">
+            <button className="carousel-btn prev-btn" onClick={prevGroup}>
+              <FaArrowLeft />
+            </button>
 
-          <motion.div
-            className="properties-grid"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            {visibleProperties.length > 0 ? (
-              visibleProperties.map((property) => (
-                <motion.div
-                  key={property.id}
-                  className="property-card"
-                  variants={cardVariants}
-                  whileHover={{ y: -10 }}
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
-                  onClick={() => {
-                    window.location.href = `/property/${property.id}`;
-                  }}
-                  style={{ cursor: "pointer" }}
-                >
-                  <div className="property-image">
-                    {property.images && property.images.length > 0 ? (
-                      <img
-                        src={property.images[0]}
-                        alt={property.title}
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="no-image">No Image</div>
-                    )}
+            <motion.div
+              className="properties-grid"
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              {visibleProperties.length > 0 ? (
+                visibleProperties.map((property) => (
+                  <motion.div
+                    key={property.id}
+                    className="property-card"
+                    variants={cardVariants}
+                    whileHover={{ y: -10 }}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    onClick={() => {
+                      window.location.href = `/property/${property.id}`;
+                    }}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <div className="property-image">
+                      {property.images && property.images.length > 0 ? (
+                        <img
+                          src={property.images[0]}
+                          alt={property.title}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="no-image">No Image</div>
+                      )}
 
-                    {/* Property info overlay */}
-                    <div className="property-overlay">
-                      <h3>{property.title}</h3>
-                      <p className="property-price">
-                        ₹{property.price.toLocaleString()}
-                      </p>
+                      {/* Property info overlay */}
+                      <div className="property-overlay">
+                        <h3>{property.title}</h3>
+                        <p className="property-price">
+                          ₹{property.price.toLocaleString()}
+                        </p>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="property-location">
-                    <FaMapMarkerAlt />
-                    <span>{property.location}</span>
-                  </div>
+                    <div className="property-location">
+                      <FaMapMarkerAlt />
+                      <span>{property.location}</span>
+                    </div>
 
-                  {property.builder_name && (
-                    <p className="property-builder">
-                      Builder: {property.builder_name}
-                    </p>
-                  )}
-                </motion.div>
-              ))
-            ) : (
-              <div className="no-properties">
-                <p>No properties found matching your criteria.</p>
-              </div>
-            )}
-          </motion.div>
+                    {property.builder_name && (
+                      <p className="property-builder">
+                        Builder: {property.builder_name}
+                      </p>
+                    )}
+                  </motion.div>
+                ))
+              ) : (
+                <div className="no-properties">
+                  <p>No properties found matching your criteria.</p>
+                </div>
+              )}
+            </motion.div>
 
-          <button className="carousel-btn next-btn" onClick={nextGroup}>
-            <FaArrowRight />
-          </button>
+            <button className="carousel-btn next-btn" onClick={nextGroup}>
+              <FaArrowRight />
+            </button>
+          </div>
         </div>
 
         <motion.div
