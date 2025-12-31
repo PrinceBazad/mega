@@ -38,32 +38,12 @@ const Projects = () => {
   useEffect(() => {
     const handleProjectsChanged = () => {
       // Re-fetch projects when changes occur
-      const fetchProjects = async () => {
-        try {
-          const response = await fetch(`${API_BASE_URL}/api/projects`);
-          const data = await response.json();
-          setProjects(data);
-        } catch (error) {
-          console.error("Error fetching projects:", error);
-        }
-      };
-
       fetchProjects();
     };
 
     const handleFavoritesChanged = (data) => {
       if (data.entityType === "project") {
         // Re-fetch projects to get updated favorite status
-        const fetchProjects = async () => {
-          try {
-            const response = await fetch(`${API_BASE_URL}/api/projects`);
-            const data = await response.json();
-            setProjects(data);
-          } catch (error) {
-            console.error("Error fetching projects:", error);
-          }
-        };
-
         fetchProjects();
       }
     };
@@ -74,6 +54,33 @@ const Projects = () => {
     return () => {
       eventBus.off(EVENT_TYPES.PROJECTS_CHANGED, handleProjectsChanged);
       eventBus.off(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
+    };
+  }, []);
+
+  // Function to fetch projects
+  const fetchProjects = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/projects`);
+      const data = await response.json();
+      setProjects(data);
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    }
+  };
+
+  // Refresh projects when component becomes visible again
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        // Page became visible, fetch latest projects
+        fetchProjects();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 

@@ -39,17 +39,6 @@ const AgentsSection = () => {
   useEffect(() => {
     const handleAgentsChanged = () => {
       // Re-fetch agents when changes occur
-      const fetchAgents = async () => {
-        try {
-          const response = await fetch(`${API_BASE_URL}/api/agents`);
-          const data = await response.json();
-
-          setAgents(data);
-        } catch (error) {
-          console.error("Error fetching agents:", error);
-        }
-      };
-
       fetchAgents();
     };
 
@@ -59,6 +48,33 @@ const AgentsSection = () => {
 
     return () => {
       eventBus.off(EVENT_TYPES.AGENTS_CHANGED, handleAgentsChanged);
+    };
+  }, []);
+
+  // Function to fetch agents
+  const fetchAgents = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/agents`);
+      const data = await response.json();
+      setAgents(data);
+    } catch (error) {
+      console.error("Error fetching agents:", error);
+    }
+  };
+
+  // Refresh agents when component becomes visible again
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        // Page became visible, fetch latest agents
+        fetchAgents();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 

@@ -161,36 +161,12 @@ const Properties = () => {
   useEffect(() => {
     const handlePropertiesChanged = () => {
       // Re-fetch properties when changes occur
-      const fetchProperties = async () => {
-        try {
-          const response = await fetch(`${API_BASE_URL}/api/properties`);
-          const data = await response.json();
-          setProperties(data);
-
-          setFilteredProperties(data);
-        } catch (error) {
-          console.error("Error fetching properties:", error);
-        }
-      };
-
       fetchProperties();
     };
 
     const handleFavoritesChanged = (data) => {
       if (data.entityType === "property") {
         // Re-fetch properties to get updated favorite status
-        const fetchProperties = async () => {
-          try {
-            const response = await fetch(`${API_BASE_URL}/api/properties`);
-            const data = await response.json();
-            setProperties(data);
-
-            setFilteredProperties(data);
-          } catch (error) {
-            console.error("Error fetching properties:", error);
-          }
-        };
-
         fetchProperties();
       }
     };
@@ -203,6 +179,38 @@ const Properties = () => {
       eventBus.off(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
     };
   }, []);
+
+  // Function to fetch properties
+  const fetchProperties = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/properties`);
+      const data = await response.json();
+      setProperties(data);
+      setFilteredProperties(data);
+      // Apply location filter if needed
+      if (selectedLocation) {
+        applyLocationFilter(selectedLocation);
+      }
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+    }
+  };
+
+  // Refresh properties when component becomes visible again
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        // Page became visible, fetch latest properties
+        fetchProperties();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [selectedLocation]);
 
   const handleViewAllProperties = () => {
     // Navigate to the dedicated properties page
@@ -279,7 +287,7 @@ const Properties = () => {
           <h2>
             {selectedLocation && selectedLocation !== "" ? (
               <>
-                {sectionContent.title || "Featured Properties"} in {" "}
+                {sectionContent.title || "Featured Properties"} in{" "}
                 {selectedLocation.charAt(0).toUpperCase() +
                   selectedLocation.slice(1)}
               </>

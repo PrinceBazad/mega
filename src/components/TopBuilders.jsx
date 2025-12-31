@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FaArrowLeft, FaArrowRight, FaBuilding } from "react-icons/fa";
 import API_BASE_URL from "../config";
+import eventBus, { EVENT_TYPES } from "../utils/eventBus";
 import "./TopBuilders.css";
 
 const TopBuilders = () => {
@@ -25,6 +26,56 @@ const TopBuilders = () => {
     };
 
     fetchBuilders();
+  }, []);
+
+  // Listen for builder changes
+  useEffect(() => {
+    const handleBuildersChanged = () => {
+      // Re-fetch builders when changes occur
+      const fetchBuilders = async () => {
+        try {
+          const response = await fetch(`${API_BASE_URL}/api/builders`);
+          const data = await response.json();
+          setBuilders(data);
+        } catch (error) {
+          console.error("Error fetching builders:", error);
+        }
+      };
+
+      fetchBuilders();
+    };
+
+    eventBus.on(EVENT_TYPES.BUILDERS_CHANGED, handleBuildersChanged);
+
+    return () => {
+      eventBus.off(EVENT_TYPES.BUILDERS_CHANGED, handleBuildersChanged);
+    };
+  }, []);
+
+  // Refresh builders when component becomes visible again
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        // Page became visible, fetch latest builders
+        const fetchBuilders = async () => {
+          try {
+            const response = await fetch(`${API_BASE_URL}/api/builders`);
+            const data = await response.json();
+            setBuilders(data);
+          } catch (error) {
+            console.error("Error fetching builders:", error);
+          }
+        };
+
+        fetchBuilders();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   const nextBuilder = () => {
