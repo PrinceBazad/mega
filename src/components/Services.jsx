@@ -65,8 +65,6 @@ const Services = () => {
     },
   ]);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-
   // Fetch section content from admin panel
   useEffect(() => {
     const fetchHomeContent = async () => {
@@ -116,16 +114,6 @@ const Services = () => {
     };
   }, []);
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % services.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + services.length) % services.length
-    );
-  };
-
   // Animation for service cards entrance
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -166,60 +154,43 @@ const Services = () => {
           </p>
         </motion.div>
 
-        <div className="services-slider">
-          <button className="carousel-btn prev-btn" onClick={prevSlide}>
-            <FaArrowLeft />
-          </button>
-
-          <div className="services-wrapper">
+        <div className="services-grid">
+          {services.map((service, index) => (
             <motion.div
-              className="services-track"
-              style={{
-                transform: `translateX(-${currentIndex * (100 / 3)}%)`,
+              key={service.id}
+              className="service-card"
+              variants={itemVariants}
+              initial="hidden"
+              animate="visible"
+              whileHover={{
+                y: -15,
+                boxShadow: "0 25px 50px rgba(0,0,0,0.15)",
+                transition: { duration: 0.3 },
               }}
             >
-              {services.map((service, index) => (
-                <motion.div
-                  key={service.id}
-                  className="service-card"
-                  variants={itemVariants}
-                  initial="hidden"
-                  animate="visible"
-                  whileHover={{
-                    y: -15,
-                    boxShadow: "0 25px 50px rgba(0,0,0,0.15)",
-                    transition: { duration: 0.3 },
-                  }}
-                >
-                  <motion.div
-                    className="service-icon"
-                    whileHover={{
-                      scale: 1.15,
-                      rotate: [0, 5, -5, 0],
-                      transition: { duration: 0.5 },
-                    }}
-                    animate={{
-                      y: [0, -10, 0],
-                      transition: {
-                        duration: 2,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: index * 0.2,
-                      },
-                    }}
-                  >
-                    {service.icon}
-                  </motion.div>
-                  <h3>{service.title}</h3>
-                  <p>{service.description}</p>
-                </motion.div>
-              ))}
+              <motion.div
+                className="service-icon"
+                whileHover={{
+                  scale: 1.15,
+                  rotate: [0, 5, -5, 0],
+                  transition: { duration: 0.5 },
+                }}
+                animate={{
+                  y: [0, -10, 0],
+                  transition: {
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: index * 0.2,
+                  },
+                }}
+              >
+                {service.icon}
+              </motion.div>
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
             </motion.div>
-          </div>
-
-          <button className="carousel-btn next-btn" onClick={nextSlide}>
-            <FaArrowRight />
-          </button>
+          ))}
         </div>
       </div>
     </section>
