@@ -37,6 +37,28 @@ const PropertyDetail = () => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
+  const fetchProperty = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`${API_BASE_URL}/api/properties/${id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setProperty(data);
+
+        // Fetch similar properties
+        if (data.property_type && data.location) {
+          fetchSimilarProperties(data.property_type, data.location);
+        }
+      } else {
+        setError("Property not found");
+      }
+    } catch (err) {
+      setError("Failed to load property details");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchProperty();
   }, [id]);
@@ -64,32 +86,15 @@ const PropertyDetail = () => {
       eventBus.off(EVENT_TYPES.PROPERTIES_CHANGED, handlePropertiesChanged);
       eventBus.off(EVENT_TYPES.FAVORITES_CHANGED, handleFavoritesChanged);
     };
-  }, [id, fetchProperty]);
-
-  const fetchProperty = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/api/properties/${id}`);
-      if (response.ok) {
-        const data = await response.json();
-        setProperty(data);
-
-        // Fetch similar properties
-        fetchSimilarProperties(data.property_type, data.location);
-      } else {
-        setError("Property not found");
-      }
-    } catch (err) {
-      setError("Failed to load property details");
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [id]);
 
   const fetchSimilarProperties = async (type, location) => {
     try {
+      if (!type || !location) {
+        return; // Don't fetch if type or location is undefined
+      }
       const response = await fetch(
-        `${API_BASE_URL}/api/properties?type=${type}&location=${encodeURIComponent(
+        `${API_BASE_URL}/api/properties?type=${encodeURIComponent(type)}&location=${encodeURIComponent(
           location
         )}`
       );
