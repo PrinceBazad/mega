@@ -12,7 +12,11 @@
   left: 0;
   right: 0;
   height: 100%;
-  background: radial-gradient(circle at top right, rgba(102, 126, 234, 0.1) 0%, transparent 50%);
+  background: radial-gradient(
+    circle at top right,
+    rgba(102, 126, 234, 0.1) 0%,
+    transparent 50%
+  );
   z-index: 0;
 }
 
@@ -157,7 +161,11 @@
   right: -50%;
   width: 200px;
   height: 200px;
-  background: radial-gradient(circle, rgba(102, 126, 234, 0.1) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(102, 126, 234, 0.1) 0%,
+    transparent 70%
+  );
   opacity: 0;
   transition: opacity 0.5s ease;
 }
@@ -243,21 +251,21 @@
   .services {
     padding: 4rem 1.5rem;
   }
-  
+
   .section-header h2 {
     font-size: 2.5rem;
   }
-  
+
   .section-header p {
     font-size: 1.1rem;
     max-width: 600px;
   }
-  
+
   .services-grid {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
   }
-  
+
   .service-card {
     padding: 2rem 1.5rem;
   }
@@ -267,31 +275,31 @@
   .services {
     padding: 3.5rem 1rem;
   }
-  
+
   .section-header {
     margin-bottom: 3rem;
   }
-  
+
   .section-header h2 {
     font-size: 2.2rem;
   }
-  
+
   .section-header p {
     font-size: 1rem;
     max-width: 500px;
   }
-  
+
   .services-grid {
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.8rem;
   }
-  
+
   .service-icon {
     width: 80px;
     height: 80px;
     font-size: 28px;
   }
-  
+
   .service-card {
     padding: 1.8rem 1.2rem;
   }
@@ -301,45 +309,45 @@
   .services {
     padding: 3rem 1rem;
   }
-  
+
   .section-header h2 {
     font-size: 2rem;
   }
-  
+
   .section-header p {
     font-size: 0.95rem;
     max-width: 100%;
   }
-  
+
   .services-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .service-card {
     padding: 1.5rem 1rem;
   }
-  
+
   .service-icon {
     width: 70px;
     height: 70px;
     font-size: 24px;
     margin-bottom: 1.2rem;
   }
-  
+
   .service-card h3 {
     font-size: 1.3rem;
   }
-  
+
   .service-card p {
     font-size: 0.9rem;
   }
-  
+
   /* Show slider on mobile and hide grid */
   .services-grid {
     display: none;
   }
-  
+
   .services-slider {
     display: block;
   }
@@ -349,44 +357,44 @@
   .services {
     padding: 2.5rem 0.75rem;
   }
-  
+
   .section-header {
     margin-bottom: 2.5rem;
     padding: 0 1rem;
   }
-  
+
   .section-header h2 {
     font-size: 1.8rem;
   }
-  
+
   .section-header p {
     font-size: 0.9rem;
   }
-  
+
   .service-card {
     padding: 1.5rem 0.8rem;
   }
-  
+
   .service-icon {
     width: 65px;
     height: 65px;
     font-size: 22px;
   }
-  
+
   .service-card h3 {
     font-size: 1.2rem;
   }
-  
+
   .carousel-btn {
     width: 45px;
     height: 45px;
     font-size: 16px;
   }
-  
+
   .carousel-btn.prev-btn {
     left: 0.5rem;
   }
-  
+
   .carousel-btn.next-btn {
     right: 0.5rem;
   }
@@ -396,21 +404,21 @@
   .services {
     padding: 2rem 0.5rem;
   }
-  
+
   .section-header h2 {
     font-size: 1.6rem;
   }
-  
+
   .service-icon {
     width: 60px;
     height: 60px;
     font-size: 20px;
   }
-  
+
   .service-card h3 {
     font-size: 1.1rem;
   }
-  
+
   .service-card p {
     font-size: 0.85rem;
   }

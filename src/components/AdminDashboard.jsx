@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FaHome,
@@ -42,6 +42,15 @@ const AdminDashboard = () => {
     builder_id: "",
     images: [""],
   });
+  
+  // Memoize form handlers to prevent unnecessary re-renders
+  const handleInputChange = useCallback((e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }, []);
   const [adminFormData, setAdminFormData] = useState({
     name: "",
     email: "",
@@ -194,12 +203,162 @@ const AdminDashboard = () => {
     }
   }, [navigate]);
 
+  const fetchData = useCallback(async () => {
+    try {
+      const token = localStorage.getItem("adminToken");
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      if (activeTab === "properties") {
+        const response = await fetch(`${API_BASE_URL}/api/admin/properties`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setProperties(data);
+        }
+      } else if (activeTab === "inquiries") {
+        const response = await fetch(`${API_BASE_URL}/api/admin/inquiries`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setInquiries(data);
+        }
+      } else if (activeTab === "admins") {
+        const response = await fetch(`${API_BASE_URL}/api/admins`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setAdmins(data);
+        }
+      } else if (activeTab === "agents") {
+        const response = await fetch(`${API_BASE_URL}/api/admin/agents`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setAgents(data);
+        }
+      } else if (activeTab === "projects") {
+        const response = await fetch(`${API_BASE_URL}/api/admin/projects`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setProjects(data);
+        }
+      } else if (activeTab === "builders") {
+        const response = await fetch(`${API_BASE_URL}/api/admin/builders`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setBuilders(data);
+        }
+      } else if (activeTab === "home") {
+        const response = await fetch(`${API_BASE_URL}/api/admin/home-content`, {
+          headers,
+        });
+        if (response.ok) {
+          const data = await response.json();
+          // Ensure all required sections exist with default values
+          const updatedData = {
+            hero: {
+              title: "Find Your Dream Property",
+              subtitle:
+                "Discover the perfect place to call home with MegaReality",
+              backgroundImage:
+                "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1920&q=80",
+              ...data.hero,
+            },
+            about: {
+              title: "About MegaReality",
+              description:
+                "We are a leading real estate company dedicated to helping you find your perfect property. With years of experience and a commitment to excellence, we make your property dreams come true.",
+              image:
+                "https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80",
+              ...data.about,
+            },
+            contact: {
+              phone: "+91 98765 43210",
+              email: "info@megareality.com",
+              address: "123 Real Estate Avenue, Gurugram, Haryana 122001",
+              ...data.contact,
+            },
+            properties: {
+              title: "Featured Properties",
+              description: "Discover our handpicked selection of premium properties",
+              ...data.properties,
+            },
+            agents: {
+              title: "Our Expert Agents",
+              description: "Meet our team of experienced real estate professionals",
+              ...data.agents,
+            },
+            services: {
+              title: "Our Services",
+              description: "Comprehensive real estate solutions tailored to your needs",
+              ...data.services,
+            },
+            autoscroll: {
+              title: "Auto-Scroll Section",
+              description:
+                "Dynamic content that auto-scrolls to showcase our offerings",
+              pages: [
+                {
+                  backgroundImage:
+                    "https://images.unsplash.com/photo-1560448204-e02f33c33ddc?w=1920&q=80",
+                  title: "Premium Properties",
+                  description:
+                    "Discover our collection of premium properties in the best locations",
+                },
+                {
+                  backgroundImage:
+                    "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1920&q=80",
+                  title: "Luxury Living",
+                  description:
+                    "Experience luxury living with our exclusive property collection",
+                },
+                {
+                  backgroundImage:
+                    "https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?w=1920&q=80",
+                  title: "Modern Designs",
+                  description: "Modern architectural designs for contemporary living",
+                },
+                {
+                  backgroundImage:
+                    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1920&q=80",
+                  title: "Affordable Options",
+                  description: "Find affordable options without compromising on quality",
+                },
+                {
+                  backgroundImage:
+                    "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=1920&q=80",
+                  title: "Investment Opportunities",
+                  description: "Great investment opportunities with high returns",
+                },
+              ],
+              ...data.autoscroll,
+            },
+          };
+          setHomeContent(updatedData);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }, [activeTab]);
+
   // Fetch data
   useEffect(() => {
     fetchData();
-  }, [activeTab]);
+  }, [activeTab, fetchData]);
 
-  const fetchData = async () => {
+  const
     try {
       const token = localStorage.getItem("adminToken");
       const headers = {
@@ -353,7 +512,6 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
   const handleLogout = () => {
     localStorage.removeItem("adminToken");
     navigate("/admin/login");
@@ -365,23 +523,15 @@ const AdminDashboard = () => {
 
   // Removed project favorite toggle functionality
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleAdminInputChange = (e) => {
+  const handleAdminInputChange = useCallback((e) => {
     const { name, value } = e.target;
     setAdminFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-  };
+  }, []);
 
-  const handleImageInputChange = (index, value) => {
+  const handleImageInputChange = useCallback((index, value) => {
     const newImages = [...imageInputs];
     newImages[index] = value;
     setImageInputs(newImages);
@@ -389,9 +539,9 @@ const AdminDashboard = () => {
       ...prev,
       images: newImages,
     }));
-  };
+  }, [imageInputs]);
 
-  const handleFileInputChange = (index, file) => {
+  const handleFileInputChange = useCallback((index, file) => {
     const newFiles = [...fileInputs];
     newFiles[index] = file;
     setFileInputs(newFiles);
@@ -406,9 +556,9 @@ const AdminDashboard = () => {
         images: newImages,
       }));
     }
-  };
+  }, [fileInputs, imageInputs]);
 
-  const handleImageUploadMethodChange = (method) => {
+  const handleImageUploadMethodChange = useCallback((method) => {
     setImageUploadMethod(method);
     // Reset the other method's inputs when switching
     if (method === "url") {
@@ -428,9 +578,9 @@ const AdminDashboard = () => {
         images: [""],
       }));
     }
-  };
+  }, []);
 
-  const addImageInput = () => {
+  const addImageInput = useCallback(() => {
     if (imageUploadMethod === "url") {
       setImageInputs([...imageInputs, ""]);
       setFormData((prev) => ({
@@ -446,9 +596,9 @@ const AdminDashboard = () => {
         images: [...prev.images, ""],
       }));
     }
-  };
+  }, [imageInputs, fileInputs, imageUploadMethod]);
 
-  const removeImageInput = (index) => {
+  const removeImageInput = useCallback((index) => {
     if (imageInputs.length > 1) {
       if (imageUploadMethod === "url") {
         const newImages = imageInputs.filter((_, i) => i !== index);
@@ -468,10 +618,10 @@ const AdminDashboard = () => {
         }));
       }
     }
-  };
+  }, [imageInputs, fileInputs, imageUploadMethod]);
 
   // Agent image functions
-  const handleAgentImageInputChange = (index, value) => {
+  const handleAgentImageInputChange = useCallback((index, value) => {
     const newImages = [...agentImageInputs];
     newImages[index] = value;
     setAgentImageInputs(newImages);
@@ -479,9 +629,9 @@ const AdminDashboard = () => {
       ...prev,
       image: newImages[0] || "",
     }));
-  };
+  }, [agentImageInputs]);
 
-  const handleAgentFileInputChange = (index, file) => {
+  const handleAgentFileInputChange = useCallback((index, file) => {
     const newFiles = [...agentFileInputs];
     newFiles[index] = file;
     setAgentFileInputs(newFiles);
@@ -493,9 +643,9 @@ const AdminDashboard = () => {
         image: imageUrl,
       }));
     }
-  };
+  }, [agentFileInputs]);
 
-  const handleAgentImageUploadMethodChange = (method) => {
+  const handleAgentImageUploadMethodChange = useCallback((method) => {
     setAgentImageUploadMethod(method);
     // Reset the other method's inputs when switching
     if (method === "url") {
@@ -513,9 +663,9 @@ const AdminDashboard = () => {
         image: "",
       }));
     }
-  };
+  }, []);
 
-  const addAgentImageInput = () => {
+  const addAgentImageInput = useCallback(() => {
     if (agentImageUploadMethod === "url") {
       setAgentImageInputs([...agentImageInputs, ""]);
       setAgentForm((prev) => ({
@@ -530,9 +680,9 @@ const AdminDashboard = () => {
         image: agentImageInputs[0] || "",
       }));
     }
-  };
+  }, [agentImageInputs, agentFileInputs, agentImageUploadMethod]);
 
-  const removeAgentImageInput = (index) => {
+  const removeAgentImageInput = useCallback((index) => {
     if (agentImageInputs.length > 1) {
       if (agentImageUploadMethod === "url") {
         const newImages = agentImageInputs.filter((_, i) => i !== index);
@@ -552,10 +702,10 @@ const AdminDashboard = () => {
         }));
       }
     }
-  };
+  }, [agentImageInputs, agentFileInputs, agentImageUploadMethod]);
 
   // Builder image functions
-  const handleBuilderImageInputChange = (index, value) => {
+  const handleBuilderImageInputChange = useCallback((index, value) => {
     const newImages = [...builderImageInputs];
     newImages[index] = value;
     setBuilderImageInputs(newImages);
@@ -563,9 +713,9 @@ const AdminDashboard = () => {
       ...prev,
       image: newImages[0] || "",
     }));
-  };
+  }, [builderImageInputs]);
 
-  const handleBuilderFileInputChange = (index, file) => {
+  const handleBuilderFileInputChange = useCallback((index, file) => {
     const newFiles = [...builderFileInputs];
     newFiles[index] = file;
     setBuilderFileInputs(newFiles);
@@ -577,9 +727,9 @@ const AdminDashboard = () => {
         image: imageUrl,
       }));
     }
-  };
+  }, [builderFileInputs]);
 
-  const handleBuilderImageUploadMethodChange = (method) => {
+  const handleBuilderImageUploadMethodChange = useCallback((method) => {
     setBuilderImageUploadMethod(method);
     // Reset the other method's inputs when switching
     if (method === "url") {
@@ -597,9 +747,9 @@ const AdminDashboard = () => {
         image: "",
       }));
     }
-  };
+  }, []);
 
-  const addBuilderImageInput = () => {
+  const addBuilderImageInput = useCallback(() => {
     if (builderImageUploadMethod === "url") {
       setBuilderImageInputs([...builderImageInputs, ""]);
       setBuilderForm((prev) => ({
@@ -614,9 +764,9 @@ const AdminDashboard = () => {
         image: builderImageInputs[0] || "",
       }));
     }
-  };
+  }, [builderImageInputs, builderFileInputs, builderImageUploadMethod]);
 
-  const removeBuilderImageInput = (index) => {
+  const removeBuilderImageInput = useCallback((index) => {
     if (builderImageInputs.length > 1) {
       if (builderImageUploadMethod === "url") {
         const newImages = builderImageInputs.filter((_, i) => i !== index);
@@ -636,9 +786,9 @@ const AdminDashboard = () => {
         }));
       }
     }
-  };
+  }, [builderImageInputs, builderFileInputs, builderImageUploadMethod]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
 
     try {
@@ -687,9 +837,9 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error("Error saving property:", error);
     }
-  };
+  }, [formData, editingProperty, imageInputs]);
 
-  const handleAdminSubmit = async (e) => {
+  const handleAdminSubmit = useCallback(async (e) => {
     e.preventDefault();
 
     try {
@@ -730,9 +880,9 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error("Error saving admin:", error);
     }
-  };
+  }, [adminFormData, editingAdmin]);
 
-  const handleEdit = (property) => {
+  const handleEdit = useCallback((property) => {
     setEditingProperty(property);
     setFormData({
       title: property.title,
@@ -749,9 +899,9 @@ const AdminDashboard = () => {
     });
     setImageInputs(property.images || [""]);
     setShowEditForm(true);
-  };
+  }, []);
 
-  const handleEditAdmin = (admin) => {
+  const handleEditAdmin = useCallback((admin) => {
     setEditingAdmin(admin);
     setAdminFormData({
       name: admin.name,
@@ -760,9 +910,9 @@ const AdminDashboard = () => {
       role: admin.role,
     });
     setShowEditAdminForm(true);
-  };
+  }, []);
 
-  const handleDelete = async (id) => {
+  const handleDelete = useCallback(async (id) => {
     if (window.confirm("Are you sure you want to delete this property?")) {
       try {
         const token = localStorage.getItem("adminToken");
@@ -793,9 +943,9 @@ const AdminDashboard = () => {
         console.error("Error deleting property:", error);
       }
     }
-  };
+  }, [fetchData]);
 
-  const handleDeleteAdmin = async (id) => {
+  const handleDeleteAdmin = useCallback(async (id) => {
     if (window.confirm("Are you sure you want to delete this admin?")) {
       try {
         const token = localStorage.getItem("adminToken");
@@ -819,9 +969,9 @@ const AdminDashboard = () => {
         console.error("Error deleting admin:", error);
       }
     }
-  };
+  }, [fetchData]);
 
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     setFormData({
       title: "",
       description: "",
@@ -836,19 +986,19 @@ const AdminDashboard = () => {
       images: [""],
     });
     setImageInputs([""]);
-  };
+  }, []);
 
-  const resetAdminForm = () => {
+  const resetAdminForm = useCallback(() => {
     setAdminFormData({
       name: "",
       email: "",
       password: "",
       role: "admin",
     });
-  };
+  }, []);
 
   // Handle agent form submission
-  const handleAgentSubmit = async (e) => {
+  const handleAgentSubmit = useCallback(async (e) => {
     e.preventDefault();
 
     try {
@@ -900,10 +1050,10 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error("Error saving agent:", error);
     }
-  };
+  }, [agentForm, editingAgent]);
 
   // Edit agent
-  const handleEditAgent = (agent) => {
+  const handleEditAgent = useCallback((agent) => {
     setEditingAgent(agent);
     setAgentForm({
       name: agent.name,
@@ -917,10 +1067,10 @@ const AdminDashboard = () => {
     });
     setAgentImageInputs([agent.image || ""]);
     setShowAddAgentForm(true);
-  };
+  }, []);
 
   // Delete agent
-  const handleDeleteAgent = async (agentId) => {
+  const handleDeleteAgent = useCallback(async (agentId) => {
     if (window.confirm("Are you sure you want to delete this agent?")) {
       try {
         const response = await fetch(
@@ -944,10 +1094,10 @@ const AdminDashboard = () => {
         console.error("Error deleting agent:", error);
       }
     }
-  };
+  }, [fetchData]);
 
   // Handle builder form submission
-  const handleBuilderSubmit = async (e) => {
+  const handleBuilderSubmit = useCallback(async (e) => {
     e.preventDefault();
 
     try {
@@ -995,10 +1145,10 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error("Error saving builder:", error);
     }
-  };
+  }, [builderForm, editingBuilder]);
 
   // Edit builder
-  const handleEditBuilder = (builder) => {
+  const handleEditBuilder = useCallback((builder) => {
     setEditingBuilder(builder);
     setBuilderForm({
       name: builder.name,
@@ -1008,10 +1158,10 @@ const AdminDashboard = () => {
     });
     setBuilderImageInputs([builder.image || ""]);
     setShowAddBuilderForm(true);
-  };
+  }, []);
 
   // Handle project form submission
-  const handleProjectSubmit = async (e) => {
+  const handleProjectSubmit = useCallback(async (e) => {
     e.preventDefault();
 
     try {
@@ -1089,10 +1239,10 @@ const AdminDashboard = () => {
     } catch (error) {
       console.error("Error saving project:", error);
     }
-  };
+  }, [projectForm, editingProject, imageInputs]);
 
   // Edit project
-  const handleEditProject = (project) => {
+  const handleEditProject = useCallback((project) => {
     setEditingProject(project);
     setProjectForm({
       title: project.title,
@@ -1114,10 +1264,10 @@ const AdminDashboard = () => {
     });
     setImageInputs(project.images || [""]);
     setShowAddProjectForm(true);
-  };
+  }, []);
 
   // Delete project
-  const handleDeleteProject = async (projectId) => {
+  const handleDeleteProject = useCallback(async (projectId) => {
     if (window.confirm("Are you sure you want to delete this project?")) {
       try {
         const response = await fetch(
@@ -1141,10 +1291,10 @@ const AdminDashboard = () => {
         console.error("Error deleting project:", error);
       }
     }
-  };
+  }, [fetchData]);
 
   // Delete builder
-  const handleDeleteBuilder = async (builderId) => {
+  const handleDeleteBuilder = useCallback(async (builderId) => {
     if (window.confirm("Are you sure you want to delete this builder?")) {
       try {
         const response = await fetch(
@@ -1168,7 +1318,7 @@ const AdminDashboard = () => {
         console.error("Error deleting builder:", error);
       }
     }
-  };
+  }, [fetchData]);
 
   const PropertyManagement = () => (
     <div className="dashboard-content">
@@ -1489,7 +1639,7 @@ const AdminDashboard = () => {
   );
 
   const InquiryManagement = () => {
-    const handleStatusChange = async (inquiryId, newStatus) => {
+    const handleStatusChange = useCallback(async (inquiryId, newStatus) => {
       try {
         const token = localStorage.getItem("adminToken");
         const response = await fetch(
@@ -1515,7 +1665,7 @@ const AdminDashboard = () => {
       } catch (error) {
         console.error("Error updating inquiry status:", error);
       }
-    };
+    }, []);
 
     return (
       <div className="dashboard-content">
@@ -1719,12 +1869,12 @@ const AdminDashboard = () => {
     const [editingSection, setEditingSection] = useState(null);
     const [editForm, setEditForm] = useState({});
 
-    const handleEditSection = (section, data) => {
+    const handleEditSection = useCallback((section, data) => {
       setEditingSection(section);
       setEditForm({ ...data });
-    };
+    }, []);
 
-    const handleSaveContent = async (section) => {
+    const handleSaveContent = useCallback(async (section) => {
       try {
         const token = localStorage.getItem("adminToken");
         const response = await fetch(
@@ -1763,7 +1913,7 @@ const AdminDashboard = () => {
       } catch (error) {
         console.error(`Error updating ${section} content:`, error);
       }
-    };
+    }, [editForm]);
 
     return (
       <div className="dashboard-content">

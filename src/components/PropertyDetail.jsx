@@ -94,9 +94,9 @@ const PropertyDetail = () => {
         return; // Don't fetch if type or location is undefined
       }
       const response = await fetch(
-        `${API_BASE_URL}/api/properties?type=${encodeURIComponent(type)}&location=${encodeURIComponent(
-          location
-        )}`
+        `${API_BASE_URL}/api/properties?type=${encodeURIComponent(
+          type
+        )}&location=${encodeURIComponent(location)}`
       );
       if (response.ok) {
         const data = await response.json();
